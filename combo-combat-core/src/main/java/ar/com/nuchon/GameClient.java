@@ -36,9 +36,9 @@ public class GameClient implements Runnable {
 		
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "combo-combat";
-		cfg.useGL20 = false;
-		cfg.width = 480;
-		cfg.height = 320;
+		cfg.useGL20 = true;
+		cfg.width = 800;
+		cfg.height = 600;
 		
 		new LwjglApplication(new GraphicsDisplayTask(), cfg);
 		
