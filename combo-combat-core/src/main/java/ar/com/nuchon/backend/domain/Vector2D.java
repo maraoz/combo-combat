@@ -5,6 +5,11 @@ import java.io.Serializable;
 public class Vector2D implements Serializable {
 
 	private final float x, y;
+	
+	public static final Vector2D UP = new Vector2D(0, 1.0f);
+	public static final Vector2D DOWN = new Vector2D(0, -1.0f);
+	public static final Vector2D RIGHT = new Vector2D(1.0f,0);
+	public static final Vector2D LEFT = new Vector2D(-1.0f,0);
 
 	public Vector2D(float x, float y) {
 		super();

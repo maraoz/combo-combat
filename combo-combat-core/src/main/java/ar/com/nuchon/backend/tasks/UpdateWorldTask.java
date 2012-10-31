@@ -10,12 +10,17 @@ import ar.com.nuchon.network.message.event.BulletHitEvent;
 public class UpdateWorldTask extends SynchedTask implements Runnable {
 
 	public void run() {
+		
 		while (true) {
-			ServerBackend.update();
-			for (BulletHit hit : ServerBackend.checkCollisions()) {
-				MessageHub.route(new BulletHitEvent(hit));
+			try {
+				ServerBackend.update();
+				for (BulletHit hit : ServerBackend.checkCollisions()) {
+					MessageHub.route(new BulletHitEvent(hit));
+				}
+				waitFPS();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			waitFPS();
 		}
 
 	}

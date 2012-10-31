@@ -1,6 +1,5 @@
 package ar.com.nuchon.network;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jboss.netty.channel.ChannelEvent;
@@ -9,7 +8,7 @@ import org.jboss.netty.channel.ChannelState;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
+import org.jboss.netty.handler.timeout.IdleStateAwareChannelUpstreamHandler;
 
 import ar.com.nuchon.network.dispatch.MessageHub;
 
@@ -21,7 +20,7 @@ import ar.com.nuchon.network.dispatch.MessageHub;
  * and closes connections when exceptions occur
  *
  */
-public abstract class DispatcherNetworkHandler extends SimpleChannelUpstreamHandler {
+public abstract class DispatcherNetworkHandler extends IdleStateAwareChannelUpstreamHandler {
 	
 	private static final Logger logger = Logger
 			.getLogger(DispatcherNetworkHandler.class.getName());
@@ -39,11 +38,17 @@ public abstract class DispatcherNetworkHandler extends SimpleChannelUpstreamHand
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-		logger.log(Level.WARNING, "Unexpected exception from downstream.",
-				e.getCause());
-		e.getChannel().close();
+		System.out.println(e.getCause().getClass()+" caught");
 	}
 	
+
+	
+	
+	
+	
+	
+	
+	// log connections and disconnections
 	@Override
 	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e)
 			throws Exception {

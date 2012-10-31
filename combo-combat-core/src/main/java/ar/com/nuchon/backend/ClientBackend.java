@@ -11,6 +11,8 @@ import ar.com.nuchon.backend.domain.BulletHit;
 import ar.com.nuchon.backend.domain.Updatable;
 import ar.com.nuchon.backend.domain.Vector2D;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -56,9 +58,14 @@ public class ClientBackend {
 		}
 	}
 
-	public static void bulletHit(BulletHit hit) {
+	public static void bulletHit(final BulletHit hit) {
 		// do something! boom
 		System.out.println("bullet "+hit.getBulletId()+" hit player "+hit.getVictimId());
+		updatees.removeAll(Collections2.filter(getBullets(), new Predicate<Bullet>() {
+			public boolean apply(Bullet x) {
+				return x.getId().equals(hit.getBulletId());
+			}
+		}));
 	}
 
 }

@@ -62,13 +62,15 @@ public class ServerBackend {
 		List<BulletHit> ret = Lists.newArrayList();
 		for (PlayerAvatar p : players.values()) {
 			synchronized (bullets) {
+				List<Bullet> toRemove = Lists.newArrayList();
 				for (Bullet b : bullets) {
 					if (b.getPos().distanceTo(p.getPosition()) < HIT_RANGE) {
 						p.reduceHP();
-						bullets.remove(b);
+						toRemove.add(b);
 						ret.add(new BulletHit(p.getId(), b.getId()));
 					}
 				}
+				bullets.removeAll(toRemove);
 			}
 		}
 		return ret;

@@ -8,10 +8,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.jboss.netty</groupId>
+			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
-			<version>3.2.6.Final</version>
-			<scope>compile</scope>
+			<version>3.5.9.Final</version>
 		</dependency>
 
 		<!-- utilidades -->
@@ -27,15 +26,5 @@
 		</dependency>
 
 	</dependencies>
-
-	<repositories>
-		<repository>
-			<id>repository.jboss.org</id>
-			<url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 
 </project>

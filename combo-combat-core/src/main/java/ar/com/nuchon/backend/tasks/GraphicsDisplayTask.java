@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.input.GestureDetector;
 
 public class GraphicsDisplayTask extends SynchedTask implements
 		ApplicationListener {
@@ -99,6 +100,16 @@ public class GraphicsDisplayTask extends SynchedTask implements
 		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
 		sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
 		sprite.setPosition(-sprite.getWidth() / 2, -sprite.getHeight() / 2);
+		
+		Gdx.input.setInputProcessor(new GestureDetector(new GestureDetector.GestureAdapter(){
+			@Override
+			public boolean fling(float velocityX, float velocityY) {
+				System.out.println(velocityX+" "+velocityY);
+				return true;
+			}
+		}));
+		
+		
 	}
 
 	public void dispose() {
@@ -128,6 +139,7 @@ public class GraphicsDisplayTask extends SynchedTask implements
 			MessageHub.route(new MoveKeyNotify(new Vector2D(x, y)));
 
 		boolean leftButtonDown = Gdx.input.isButtonPressed(Buttons.LEFT);
+		
 		if (leftButtonDown) {
 			MessageHub.route(new ShootKeyNotify(getMousePos()));
 		}

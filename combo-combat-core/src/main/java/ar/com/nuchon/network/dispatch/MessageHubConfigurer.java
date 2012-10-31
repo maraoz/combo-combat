@@ -17,7 +17,7 @@ import ar.com.nuchon.handler.session.ClientDisconnectNotifyHandler;
 import ar.com.nuchon.handler.session.ClientDisconnectResponseHandler;
 import ar.com.nuchon.handler.session.ServerConnectRequestHandler;
 import ar.com.nuchon.handler.session.ServerDisconnectRequestHandler;
-import ar.com.nuchon.handler.shoot.ServerBulletShotRequestHandler;
+import ar.com.nuchon.handler.spells.ServerBulletShotRequestHandler;
 import ar.com.nuchon.handler.update.ClientUpdatableCreateNotifyHandler;
 import ar.com.nuchon.network.message.chat.ChatNotify;
 import ar.com.nuchon.network.message.chat.ChatRequest;
