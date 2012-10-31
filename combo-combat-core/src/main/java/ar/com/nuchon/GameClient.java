@@ -24,7 +24,7 @@ public class GameClient implements Runnable {
 
 	public void run() {
 		// TODO: configuration file or command line arguments
-		String host = "localhost";
+		String host = "190.247.4.86";
 		int port = GameServer.SERVER_DEFAULT_PORT;
 
 		// bind message handlers
