@@ -1,5 +1,7 @@
 package ar.com.nuchon.backend.domain;
 
+import ar.com.nuchon.backend.domain.base.GameObject;
+
 public class Bullet extends GameObject implements Updatable {
 
 	private static final int VELOCITY = 5;

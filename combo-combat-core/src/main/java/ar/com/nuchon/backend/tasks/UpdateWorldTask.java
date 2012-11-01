@@ -1,9 +1,9 @@
 package ar.com.nuchon.backend.tasks;
 
 import ar.com.nuchon.backend.ServerBackend;
-import ar.com.nuchon.backend.domain.BulletHit;
+import ar.com.nuchon.backend.domain.events.BulletHitEvent;
 import ar.com.nuchon.network.dispatch.MessageHub;
-import ar.com.nuchon.network.message.event.BulletHitEvent;
+import ar.com.nuchon.network.message.event.BulletHitNotify;
 
 
 
@@ -14,8 +14,8 @@ public class UpdateWorldTask extends SynchedTask implements Runnable {
 		while (true) {
 			try {
 				ServerBackend.update();
-				for (BulletHit hit : ServerBackend.checkCollisions()) {
-					MessageHub.route(new BulletHitEvent(hit));
+				for (BulletHitEvent hit : ServerBackend.checkCollisions()) {
+					MessageHub.route(new BulletHitNotify(hit));
 				}
 				waitFPS();
 			} catch (Exception e) {

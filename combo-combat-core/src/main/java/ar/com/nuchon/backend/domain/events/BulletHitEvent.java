@@ -1,13 +1,13 @@
-package ar.com.nuchon.backend.domain;
+package ar.com.nuchon.backend.domain.events;
 
 import java.io.Serializable;
 
-public class BulletHit implements Serializable {
+public class BulletHitEvent implements Serializable {
 
 	private final Long victimId;
 	private final Long bulletId;
 	
-	public BulletHit(Long victimId, Long bulletId) {
+	public BulletHitEvent(Long victimId, Long bulletId) {
 		super();
 		this.victimId = victimId;
 		this.bulletId = bulletId;

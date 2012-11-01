@@ -21,7 +21,7 @@ import ar.com.nuchon.handler.spells.ServerBulletShotRequestHandler;
 import ar.com.nuchon.handler.update.ClientUpdatableCreateNotifyHandler;
 import ar.com.nuchon.network.message.chat.ChatNotify;
 import ar.com.nuchon.network.message.chat.ChatRequest;
-import ar.com.nuchon.network.message.event.BulletHitEvent;
+import ar.com.nuchon.network.message.event.BulletHitNotify;
 import ar.com.nuchon.network.message.gui.CloseNotify;
 import ar.com.nuchon.network.message.gui.LineTypedNotify;
 import ar.com.nuchon.network.message.gui.MouseMovedNotify;
@@ -57,7 +57,7 @@ public class MessageHubConfigurer {
 		// no handler for ShootKeyNotify
 		MessageHub.subscribe(BulletShotRequest.class, ServerBulletShotRequestHandler.get());
 		// no handler for UpdatableCreateNotify
-		MessageHub.subscribe(BulletHitEvent.class, ServerBulletHitEventHandler.get());
+		MessageHub.subscribe(BulletHitNotify.class, ServerBulletHitEventHandler.get());
 		
 	}
 
@@ -80,7 +80,7 @@ public class MessageHubConfigurer {
 		MessageHub.subscribe(ShootKeyNotify.class,  ClientShootKeyNotifyHandler.get());
 		// no handler for BulletShotRequest
 		MessageHub.subscribe(UpdatableCreateNotify.class,  ClientUpdatableCreateNotifyHandler.get());
-		MessageHub.subscribe(BulletHitEvent.class, ClientBulletHitEventHandler.get());
+		MessageHub.subscribe(BulletHitNotify.class, ClientBulletHitEventHandler.get());
 		
 	}
 

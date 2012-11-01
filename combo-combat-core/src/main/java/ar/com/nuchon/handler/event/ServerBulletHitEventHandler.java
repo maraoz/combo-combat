@@ -2,10 +2,10 @@ package ar.com.nuchon.handler.event;
 
 import ar.com.nuchon.handler.base.BaseServerHandler;
 import ar.com.nuchon.network.dispatch.MessageListener;
-import ar.com.nuchon.network.message.event.BulletHitEvent;
+import ar.com.nuchon.network.message.event.BulletHitNotify;
 
 public class ServerBulletHitEventHandler extends BaseServerHandler implements
-		MessageListener<BulletHitEvent> {
+		MessageListener<BulletHitNotify> {
 
 	private static final ServerBulletHitEventHandler INSTANCE = new ServerBulletHitEventHandler();
 
@@ -16,7 +16,7 @@ public class ServerBulletHitEventHandler extends BaseServerHandler implements
 		return INSTANCE;
 	}
 
-	public void handle(BulletHitEvent message) {
+	public void handle(BulletHitNotify message) {
 		sendToAll(message);
 	}
 

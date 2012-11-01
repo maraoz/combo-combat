@@ -3,10 +3,10 @@ package ar.com.nuchon.handler.event;
 import ar.com.nuchon.backend.ClientBackend;
 import ar.com.nuchon.handler.base.BaseClientHandler;
 import ar.com.nuchon.network.dispatch.MessageListener;
-import ar.com.nuchon.network.message.event.BulletHitEvent;
+import ar.com.nuchon.network.message.event.BulletHitNotify;
 
 public class ClientBulletHitEventHandler extends BaseClientHandler implements
-		MessageListener<BulletHitEvent> {
+		MessageListener<BulletHitNotify> {
 
 	private static final ClientBulletHitEventHandler INSTANCE = new ClientBulletHitEventHandler();
 
@@ -17,7 +17,7 @@ public class ClientBulletHitEventHandler extends BaseClientHandler implements
 		return INSTANCE;
 	}
 
-	public void handle(BulletHitEvent message) {
+	public void handle(BulletHitNotify message) {
 		ClientBackend.bulletHit(message.getHit());
 	}
 

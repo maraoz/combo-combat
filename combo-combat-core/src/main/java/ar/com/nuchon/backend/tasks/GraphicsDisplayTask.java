@@ -104,9 +104,15 @@ public class GraphicsDisplayTask extends SynchedTask implements
 		Gdx.input.setInputProcessor(new GestureDetector(new GestureDetector.GestureAdapter(){
 			@Override
 			public boolean fling(float velocityX, float velocityY) {
-				System.out.println(velocityX+" "+velocityY);
+				System.out.println("fling "+velocityX+" "+velocityY);
 				return true;
 			}
+			@Override
+			public boolean touchDown(int x, int y, int pointer) {
+				System.out.println("click "+(Gdx.input.isButtonPressed(Buttons.LEFT)?"izquierdo":"derecho"));
+				return true;
+			}
+			
 		}));
 		
 		

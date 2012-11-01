@@ -1,4 +1,4 @@
-package ar.com.nuchon.backend.domain;
+package ar.com.nuchon.backend.domain.base;
 
 import java.util.concurrent.atomic.AtomicLong;
 

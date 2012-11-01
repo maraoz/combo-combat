@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.nuchon.backend.domain.Bullet;
-import ar.com.nuchon.backend.domain.BulletHit;
 import ar.com.nuchon.backend.domain.PlayerAvatar;
 import ar.com.nuchon.backend.domain.Updatable;
 import ar.com.nuchon.backend.domain.Vector2D;
+import ar.com.nuchon.backend.domain.events.BulletHitEvent;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -58,8 +58,8 @@ public class ServerBackend {
 		return bullet;
 	}
 	
-	public static List<BulletHit> checkCollisions() {
-		List<BulletHit> ret = Lists.newArrayList();
+	public static List<BulletHitEvent> checkCollisions() {
+		List<BulletHitEvent> ret = Lists.newArrayList();
 		for (PlayerAvatar p : players.values()) {
 			synchronized (bullets) {
 				List<Bullet> toRemove = Lists.newArrayList();
@@ -67,7 +67,7 @@ public class ServerBackend {
 					if (b.getPos().distanceTo(p.getPosition()) < HIT_RANGE) {
 						p.reduceHP();
 						toRemove.add(b);
-						ret.add(new BulletHit(p.getId(), b.getId()));
+						ret.add(new BulletHitEvent(p.getId(), b.getId()));
 					}
 				}
 				bullets.removeAll(toRemove);

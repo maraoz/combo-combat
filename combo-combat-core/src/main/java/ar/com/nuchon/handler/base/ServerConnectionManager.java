@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.jboss.netty.channel.Channel;
 
-import ar.com.nuchon.backend.domain.IdentityProvider;
+import ar.com.nuchon.backend.domain.base.IdentityProvider;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;

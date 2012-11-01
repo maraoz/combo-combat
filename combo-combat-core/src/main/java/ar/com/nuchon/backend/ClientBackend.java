@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.nuchon.backend.domain.Bullet;
-import ar.com.nuchon.backend.domain.BulletHit;
 import ar.com.nuchon.backend.domain.Updatable;
 import ar.com.nuchon.backend.domain.Vector2D;
+import ar.com.nuchon.backend.domain.events.BulletHitEvent;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -58,7 +58,7 @@ public class ClientBackend {
 		}
 	}
 
-	public static void bulletHit(final BulletHit hit) {
+	public static void bulletHit(final BulletHitEvent hit) {
 		// do something! boom
 		System.out.println("bullet "+hit.getBulletId()+" hit player "+hit.getVictimId());
 		updatees.removeAll(Collections2.filter(getBullets(), new Predicate<Bullet>() {
