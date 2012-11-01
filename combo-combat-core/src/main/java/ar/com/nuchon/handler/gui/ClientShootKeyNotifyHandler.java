@@ -3,7 +3,7 @@ package ar.com.nuchon.handler.gui;
 import ar.com.nuchon.handler.base.BaseClientHandler;
 import ar.com.nuchon.network.dispatch.MessageListener;
 import ar.com.nuchon.network.message.gui.ShootKeyNotify;
-import ar.com.nuchon.network.message.shoot.BulletShotRequest;
+import ar.com.nuchon.network.message.spells.BulletShotRequest;
 
 public class ClientShootKeyNotifyHandler extends BaseClientHandler implements
 		MessageListener<ShootKeyNotify> {

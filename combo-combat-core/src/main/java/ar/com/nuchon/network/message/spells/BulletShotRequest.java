@@ -1,4 +1,4 @@
-package ar.com.nuchon.network.message.shoot;
+package ar.com.nuchon.network.message.spells;
 
 import ar.com.nuchon.backend.domain.Vector2D;
 import ar.com.nuchon.network.BaseMessage;

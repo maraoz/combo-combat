@@ -5,7 +5,7 @@ import ar.com.nuchon.backend.domain.Bullet;
 import ar.com.nuchon.backend.domain.PlayerAvatar;
 import ar.com.nuchon.handler.base.BaseServerHandler;
 import ar.com.nuchon.network.dispatch.MessageListener;
-import ar.com.nuchon.network.message.shoot.BulletShotRequest;
+import ar.com.nuchon.network.message.spells.BulletShotRequest;
 import ar.com.nuchon.network.message.update.UpdatableCreateNotify;
 
 public class ServerBulletShotRequestHandler extends BaseServerHandler implements

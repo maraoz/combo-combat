@@ -35,7 +35,7 @@ import ar.com.nuchon.network.message.session.ConnectResponse;
 import ar.com.nuchon.network.message.session.DisconnectNotify;
 import ar.com.nuchon.network.message.session.DisconnectRequest;
 import ar.com.nuchon.network.message.session.DisconnectResponse;
-import ar.com.nuchon.network.message.shoot.BulletShotRequest;
+import ar.com.nuchon.network.message.spells.BulletShotRequest;
 import ar.com.nuchon.network.message.update.UpdatableCreateNotify;
 
 public class MessageHubConfigurer {
