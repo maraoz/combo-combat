@@ -1,75 +1,115 @@
 package ar.com.nuchon.backend.domain;
 
-import java.io.Serializable;
+import com.badlogic.gdx.math.Matrix3;
+import com.badlogic.gdx.math.Vector2;
 
-public class Vector2D implements Serializable {
-
-	private final float x, y;
+public class Vector2D extends Vector2 {
 	
-	public static final Vector2D UP = new Vector2D(0, 1.0f);
-	public static final Vector2D DOWN = new Vector2D(0, -1.0f);
-	public static final Vector2D RIGHT = new Vector2D(1.0f,0);
-	public static final Vector2D LEFT = new Vector2D(-1.0f,0);
-
+	public static final Vector2D UP = new Vector2D(0.0f, 1.0f);
+	public static final Vector2D DOWN = new Vector2D(0.0f, -1.0f);
+	public static final Vector2D RIGHT = new Vector2D(1.0f,0.0f);
+	public static final Vector2D LEFT = new Vector2D(-1.0f,0.0f);
+	
 	public Vector2D(float x, float y) {
+		super(x, y);
+	}
+	
+	public Vector2D() {
 		super();
-		this.x = x;
-		this.y = y;
 	}
-
-	public float getX() {
-		return x;
+	
+	public Vector2D(Vector2D v) {
+		super(v);
 	}
-
-	public float getY() {
-		return y;
+	
+	@Override
+	public Vector2D add(float x, float y) {
+		return (Vector2D) super.add(x, y);
+	}
+	
+	@Override
+	public Vector2D add(Vector2 v) {
+		return (Vector2D) super.add(v);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Vector2D other = (Vector2D) obj;
-		if (x != other.x)
-			return false;
-		if (y != other.y)
-			return false;
-		return true;
-	};
+	public Vector2D cpy() {
+		return new Vector2D(this);
+	}
 	
 	@Override
-	public String toString() {
-		return "("+x+", "+y+")";
-	}
-
-	public Vector2D plus(Vector2D other) {
-		return new Vector2D( x + other.getX(), y + other.getY());
+	public Vector2D lerp(Vector2 target, float alpha) {
+		return (Vector2D) super.lerp(target, alpha);
 	}
 	
-	public Vector2D minus(Vector2D other) {
-		return new Vector2D(x - other.getX(), y - other.getY());
+	@Override
+	public Vector2D mul(float scalar) {
+		return (Vector2D) super.mul(scalar);
 	}
 	
-	public float norm() {
-		return (float) Math.sqrt(x*x + y*y);
+	@Override
+	public Vector2D mul(Matrix3 mat) {
+		return (Vector2D) super.mul(mat);
 	}
 	
-	public Vector2D times(float k) {
-		return new Vector2D(k*getX(), k*getY());
+	@Override
+	public Vector2D nor() {
+		return (Vector2D) super.nor();
 	}
 	
+	@Override
+	public Vector2D rotate(float angle) {
+		return (Vector2D) super.rotate(angle);
+	}
+	
+	@Override
+	public Vector2D set(float x, float y) {
+		return (Vector2D) super.set(x, y);
+	}
+	
+	@Override
+	public Vector2D set(Vector2 v) {
+		return (Vector2D) super.set(v);
+	}
+	
+	@Override
+	public Vector2D sub(float x, float y) {
+		return (Vector2D) super.sub(x, y);
+	}
+	
+	@Override
+	public Vector2D sub(Vector2 v) {
+		return (Vector2D) super.sub(v);
+	}
+	
+	
+	
+	
+	
+	// ADDED METHODS
+	/**
+	 * Returns a new unitary vector pointing from this point to the other point 
+	 */
 	public Vector2D directionTo(Vector2D other) {
 		Vector2D diff = other.minus(this);
-		return diff.times(1/diff.norm());
-	}
-	
-	public float distanceTo(Vector2D other) {
-		return this.minus(other).norm();
+		return diff.nor();
 	}
 	
 	
+	// functional version of add
+	public Vector2D plus(Vector2D other) {
+		return new Vector2D(x + other.x, y + other.y);
+	}
+	
+	// functional version of sub	
+	public Vector2D minus(Vector2D other) {
+		return new Vector2D(x - other.x, y - other.y);
+	}
+
+	// functional version of mul
+	public Vector2D times(int alpha) {
+		return new Vector2D(alpha*x, alpha*y);
+	}
+	
+
 }

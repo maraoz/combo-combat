@@ -39,6 +39,7 @@ public abstract class DispatcherNetworkHandler extends IdleStateAwareChannelUpst
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		System.out.println(e.getCause().getClass()+" caught");
+		e.getCause().printStackTrace();
 	}
 	
 

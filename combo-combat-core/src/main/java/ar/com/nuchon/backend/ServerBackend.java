@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import ar.com.nuchon.backend.domain.Bullet;
+import ar.com.nuchon.backend.domain.Fireball;
 import ar.com.nuchon.backend.domain.PlayerAvatar;
 import ar.com.nuchon.backend.domain.Updatable;
 import ar.com.nuchon.backend.domain.Vector2D;
@@ -21,7 +21,7 @@ public class ServerBackend {
 	private static final float HIT_RANGE = 15;
 	private static Map<Long, PlayerAvatar> players = Maps.newHashMap();
 	private static List<Updatable> updatees = Collections.synchronizedList(new ArrayList<Updatable>());
-	private static List<Bullet> bullets = Collections.synchronizedList(new ArrayList<Bullet>());
+	private static List<Fireball> bullets = Collections.synchronizedList(new ArrayList<Fireball>());
 	
 	
 	public static void movePlayer(Long id, Vector2D delta) {
@@ -29,8 +29,7 @@ public class ServerBackend {
 		Preconditions.checkNotNull(delta);
 		
 		PlayerAvatar player = getPlayer(id);
-		Vector2D moved = player.getPosition().plus(delta);
-		player.setPosition(moved);
+		player.getPosition().add(delta);
 	}
 	
 	public static void removePlayer(Long id) {
@@ -51,8 +50,8 @@ public class ServerBackend {
 		return players.get(sessionId);
 	}
 	
-	public static Bullet bulletShot(Vector2D origin, Vector2D target) {
-		Bullet bullet = new Bullet(origin, target);
+	public static Fireball bulletShot(Vector2D origin, Vector2D target) {
+		Fireball bullet = new Fireball(origin, target);
 		bullets.add(bullet);
 		updatees.add(bullet);
 		return bullet;
@@ -62,9 +61,9 @@ public class ServerBackend {
 		List<BulletHitEvent> ret = Lists.newArrayList();
 		for (PlayerAvatar p : players.values()) {
 			synchronized (bullets) {
-				List<Bullet> toRemove = Lists.newArrayList();
-				for (Bullet b : bullets) {
-					if (b.getPos().distanceTo(p.getPosition()) < HIT_RANGE) {
+				List<Fireball> toRemove = Lists.newArrayList();
+				for (Fireball b : bullets) {
+					if (b.getPos().dst(p.getPosition()) < HIT_RANGE) {
 						p.reduceHP();
 						toRemove.add(b);
 						ret.add(new BulletHitEvent(p.getId(), b.getId()));

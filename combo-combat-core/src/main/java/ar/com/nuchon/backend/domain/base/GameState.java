@@ -7,7 +7,6 @@ public class GameState {
 
 	public GameState(long sequence) {
 		super();
-		String a;
 		this.sequence = sequence;
 	}
 	

@@ -1,7 +1,7 @@
 package ar.com.nuchon.backend.tasks;
 
 import ar.com.nuchon.backend.ClientBackend;
-import ar.com.nuchon.backend.domain.Bullet;
+import ar.com.nuchon.backend.domain.Fireball;
 import ar.com.nuchon.backend.domain.Vector2D;
 import ar.com.nuchon.network.dispatch.MessageHub;
 import ar.com.nuchon.network.message.gui.CloseNotify;
@@ -159,12 +159,12 @@ public class GraphicsDisplayTask extends SynchedTask implements
 
 		// draw players
 		for (Vector2D p : ClientBackend.getPositions()) {
-			drawRect(p.getX(), p.getY(), PLAYER_SIZE);
+			drawRect(p.x, p.y, PLAYER_SIZE);
 		}
 
 		// draw bullets
-		for (Bullet b : ClientBackend.getBullets()) {
-			drawRect(b.getPos().getX(), b.getPos().getY(), BULLET_SIZE);
+		for (Fireball b : ClientBackend.getBullets()) {
+			drawRect(b.getPos().x, b.getPos().y, BULLET_SIZE);
 		}
 
 		batch.setProjectionMatrix(camera.combined);

@@ -2,6 +2,7 @@ package ar.com.nuchon.backend.domain;
 
 import ar.com.nuchon.backend.domain.base.GameObject;
 
+
 public class PlayerAvatar extends GameObject {
 
 	private Vector2D position;

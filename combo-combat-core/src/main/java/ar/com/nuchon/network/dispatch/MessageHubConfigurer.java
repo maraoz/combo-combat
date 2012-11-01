@@ -35,7 +35,7 @@ import ar.com.nuchon.network.message.session.ConnectResponse;
 import ar.com.nuchon.network.message.session.DisconnectNotify;
 import ar.com.nuchon.network.message.session.DisconnectRequest;
 import ar.com.nuchon.network.message.session.DisconnectResponse;
-import ar.com.nuchon.network.message.spells.BulletShotRequest;
+import ar.com.nuchon.network.message.spells.FireballCastRequest;
 import ar.com.nuchon.network.message.update.UpdatableCreateNotify;
 
 public class MessageHubConfigurer {
@@ -55,7 +55,7 @@ public class MessageHubConfigurer {
 		// no handler for PlayerMoveNotify
 		// no handler for MoveKeyNotify
 		// no handler for ShootKeyNotify
-		MessageHub.subscribe(BulletShotRequest.class, ServerBulletShotRequestHandler.get());
+		MessageHub.subscribe(FireballCastRequest.class, ServerBulletShotRequestHandler.get());
 		// no handler for UpdatableCreateNotify
 		MessageHub.subscribe(BulletHitNotify.class, ServerBulletHitEventHandler.get());
 		
