@@ -11,7 +11,7 @@ import org.jboss.netty.handler.codec.serialization.ObjectDecoder;
 import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
 
 
-public abstract class GamePipelineFactory implements ChannelPipelineFactory {
+public abstract class BasePipelineFactory implements ChannelPipelineFactory {
 
 	public ChannelPipeline getPipeline() {
 		ChannelPipeline pipeline = Channels.pipeline();

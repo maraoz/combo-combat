@@ -8,6 +8,7 @@ import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
+import ar.com.nuchon.annotation.GameObjectAnnotationProcessor;
 import ar.com.nuchon.backend.tasks.GraphicsDisplayTask;
 import ar.com.nuchon.backend.tasks.LineReaderTask;
 import ar.com.nuchon.network.GameClientPipelineFactory;
@@ -29,6 +30,9 @@ public class GameClient implements Runnable {
 
 		// bind message handlers
 		MessageHubConfigurer.setupClient();
+		
+		// scan annotations and do reflection magic
+		GameObjectAnnotationProcessor.processDomainClasses();
 
 		// create GUI for client
 		ExecutorService pool = Executors.newFixedThreadPool(5);

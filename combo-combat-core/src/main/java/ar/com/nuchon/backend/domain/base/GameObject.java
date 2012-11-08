@@ -63,7 +63,8 @@ public class GameObject {
 		return true;
 	}
 	
-	
-	
+	public boolean isAlive() {
+		return !shouldDestroyMe();
+	}
 
 }

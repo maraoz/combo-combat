@@ -1,14 +1,17 @@
 package ar.com.nuchon.backend.domain;
 
+import ar.com.nuchon.annotation.NetworkData;
 import ar.com.nuchon.backend.domain.base.GameObject;
 
 
 public class Fireball extends GameObject implements Updatable {
 
 	private static final int VELOCITY = 5;
+	
+	@NetworkData
 	private Vector2D pos;
-	private final Vector2D speed;
-	private boolean alive = true;
+	@NetworkData
+	private Vector2D speed;
 	
 	public Fireball(Vector2D pos, Vector2D target) {
 		super();
@@ -24,14 +27,6 @@ public class Fireball extends GameObject implements Updatable {
 	
 	public void update() {
 		this.pos.add(speed);
-	}
-	
-	public void boom() {
-		alive = false;
-	}
-	
-	public boolean isAlive() {
-		return alive;
 	}
 	
 }
