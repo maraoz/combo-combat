@@ -9,6 +9,7 @@ import java.util.Map;
 import ar.com.nuchon.backend.domain.Fireball;
 import ar.com.nuchon.backend.domain.Updatable;
 import ar.com.nuchon.backend.domain.Vector2D;
+import ar.com.nuchon.backend.domain.base.GameState;
 import ar.com.nuchon.backend.domain.events.BulletHitEvent;
 
 import com.google.common.base.Predicate;
@@ -17,6 +18,16 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class ClientBackend {
+	
+	private static GameState lastKnownState = new GameState();
+	
+	public static GameState getState() {
+		return lastKnownState;
+	}
+	
+	public static void setState(GameState state) {
+		lastKnownState = state;
+	}
 	
 	private static Map<Long, Vector2D> playerPositions = Maps.newHashMap();
 	private static List<Updatable> updatees = Collections.synchronizedList(new ArrayList<Updatable>());

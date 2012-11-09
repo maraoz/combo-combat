@@ -15,8 +15,13 @@ public class GameStateDelta implements Serializable {
 	
 	private List<GameObjectDelta> objectChanges = Lists.newArrayList();
 	private List<GameObject> spawnedObjects = Lists.newArrayList();
+	private final Long sequence;
 	
-	
+	public GameStateDelta(Long sequence) {
+		super();
+		this.sequence = sequence;
+	}
+
 	public void addNewObject(GameObject object) {
 		this.spawnedObjects.add(object);
 	}
@@ -24,6 +29,18 @@ public class GameStateDelta implements Serializable {
 	public void addObjectChange(GameObjectDelta delta) {
 		objectChanges.add(delta);
 	}
+
+	@Override
+	public String toString() {
+		return "GameStateDelta [objectChanges=" + objectChanges
+				+ ", spawnedObjects=" + spawnedObjects + ", sequence="
+				+ sequence + "]";
+	}
+
+	public long getSequence() {
+		return sequence;
+	}
+	
 	
 	
 }

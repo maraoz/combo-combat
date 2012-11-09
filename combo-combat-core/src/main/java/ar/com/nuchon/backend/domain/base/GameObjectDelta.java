@@ -25,8 +25,12 @@ public class GameObjectDelta {
 	public void addFieldChange(GameObjectFieldChange fieldChange) {
 		changes.add(fieldChange);
 	}
-
-
+	
+	@Override
+	public String toString() {
+		return "GameObjectDelta [" + type + "(" + objectId
+				+ ")->" + changes + "]";
+	}
 
 	// factory method for a delta representing game object must be destroyed
 	public static GameObjectDelta destroyDeltaFor(GameObject object) {
@@ -34,5 +38,7 @@ public class GameObjectDelta {
 		ret.addFieldChange(new GameObjectFieldChange("destroyMe", true));
 		return ret;
 	}
+	
+	
 
 }

@@ -3,7 +3,10 @@ package ar.com.nuchon.network.dispatch;
 import ar.com.nuchon.handler.chat.ClientChatNotifyHandler;
 import ar.com.nuchon.handler.chat.ServerChatRequestHandler;
 import ar.com.nuchon.handler.event.ClientBulletHitEventHandler;
+import ar.com.nuchon.handler.event.ClientGameStateDeltaNotifyHandler;
 import ar.com.nuchon.handler.event.ServerBulletHitEventHandler;
+import ar.com.nuchon.handler.event.ServerGameStateAckHandler;
+import ar.com.nuchon.handler.event.ServerGameStateNotifyHandler;
 import ar.com.nuchon.handler.gui.ClientCloseNotifyHandler;
 import ar.com.nuchon.handler.gui.ClientLineTypedNotifyHandler;
 import ar.com.nuchon.handler.gui.ClientMouseMovedNotifyHandler;
@@ -22,6 +25,9 @@ import ar.com.nuchon.handler.update.ClientUpdatableCreateNotifyHandler;
 import ar.com.nuchon.network.message.chat.ChatNotify;
 import ar.com.nuchon.network.message.chat.ChatRequest;
 import ar.com.nuchon.network.message.event.BulletHitNotify;
+import ar.com.nuchon.network.message.event.GameStateAck;
+import ar.com.nuchon.network.message.event.GameStateDeltaNotify;
+import ar.com.nuchon.network.message.event.GameStateNotify;
 import ar.com.nuchon.network.message.gui.CloseNotify;
 import ar.com.nuchon.network.message.gui.LineTypedNotify;
 import ar.com.nuchon.network.message.gui.MouseMovedNotify;
@@ -58,6 +64,9 @@ public class MessageHubConfigurer {
 		MessageHub.subscribe(FireballCastRequest.class, ServerBulletShotRequestHandler.get());
 		// no handler for UpdatableCreateNotify
 		MessageHub.subscribe(BulletHitNotify.class, ServerBulletHitEventHandler.get());
+		MessageHub.subscribe(GameStateNotify.class, ServerGameStateNotifyHandler.get());
+		// no handler for GameStateDeltaNotify
+		MessageHub.subscribe(GameStateAck.class, ServerGameStateAckHandler.get());
 		
 	}
 
@@ -81,7 +90,9 @@ public class MessageHubConfigurer {
 		// no handler for BulletShotRequest
 		MessageHub.subscribe(UpdatableCreateNotify.class,  ClientUpdatableCreateNotifyHandler.get());
 		MessageHub.subscribe(BulletHitNotify.class, ClientBulletHitEventHandler.get());
-		
+		// no handler for GameStateNotify
+		MessageHub.subscribe(GameStateDeltaNotify.class, ClientGameStateDeltaNotifyHandler.get());
+		// no handler for GameStateAck
 	}
 
 }

@@ -25,4 +25,12 @@ public class GameObjectFieldChange {
 	public String getFieldName() {
 		return fieldName;
 	}
+
+	@Override
+	public String toString() {
+		return "("+fieldName	+ ":= " + changedValue + ")";
+	}
+	
+	
+	
 }

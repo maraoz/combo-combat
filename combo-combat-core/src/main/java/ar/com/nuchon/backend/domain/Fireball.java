@@ -28,5 +28,8 @@ public class Fireball extends GameObject implements Updatable {
 	public void update() {
 		this.pos.add(speed);
 	}
-	
+	@Override
+	public String toString() {
+		return "Fireball [pos=" + pos + ", speed=" + speed + "]";
+	}
 }

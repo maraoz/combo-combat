@@ -10,13 +10,31 @@ import ar.com.nuchon.backend.domain.Fireball;
 import ar.com.nuchon.backend.domain.PlayerAvatar;
 import ar.com.nuchon.backend.domain.Updatable;
 import ar.com.nuchon.backend.domain.Vector2D;
-import ar.com.nuchon.backend.domain.events.BulletHitEvent;
+import ar.com.nuchon.backend.domain.base.GameState;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class ServerBackend {
+	
+	public static GameState currentState = new GameState();
+
+	private static final List<GameState> stateMemory = Lists.newLinkedList();
+	private static Long latestStateId = 0L; 
+	private static final Map<Long, Long> sessionToLastAckState = Maps.newHashMap();
+	
+	public static List<GameState> getStateMemory() {
+		return stateMemory;
+	}
+	
+	public static Long getLatestStateId() {
+		return latestStateId;
+	}
+	
+	public static Map<Long, Long> getSessionToLastAckState() {
+		return sessionToLastAckState;
+	}
 	
 	private static final float HIT_RANGE = 15;
 	private static Map<Long, PlayerAvatar> players = Maps.newHashMap();
@@ -50,37 +68,24 @@ public class ServerBackend {
 		return players.get(sessionId);
 	}
 	
-	public static Fireball bulletShot(Vector2D origin, Vector2D target) {
-		Fireball bullet = new Fireball(origin, target);
-		bullets.add(bullet);
-		updatees.add(bullet);
-		return bullet;
+	public static void bulletShot(Vector2D origin, Vector2D target) {
+		GameState current = getState();
+		Fireball fireball = new Fireball(origin, target);
+		current.addObject(fireball);
+		setState(current);
+		
 	}
 	
-	public static List<BulletHitEvent> checkCollisions() {
-		List<BulletHitEvent> ret = Lists.newArrayList();
-		for (PlayerAvatar p : players.values()) {
-			synchronized (bullets) {
-				List<Fireball> toRemove = Lists.newArrayList();
-				for (Fireball b : bullets) {
-					if (b.getPos().dst(p.getPosition()) < HIT_RANGE) {
-						p.reduceHP();
-						toRemove.add(b);
-						ret.add(new BulletHitEvent(p.getId(), b.getId()));
-					}
-				}
-				bullets.removeAll(toRemove);
-			}
-		}
-		return ret;
+	public static GameState getState() {
+		return currentState.next();
 	}
 	
-	public static void update() {
-		synchronized (updatees) {
-			for (Updatable u : updatees) {
-				u.update();
-			}
-		}
+	public static void setState(GameState state) {
+		currentState = state;
 	}
 
+	public static void update() {
+		currentState.update();
+	}
+	
 }

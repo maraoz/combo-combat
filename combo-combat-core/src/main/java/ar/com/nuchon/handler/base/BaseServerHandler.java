@@ -1,6 +1,7 @@
 package ar.com.nuchon.handler.base;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
@@ -21,7 +22,9 @@ public class BaseServerHandler {
 	public Long getClient(Channel channel) {
 		return connectionManager.getSessionFor(channel);
 	}
-
+	public Set<Long> getAllSessions() {
+		return connectionManager.getAll();
+	}
 	public void send(BaseMessage message, Long destSession) {
 		connectionManager.getChannelFor(destSession).write(message);
 	}

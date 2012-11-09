@@ -27,9 +27,13 @@ public class GameState {
 	/**
 	 * Copy constructor
 	 */
-	public GameState(GameState other) {
-		this.objects = Maps.newHashMap(other.objects);
-		this.sequence = other.sequence + 1;
+	private GameState(GameState other) {
+		this(other.objects, other.sequence);
+	}
+	
+	public GameState(Map<Long, GameObject> objects, long sequence) {
+		this.objects = Maps.newHashMap(objects);
+		this.sequence = sequence;
 	}
 	
 	public long getSequence() {
@@ -38,6 +42,11 @@ public class GameState {
 	
 	public Set<GameObject> getGameObjects() {
 		return Sets.newHashSet(objects.values());
+	}
+	
+	public void addObject(GameObject object) {
+		Preconditions.checkNotNull(object);
+		this.objects.put(object.getId(), object);
 	}
 	
 	public GameObject getGameObject(Long id) {
@@ -57,7 +66,7 @@ public class GameState {
 	 * Creates the delta that would take this state to the newer state 
 	 */
 	public GameStateDelta getDeltaTo(GameState newer) {
-		GameStateDelta delta = new GameStateDelta();
+		GameStateDelta delta = new GameStateDelta(newer.getSequence());
 		
 		Set<GameObject> dissapeared = Sets.difference(this.getGameObjects(), newer.getGameObjects());
 		Set<GameObject> appeared = Sets.difference(newer.getGameObjects(), this.getGameObjects());
@@ -113,5 +122,42 @@ public class GameState {
 		// TODO
 		return changedState;
 	}
+
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (sequence ^ (sequence >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameState other = (GameState) obj;
+		if (sequence != other.sequence)
+			return false;
+		return true;
+	}
+
+	public GameState copy() {
+		return new GameState(this);
+	}
+	
+	public GameState next() {
+		return new GameState(this.objects, this.sequence+1);
+	}
+	
+	
 	
 }

@@ -28,7 +28,7 @@ public class ServerConnectionManager {
 	public Set<Long> getAll() {
 		return clients.keySet();
 	}
-
+	
 	public Channel getChannelFor(Long session) {
 		return clients.get(session);
 	}
