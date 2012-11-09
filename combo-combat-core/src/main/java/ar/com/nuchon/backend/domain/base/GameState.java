@@ -17,11 +17,23 @@ public class GameState {
 	
 	// sequence number of game state in chronological order.
 	private final long sequence;
-	private Map<Long, GameObject> objects = Maps.newHashMap();
+	private final Map<Long, GameObject> objects;
 
-	public GameState(long sequence) {
-		super();
-		this.sequence = sequence;
+	public GameState() {
+		this.objects = Maps.newHashMap();
+		this.sequence = 0;
+	}
+	
+	/**
+	 * Copy constructor
+	 */
+	public GameState(GameState other) {
+		this.objects = Maps.newHashMap(other.objects);
+		this.sequence = other.sequence + 1;
+	}
+	
+	public long getSequence() {
+		return sequence;
 	}
 	
 	public Set<GameObject> getGameObjects() {
@@ -97,8 +109,9 @@ public class GameState {
 	 * Returns a new state with the delta changes applied to this state
 	 */
 	public GameState applyDelta(GameStateDelta delta) {
+		GameState changedState = new GameState(this);
 		// TODO
-		return null;
+		return changedState;
 	}
 	
 }

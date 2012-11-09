@@ -22,7 +22,7 @@ public class GameStateDelta implements Serializable {
 	}
 	
 	public void addObjectChange(GameObjectDelta delta) {
-		
+		objectChanges.add(delta);
 	}
 	
 	

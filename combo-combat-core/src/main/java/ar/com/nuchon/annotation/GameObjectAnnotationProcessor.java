@@ -20,8 +20,6 @@ public class GameObjectAnnotationProcessor {
 	}
 	
 	public static void process(Class<? extends GameObject> clazz) {
-		Field[] fields = clazz.getFields();
-		;
 		Set<Field> networkedFields = Reflections.getAllFields(clazz, Reflections.withAnnotation(NetworkData.class));
 		for (Field field : networkedFields) {
 			System.out.println("\tFound network data: "+field.getName());
