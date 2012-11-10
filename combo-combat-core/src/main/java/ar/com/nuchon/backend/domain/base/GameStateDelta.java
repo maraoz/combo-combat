@@ -41,6 +41,13 @@ public class GameStateDelta implements Serializable {
 		return sequence;
 	}
 	
+	public List<GameObject> getSpawnedObjects() {
+		return spawnedObjects;
+	}
+	
+	public List<GameObjectDelta> getObjectChanges() {
+		return objectChanges;
+	}
 	
 	
 }

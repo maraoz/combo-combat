@@ -22,8 +22,30 @@ public class GameObjectAnnotationProcessor {
 	public static void process(Class<? extends GameObject> clazz) {
 		Set<Field> networkedFields = Reflections.getAllFields(clazz, Reflections.withAnnotation(NetworkData.class));
 		for (Field field : networkedFields) {
+			field.setAccessible(true);
 			System.out.println("\tFound network data: "+field.getName());
 		}
 		GameObjectInspector.store(clazz, networkedFields);
 	}
+
+	public static void setField(GameObject gameObject, String fieldName,
+			Object changedValue) {
+		try {
+			Field field = gameObject.getClass().getField(fieldName);
+			field.setAccessible(true);
+			field.set(gameObject, changedValue);
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
 }

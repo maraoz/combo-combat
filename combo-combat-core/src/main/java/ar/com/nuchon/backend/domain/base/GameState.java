@@ -1,14 +1,17 @@
 package ar.com.nuchon.backend.domain.base;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ar.com.nuchon.annotation.GameObjectAnnotationProcessor;
 import ar.com.nuchon.annotation.GameObjectInspector;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -24,10 +27,7 @@ public class GameState {
 		this.sequence = 0;
 	}
 	
-	/**
-	 * Copy constructor
-	 */
-	private GameState(GameState other) {
+	public GameState(GameState other, long sequence) {
 		this(other.objects, other.sequence);
 	}
 	
@@ -89,7 +89,7 @@ public class GameState {
 			Class<? extends GameObject> type = current.getClass();
 			Set<Field> networkedFields = GameObjectInspector.getNetworkedFields(type);
 			boolean changed = false;
-			GameObjectDelta objectDelta = new GameObjectDelta(type, id);
+			GameObjectDelta objectDelta = new GameObjectDelta(current);
 			for (Field f : networkedFields) {
 				Object currentValue;
 				Object futureValue;
@@ -118,14 +118,32 @@ public class GameState {
 	 * Returns a new state with the delta changes applied to this state
 	 */
 	public GameState applyDelta(GameStateDelta delta) {
-		GameState changedState = new GameState(this);
-		// TODO
+		GameState changedState = new GameState(this, delta.getSequence());
+		for (GameObject spawned : delta.getSpawnedObjects()) {
+			changedState.addObject(spawned);
+		}
+		for (GameObjectDelta change : delta.getObjectChanges()) {
+			long objectId = change.getObjectId();
+			GameObject gameObject = changedState.getGameObject(objectId);
+			for (GameObjectFieldChange fieldChange : change.getChanges()) {
+				GameObjectAnnotationProcessor.setField(gameObject, 
+						fieldChange.getFieldName(), fieldChange.getChangedValue());
+			}
+		}
 		return changedState;
 	}
 
 	public void update() {
-		// TODO Auto-generated method stub
-		
+		List<GameObject> toRemove = Lists.newArrayList();
+		for (GameObject o : getGameObjects()) {
+			o.update();
+			if (o.shouldDestroyMe()) {
+				toRemove.add(o);
+			}
+		}
+		for (GameObject removeMe: toRemove) {
+			objects.remove(removeMe.getId());
+		}
 	}
 
 	@Override
@@ -150,14 +168,8 @@ public class GameState {
 		return true;
 	}
 
-	public GameState copy() {
-		return new GameState(this);
-	}
-	
 	public GameState next() {
 		return new GameState(this.objects, this.sequence+1);
 	}
-	
-	
 	
 }

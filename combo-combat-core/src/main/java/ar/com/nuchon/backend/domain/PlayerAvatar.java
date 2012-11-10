@@ -35,4 +35,9 @@ public class PlayerAvatar extends GameObject {
 		System.out.println(this.getId() + ": " + hitPoints);
 	}
 
+	@Override
+	public void update() {
+		// nothing for now
+	}
+
 }

@@ -4,7 +4,7 @@ import ar.com.nuchon.annotation.NetworkData;
 
 import com.google.common.base.Preconditions;
 
-public class GameObject {
+public abstract class GameObject {
 
 	private final Long id;
 	
@@ -66,5 +66,7 @@ public class GameObject {
 	public boolean isAlive() {
 		return !shouldDestroyMe();
 	}
+	
+	public abstract void update();
 
 }

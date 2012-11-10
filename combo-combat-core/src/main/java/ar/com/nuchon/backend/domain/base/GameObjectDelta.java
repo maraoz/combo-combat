@@ -17,13 +17,25 @@ public class GameObjectDelta {
 	
 	
 	
-	public GameObjectDelta(Class<? extends GameObject> type, long objectId) {
-		this.type = type;
-		this.objectId = objectId;
+	public GameObjectDelta(GameObject o) {
+		this.type = o.getClass();
+		this.objectId = o.getId();
 	}
 	
 	public void addFieldChange(GameObjectFieldChange fieldChange) {
 		changes.add(fieldChange);
+	}
+	
+	public List<GameObjectFieldChange> getChanges() {
+		return changes;
+	}
+	
+	public long getObjectId() {
+		return objectId;
+	}
+	
+	public Class<? extends GameObject> getType() {
+		return type;
 	}
 	
 	@Override
@@ -34,7 +46,7 @@ public class GameObjectDelta {
 
 	// factory method for a delta representing game object must be destroyed
 	public static GameObjectDelta destroyDeltaFor(GameObject object) {
-		GameObjectDelta ret = new GameObjectDelta(object.getClass(), object.getId());
+		GameObjectDelta ret = new GameObjectDelta(object);
 		ret.addFieldChange(new GameObjectFieldChange("destroyMe", true));
 		return ret;
 	}

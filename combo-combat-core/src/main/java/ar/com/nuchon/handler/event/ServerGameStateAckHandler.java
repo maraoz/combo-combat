@@ -20,6 +20,7 @@ public class ServerGameStateAckHandler extends BaseServerHandler implements
 	public void handle(GameStateAck message) {
 		Long session = getClient(message.getChannel());
 		ServerBackend.getSessionToLastAckState().put(session, message.getSequence());
+		System.out.println("client "+session+" acked state "+message.getSequence());
 	}
 
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import ar.com.nuchon.backend.domain.Fireball;
 import ar.com.nuchon.backend.domain.Updatable;
 import ar.com.nuchon.backend.domain.Vector2D;
+import ar.com.nuchon.backend.domain.base.GameObject;
 import ar.com.nuchon.backend.domain.base.GameState;
 import ar.com.nuchon.backend.domain.events.BulletHitEvent;
 
@@ -21,11 +22,11 @@ public class ClientBackend {
 	
 	private static GameState lastKnownState = new GameState();
 	
-	public static GameState getState() {
+	public synchronized static GameState getState() {
 		return lastKnownState;
 	}
 	
-	public static void setState(GameState state) {
+	public synchronized static void setState(GameState state) {
 		lastKnownState = state;
 	}
 	
@@ -50,23 +51,18 @@ public class ClientBackend {
 	
 	public static List<Fireball> getBullets() {
 		List<Fireball> ret = Lists.newArrayList();
-		synchronized (updatees) {
-			for (Updatable u : updatees) {
-				ret.add((Fireball) u);
+		synchronized (lastKnownState) {
+			for (GameObject g : lastKnownState.getGameObjects()) {
+				if (g instanceof Fireball) {
+					ret.add((Fireball) g);
+				}
 			}
 		}
 		return ret;
 	}
 	
 	public static void update() {
-		synchronized (updatees) {
-			for (Updatable u : updatees) {
-				if (!u.isAlive()) {
-					updatees.remove(u);
-				}
-				u.update();
-			}
-		}
+		lastKnownState.update();
 	}
 
 	public static void bulletHit(final BulletHitEvent hit) {
