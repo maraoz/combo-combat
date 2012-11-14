@@ -153,7 +153,7 @@ function MakeWindow (id : int)
 		// Start a new server
 		if (allowsDedicatedServer)
 		{
-		    if (GUILayout.Button ("Start Server")) {
+		    if (IsBatchMode() || GUILayout.Button ("Start Server")) {
 			    Network.InitializeServer(32, serverPort, useNat);
 			    MasterServer.RegisterHost(gameName, "Main Server", "Argentina public server");
 		    }
@@ -178,6 +178,11 @@ function MakeWindow (id : int)
 		}
 		GUILayout.FlexibleSpace();
 	}
+}
+
+function IsBatchMode(){
+    var cla = System.Environment.GetCommandLineArgs();
+    return cla.Length > 1 && cla[1] == "-batchmode";
 }
 
 function MakeClientWindow(id : int)
