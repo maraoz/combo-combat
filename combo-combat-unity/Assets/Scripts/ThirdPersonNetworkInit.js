@@ -8,7 +8,7 @@ function OnNetworkInstantiate (msg : NetworkMessageInfo) {
 	// This is just some remote controlled player
 	else
 	{
-		name += "Remote"+msg.sender;
+		name += "Remote";
 		GetComponent(ThirdPersonController).enabled = false;
 		GetComponent(ThirdPersonSimpleAnimation).enabled = false;
 		GetComponent("NetworkInterpolatedTransform").enabled = true;
