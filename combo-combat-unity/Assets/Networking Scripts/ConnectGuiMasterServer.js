@@ -12,7 +12,7 @@ private var filterNATHosts = false;
 private var probingPublicIP = false;
 private var doneTesting = false;
 private var timer : float = 0.0;
-private var useNat = false;		// Should the server enabled NAT punchthrough feature
+private var useNat = true;		// Should the server enabled NAT punchthrough feature
 
 private var windowRect;
 private var serverListRect;

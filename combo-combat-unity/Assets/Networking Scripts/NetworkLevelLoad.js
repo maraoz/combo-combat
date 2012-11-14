@@ -5,19 +5,19 @@ function Awake ()
 }
 
 function OnConnectedToServer() {
-    Network.SetSendingEnabled(0, false);	
-    Network.isMessageQueueRunning = false;
-    Application.LoadLevel("ComboGame");
+	Network.SetSendingEnabled(0, false);	
+	Network.isMessageQueueRunning = false;
+	Application.LoadLevel("ComboGame");
 }
 
 function OnServerInitialized() {
-    Application.LoadLevel("ComboGame");
-    Debug.Log("Server initialized and ready");
+	Application.LoadLevel("ComboGame");
+	Debug.Log("Server initialized and ready");
 }
 function OnDisconnectedFromServer ()
 {
-    //Application.LoadLevel(disconnectedLevel);
-    // TODO: Reconnecting...
+	//Application.LoadLevel(disconnectedLevel);
+	// TODO: Reconnecting...
 }
 
 @script RequireComponent(NetworkView)
