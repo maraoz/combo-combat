@@ -1,0 +1,8 @@
+C:\Users\Manu\Documents\GitHub\combo-combat\combo-combat-unity\Temp\bin\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\Manu\Documents\GitHub\combo-combat\combo-combat-unity\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
+C:\Users\Manu\Documents\GitHub\combo-combat\combo-combat-unity\Temp\bin\Debug\UnityEditor.dll
+C:\Users\Manu\Documents\GitHub\combo-combat\combo-combat-unity\Temp\bin\Debug\UnityEngine.dll
+C:\Users\Manu\Documents\GitHub\combo-combat\combo-combat-unity\Temp\bin\Debug\nunit.framework.dll
+C:\Users\Manu\Documents\GitHub\combo-combat\combo-combat-unity\obj\Debug\Assembly-CSharp-firstpass-vs.csprojResolveAssemblyReference.cache
+C:\Users\Manu\Documents\GitHub\combo-combat\combo-combat-unity\obj\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\Manu\Documents\GitHub\combo-combat\combo-combat-unity\obj\Debug\Assembly-CSharp-firstpass.pdb

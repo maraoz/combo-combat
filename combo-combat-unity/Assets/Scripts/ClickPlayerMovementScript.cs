@@ -3,12 +3,13 @@ using System.Collections;
 
 public class ClickPlayerMovementScript : MonoBehaviour {
 
-    public Camera referencedCamera;
     private Player player;
     public float floorYOffset = -1.0f;
+    private Camera referencedCamera;
 
     void Awake() {
         this.player = this.gameObject.GetComponent<Player>();
+        referencedCamera = Camera.main;
     }
 
     // Update is called once per frame
@@ -21,40 +22,18 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
         // Check collision
         RaycastHit hitInfo = new RaycastHit();
-        if (Input.GetMouseButton(MouseButton.LEFT) || Input.GetMouseButtonDown(MouseButton.LEFT) || Input.GetMouseButton(MouseButton.RIGHT)) {
+        if (Input.GetMouseButton(MouseButton.RIGHT) || Input.GetMouseButtonDown(MouseButton.RIGHT) || Input.GetMouseButton(MouseButton.LEFT)) {
             Physics.Raycast(ray, out hitInfo, distanceToFloorY);
         }
 
-        if (Input.GetMouseButton(MouseButton.LEFT)) {
+        if (Input.GetMouseButton(MouseButton.RIGHT)) {
             if (hitInfo.collider == null || !hitInfo.collider.gameObject.CompareTag("Enemy")) {
                 Vector3 planePosition = ray.origin + distanceToFloorY * ray.direction;
-                player.Move(planePosition);
-            } else {
-                // enemy case
-                /*if (player.state.CanCancel(player) && !hitInfo.collider.gameObject.GetComponent<Battler>().isDead()) {
-                    // Set current target to this enemy
-                    player.Target(hitInfo.collider.gameObject);
-
-                    // Begin regular melee attack script
-                    Skill skill = player.getLeftClickSkill();
-
-                    if (player.mp > skill.mpConsumption) {
-                        player.ChangeState(skill.beginState(player));
-                    }
-                }*/
-            } 
+                player.PlanMove(planePosition);
+            }
         }
 
-        if (Input.GetMouseButtonDown(MouseButton.LEFT) && hitInfo.collider != null && hitInfo.collider.gameObject.CompareTag("Item")) {
-                /*startedTargeting = true;
-                player.Target(hitInfo.collider.gameObject);
-
-                Skill skill = itemPickupSkill;
-                player.ChangeState(skill.beginState(player));
-                 */
-        }
-
-        if (Input.GetMouseButton(MouseButton.RIGHT)) {
+        if (Input.GetMouseButton(MouseButton.LEFT)) {
             /*
             Skill skill = player.getRightClickSkill();
 

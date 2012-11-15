@@ -40,17 +40,17 @@ function Update ()
         animation.CrossFade("idle");
         SendMessage("SyncAnimation", "idle");
     }
-	
+    
     animation["run"].normalizedSpeed = runSpeedScale;
     animation["walk"].normalizedSpeed = walkSpeedScale;
-	
+    
     if (marioController.IsJumping ())
     {
         animation.wrapMode = WrapMode.ClampForever;
-		
+        
         animation.CrossFade ("jump", 0.2);
         SendMessage("SyncAnimation", "jump");
-		
+        
     }
         // We fell down somewhere
     else if (!marioController.IsGroundedWithTimeout ())

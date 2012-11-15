@@ -135,6 +135,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 testMessage = "Error in test routine, got " + connectionTestResult;
                 break;
         }
+        if (!testMessage.Contains("Undetermined")) 
         Debug.Log(testMessage);
     }
 

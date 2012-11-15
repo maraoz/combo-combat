@@ -47,10 +47,10 @@
      <Compile Include="Assets\Authoritative Server\AuthServerPersonAnimation.js" />
      <Compile Include="Assets\Authoritative Server\NetworkController.js" />
      <Compile Include="Assets\Chat\Chat.js" />
-     <Compile Include="Assets\Scripts\CharacterControls-(No Networking code)\SpringFollowCamera.js" />
-     <Compile Include="Assets\Scripts\CharacterControls-(No Networking code)\ThirdPersonController.js" />
-     <Compile Include="Assets\Scripts\CharacterControls-(No Networking code)\ThirdPersonPushBodies.js" />
-     <Compile Include="Assets\Scripts\CharacterControls-(No Networking code)\ThirdPersonSimpleAnimation.js" />
+     <Compile Include="Assets\Scripts\CharacterControls\SpringFollowCamera.js" />
+     <Compile Include="Assets\Scripts\CharacterControls\ThirdPersonController.js" />
+     <Compile Include="Assets\Scripts\CharacterControls\ThirdPersonPushBodies.js" />
+     <Compile Include="Assets\Scripts\CharacterControls\ThirdPersonSimpleAnimation.js" />
      <Compile Include="Assets\Scripts\ThirdPersonNetworkInit.js" />
   </ItemGroup>
   <ItemGroup>
