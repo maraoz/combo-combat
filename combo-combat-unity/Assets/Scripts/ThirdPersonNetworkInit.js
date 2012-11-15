@@ -11,7 +11,7 @@ function OnNetworkInstantiate (msg : NetworkMessageInfo) {
 	{
 		name += "Remote";
 		GetComponent(ThirdPersonController).enabled = false;
-		GetComponent(ThirdPersonSimpleAnimation).enabled = false;
+		GetComponent("CharacterSimpleAnimation").enabled = false;
 		GetComponent("NetworkInterpolatedTransform").enabled = true;
 	}
 }
