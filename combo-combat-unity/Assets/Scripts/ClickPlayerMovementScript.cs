@@ -1,15 +1,11 @@
 using UnityEngine;
 using System.Collections;
-/*
+
 public class ClickPlayerMovementScript : MonoBehaviour {
 
     public Camera referencedCamera;
     private Player player;
     public float floorYOffset = -1.0f;
-
-    public Skill itemPickupSkill;
-
-    private bool startedTargeting;
 
     void Awake() {
         this.player = this.gameObject.GetComponent<Player>();
@@ -25,20 +21,17 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
         // Check collision
         RaycastHit hitInfo = new RaycastHit();
-        if (Input.GetMouseButton(0) || Input.GetMouseButtonDown(0) || Input.GetMouseButton(1)) {
+        if (Input.GetMouseButton(MouseButton.LEFT) || Input.GetMouseButtonDown(MouseButton.LEFT) || Input.GetMouseButton(MouseButton.RIGHT)) {
             Physics.Raycast(ray, out hitInfo, distanceToFloorY);
         }
 
-        if (Input.GetMouseButton(0) && !startedTargeting) {
-            if (hitInfo.collider == null) {
-                if (player.state.CanCancel(player)) {
-                    if (!startedTargeting) {
-                        Vector3 planePosition = ray.origin + distanceToFloorY * ray.direction;
-                        player.Move(planePosition);
-                    }
-                }
-            } else if (hitInfo.collider.gameObject.CompareTag("Enemy")) {
-                if (player.state.CanCancel(player) && !hitInfo.collider.gameObject.GetComponent<Battler>().isDead()) {
+        if (Input.GetMouseButton(MouseButton.LEFT)) {
+            if (hitInfo.collider == null || !hitInfo.collider.gameObject.CompareTag("Enemy")) {
+                Vector3 planePosition = ray.origin + distanceToFloorY * ray.direction;
+                player.Move(planePosition);
+            } else {
+                // enemy case
+                /*if (player.state.CanCancel(player) && !hitInfo.collider.gameObject.GetComponent<Battler>().isDead()) {
                     // Set current target to this enemy
                     player.Target(hitInfo.collider.gameObject);
 
@@ -48,31 +41,21 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                     if (player.mp > skill.mpConsumption) {
                         player.ChangeState(skill.beginState(player));
                     }
-                }
-            } else {
-                if (player.state.CanCancel(player)) {
-                    if (!startedTargeting) {
-                        Vector3 planePosition = ray.origin + distanceToFloorY * ray.direction;
-                        player.Move(planePosition);
-                    }
-                }
-            }
-        } else if (Input.GetMouseButtonUp(0)) {
-            startedTargeting = false;
+                }*/
+            } 
         }
 
-        if (Input.GetMouseButtonDown(0) && hitInfo.collider != null && hitInfo.collider.gameObject.CompareTag("Item")) {
-            if (player.state.CanCancel(player)) {
-                startedTargeting = true;
+        if (Input.GetMouseButtonDown(MouseButton.LEFT) && hitInfo.collider != null && hitInfo.collider.gameObject.CompareTag("Item")) {
+                /*startedTargeting = true;
                 player.Target(hitInfo.collider.gameObject);
 
                 Skill skill = itemPickupSkill;
                 player.ChangeState(skill.beginState(player));
-            }
+                 */
         }
 
-        if (Input.GetMouseButton(1)) {
-
+        if (Input.GetMouseButton(MouseButton.RIGHT)) {
+            /*
             Skill skill = player.getRightClickSkill();
 
             if (skill.isTargetable() && player.mp > skill.mpConsumption) {
@@ -89,9 +72,9 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                     player.Target(null);
                     player.ChangeState(skill.beginState(player));
                 }
-            }
+            }*/
         }
 
     }
 
-}*/
+}

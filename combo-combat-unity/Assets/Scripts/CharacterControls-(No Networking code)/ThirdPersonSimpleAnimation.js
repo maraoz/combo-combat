@@ -16,6 +16,7 @@ function Update ()
 {
 	var marioController : ThirdPersonController = GetComponent(ThirdPersonController);
 	var currentSpeed = marioController.GetSpeed();
+	animation.wrapMode = WrapMode.Loop;
 
 	// Fade in run
 	if (currentSpeed > marioController.walkSpeed)
@@ -45,6 +46,7 @@ function Update ()
 	
 	if (marioController.IsJumping ())
 	{
+		animation.wrapMode = WrapMode.ClampForever;
 		if (marioController.IsCapeFlying())
 		{
 			animation.CrossFade ("jetpackjump", 0.2);
