@@ -13,7 +13,10 @@
 			return null;
 		}
 		if (typeof unityObject != "undefined") {
-			unityObject.embedUnity("unityPlayer", "WebPlayer.unity3d", 960, 600);
+			var params = {
+				disableContextMenu: true
+			};
+			unityObject.embedUnity("unityPlayer", "WebPlayer.unity3d", 960, 600, params);
 			
 		}
 		-->

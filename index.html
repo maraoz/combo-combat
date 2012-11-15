@@ -17,7 +17,10 @@
 			return null;
 		}
 		if (typeof unityObject != "undefined") {
-			unityObject.embedUnity("unityPlayer", "WebPlayer/WebPlayer.unity3d", 960, 600);
+                        var params = {
+				disableContextMenu: true
+			};
+			unityObject.embedUnity("unityPlayer", "WebPlayer/WebPlayer.unity3d", 960, 600, params);
 			
 		}
 		-->
@@ -64,9 +67,15 @@
 			border-width: 0px;
 		}
 		div#unityPlayer {
-			cursor: default;
+			cursor: none;
 			height: 600px;
 			width: 960px;
+                        margin-top: 100px;
+                        position:absolute;
+                        left:50%;
+                        top:50%;
+                        margin:-300px 0 0 -480px;
+
 		}
 		-->
 		</style>
