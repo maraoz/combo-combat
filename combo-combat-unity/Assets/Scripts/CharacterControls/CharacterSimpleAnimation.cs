@@ -28,10 +28,11 @@ public class CharacterSimpleAnimation : MonoBehaviour {
         }
             // Fade in walk
         else if (currentSpeed > 0.1) {
-            animation.CrossFade("walk");
+            // changed from walk to run to try
+            animation.CrossFade("run");
             // We fade out jumpland realy quick otherwise we get sliding feet
             animation.Blend("jumpland", 0);
-            SendMessage("SyncAnimation", "walk");
+            SendMessage("SyncAnimation", "run");
         }
             // Fade out walk and run
         else {
