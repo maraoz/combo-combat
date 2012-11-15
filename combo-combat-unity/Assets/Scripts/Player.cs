@@ -36,6 +36,7 @@ public class Player : MonoBehaviour {
     void ApplyTargetHunt() {
         groundSpeed = 0f;
         if (target != Vector3.zero) {
+            target.y = transform.position.y;
             if (CheckArrivedTarget()) {
                 transform.position = target;
                 target = Vector3.zero;
