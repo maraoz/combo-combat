@@ -19,9 +19,4 @@ public class SpawnPlayerScript : MonoBehaviour {
 		Network.DestroyPlayerObjects(player);
 	}
 
-	void OnGUI() {
-		if (Network.isServer)
-			GUI.Label(new Rect(20, Screen.height - 50, 200, 20), "Running as a dedicated server");
-	}
-
 }

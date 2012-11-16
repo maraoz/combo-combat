@@ -4,9 +4,9 @@ using System.Collections;
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour {
 
-    public PlayerState state;
     public float walkingSpeed = 6f;
     public float gravityMagnitude = 20.0f;
+    public Spell mainSpell;
 
     private CharacterController controller;
     private CollisionFlags collisionFlags;
