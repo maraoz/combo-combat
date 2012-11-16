@@ -3,13 +3,9 @@ using System.Collections;
 
 public class Spell : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public GameObject fireball; 
+
+    public void Cast(Vector3 target) {
+        GameObject.Instantiate(fireball, transform.position, Quaternion.identity);
+    }
 }

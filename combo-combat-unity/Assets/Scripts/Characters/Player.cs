@@ -6,7 +6,7 @@ public class Player : MonoBehaviour {
 
     public float walkingSpeed = 6f;
     public float gravityMagnitude = 20.0f;
-    public Spell mainSpell;
+    public GameObject fireball; 
 
     private CharacterController controller;
     private CollisionFlags collisionFlags;
@@ -17,6 +17,12 @@ public class Player : MonoBehaviour {
     private float groundSpeed = 0f;
     // y axis speed
     private float verticalSpeed = 0f;
+
+    // TODO: sacar esto de aca
+    public float castingTimeNeeded = 2;
+    private float castingTime = 0f;
+    private bool isCasting = false;
+    private bool hasCreatedFireball = false;
 
     void Awake() {
         controller = GetComponent<CharacterController>();
@@ -35,7 +41,7 @@ public class Player : MonoBehaviour {
 
     void ApplyTargetHunt() {
         groundSpeed = 0f;
-        if (target != Vector3.zero) {
+        if (target != Vector3.zero && !isCasting) {
             target.y = transform.position.y;
             if (CheckArrivedTarget()) {
                 transform.position = target;
@@ -47,7 +53,27 @@ public class Player : MonoBehaviour {
         }
     }
 
+    void UpdateTimers() {
+        if (isCasting) {
+            castingTime += Time.deltaTime;
+            if (castingTime >= (castingTimeNeeded / 2) && !hasCreatedFireball) {
+                hasCreatedFireball = true;
+                Vector3 forward = transform.TransformDirection(Vector3.forward);
+                Vector3 right = transform.TransformDirection(Vector3.right);
+                GameObject.Instantiate(fireball, transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f*right), transform.rotation);
+            }
+            if (castingTime >= castingTimeNeeded) {
+                castingTime = 0f;
+                isCasting = false;
+                hasCreatedFireball = false;
+            }
+
+        }
+    }
+
     void Update() {
+
+        UpdateTimers();
 
         // vertical movement
         ApplyGravity();
@@ -71,12 +97,25 @@ public class Player : MonoBehaviour {
         target = v;
     }
 
+    public void CastFireball(Vector3 v) {
+        isCasting = true;
+        target = Vector3.zero;
+    }
+
     public float GetSpeed() {
         return controller.velocity.magnitude;
     }
 
     public bool IsJumping() {
         return false;
+    }
+
+    public bool IsCasting() {
+        return isCasting;
+    }
+
+    public float GetCastingTimeNeeded() {
+        return castingTimeNeeded;
     }
 
     public bool IsGrounded() {

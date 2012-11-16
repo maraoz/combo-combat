@@ -26,32 +26,18 @@ public class ClickPlayerMovementScript : MonoBehaviour {
             Physics.Raycast(ray, out hitInfo, distanceToFloorY);
         }
 
-        if (Input.GetMouseButton(MouseButton.RIGHT)) {
+        if (Input.GetMouseButton(MouseButton.RIGHT) || Input.GetMouseButtonDown(MouseButton.LEFT)) {
             if (hitInfo.collider == null || !hitInfo.collider.gameObject.CompareTag("Enemy")) {
                 Vector3 planePosition = ray.origin + distanceToFloorY * ray.direction;
-                player.PlanMove(planePosition);
+
+                if (Input.GetMouseButton(MouseButton.RIGHT)) {
+                    player.PlanMove(planePosition);
+
+                }
+                if (Input.GetMouseButtonDown(MouseButton.LEFT)) {
+                    player.CastFireball(planePosition);
+                }
             }
-        }
-
-        if (Input.GetMouseButton(MouseButton.LEFT)) {
-            /*
-            Skill skill = player.getRightClickSkill();
-
-            if (skill.isTargetable() && player.mp > skill.mpConsumption) {
-                if (hitInfo.collider != null && hitInfo.collider.gameObject.CompareTag("Enemy")) {
-                    if (player.state.CanCancel(player) && !hitInfo.collider.gameObject.GetComponent<Battler>().isDead()) {
-                        // Set current target to this enemy
-                        player.Target(hitInfo.collider.gameObject);
-
-                        player.ChangeState(skill.beginState(player));
-                    }
-                }
-            } else {
-                if (player.state.CanCancel(player)) {
-                    player.Target(null);
-                    player.ChangeState(skill.beginState(player));
-                }
-            }*/
         }
 
     }

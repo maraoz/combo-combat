@@ -47,8 +47,11 @@ public class CharacterSimpleAnimation : MonoBehaviour {
             animation.wrapMode = WrapMode.ClampForever;
             animation.CrossFade("jump", 0.2f);
             SendMessage("SyncAnimation", "jump");
-
+        }
+        if (player.IsCasting()) {
+            AnimationState state = animation["punch"];
+            state.speed = state.length / player.GetCastingTimeNeeded();
+            animation.CrossFade("punch");
         }
     }
-
 }
