@@ -3,7 +3,7 @@ using System.Collections;
 
 public class FireballController : MonoBehaviour {
 
-    private float speed = .1f;
+    private float speed = .2f;
 
     // Use this for initialization
     void Start () {
@@ -14,4 +14,13 @@ public class FireballController : MonoBehaviour {
     void Update () {
         transform.position += transform.TransformDirection(Vector3.forward) * speed;
     }
+
+    void OnTriggerEnter(Collider other) {
+        Destroy(gameObject);
+    }
+
+    public void SetSpeed(float s) {
+        speed = s;
+    }
+
 }
