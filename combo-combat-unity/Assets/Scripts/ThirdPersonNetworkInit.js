@@ -10,7 +10,7 @@ function OnNetworkInstantiate (msg : NetworkMessageInfo) {
 	else
 	{
 		name += "Remote";
-		GetComponent(ThirdPersonController).enabled = false;
+		GetComponent("ClickPlayerMovementScript").enabled = false;
 		GetComponent("CharacterSimpleAnimation").enabled = false;
 		GetComponent("NetworkInterpolatedTransform").enabled = true;
 	}
