@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\CharacterControls\ThirdPersonSimpleAnimation.js" />
      <Compile Include="Assets\Scripts\ThirdPersonNetworkInit.js" />
      <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
+     <None Include="Assets\Standard Assets\Detonator\Resources\Detonator\Textures\HeatDistort.shader" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
