@@ -3,8 +3,6 @@ function OnNetworkInstantiate (msg : NetworkMessageInfo) {
 	if (networkView.isMine)
 	{
 	    Camera.main.SendMessage("SetTarget", transform);
-	    //Camera.main.transform.parent = transform;
-		GetComponent("NetworkInterpolatedTransform").enabled = false;
 	}
 	// This is just some remote controlled player
 	else

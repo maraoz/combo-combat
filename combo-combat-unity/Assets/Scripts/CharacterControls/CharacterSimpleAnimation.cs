@@ -15,7 +15,7 @@ public class CharacterSimpleAnimation : MonoBehaviour {
         animation.Play("idle");
     }
     void Update() {
-        Player player = GetComponent<Player>();
+        Mage player = GetComponent<Mage>();
         float currentSpeed = player.GetSpeed();
         animation.wrapMode = WrapMode.Loop;
 
@@ -52,6 +52,7 @@ public class CharacterSimpleAnimation : MonoBehaviour {
             AnimationState state = animation["punch"];
             state.speed = state.length / player.GetCastingTimeNeeded();
             animation.CrossFade("punch");
+            SendMessage("SyncAnimation", "punch");
         }
     }
 }

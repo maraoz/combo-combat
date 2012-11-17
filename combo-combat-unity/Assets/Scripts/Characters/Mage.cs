@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(CharacterController))]
-public class Player : MonoBehaviour {
+public class Mage : MonoBehaviour {
 
     public float walkingSpeed = 6f;
     public float gravityMagnitude = 20.0f;
@@ -60,7 +60,7 @@ public class Player : MonoBehaviour {
                 hasCreatedFireball = true;
                 Vector3 forward = transform.TransformDirection(Vector3.forward);
                 Vector3 right = transform.TransformDirection(Vector3.right);
-                GameObject.Instantiate(fireball, transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f*right), transform.rotation);
+                Network.Instantiate(fireball, transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f*right), transform.rotation, 0);
             }
             if (castingTime >= castingTimeNeeded) {
                 castingTime = 0f;

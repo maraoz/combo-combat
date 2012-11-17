@@ -3,12 +3,12 @@ using System.Collections;
 
 public class ClickPlayerMovementScript : MonoBehaviour {
 
-    private Player player;
+    private Mage player;
     public float floorYOffset = -1.0f;
     private Camera referencedCamera;
 
     void Awake() {
-        this.player = this.gameObject.GetComponent<Player>();
+        this.player = this.gameObject.GetComponent<Mage>();
         referencedCamera = Camera.main;
     }
 
