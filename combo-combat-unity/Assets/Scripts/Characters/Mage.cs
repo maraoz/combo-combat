@@ -60,7 +60,7 @@ public class Mage : MonoBehaviour {
                 hasCreatedFireball = true;
                 Vector3 forward = transform.TransformDirection(Vector3.forward);
                 Vector3 right = transform.TransformDirection(Vector3.right);
-                Network.Instantiate(fireball, transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f*right), transform.rotation, 0);
+                Network.Instantiate(fireball, transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f*right), transform.rotation, GameConstants.FIREBALL_GROUP);
             }
             if (castingTime >= castingTimeNeeded) {
                 castingTime = 0f;

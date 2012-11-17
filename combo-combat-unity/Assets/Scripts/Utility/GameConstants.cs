@@ -4,4 +4,8 @@ using System.Collections;
 public class GameConstants {
 
     public static string gameVersion = "alpha-0.2";
+
+    public static int CHARACTER_GROUP = 0;
+    public static int FIREBALL_GROUP = 1;
+
 }

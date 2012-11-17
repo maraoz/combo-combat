@@ -5,8 +5,8 @@ public class FireballController : MonoBehaviour {
 
     public GameObject explosion;
     public float secondsUntilExhaust = 3.0f;
-    public float secondsPast;
     
+    private float secondsPast;
     private float speed = .2f;
 
     // Use this for initialization
@@ -19,13 +19,20 @@ public class FireballController : MonoBehaviour {
         transform.position += transform.TransformDirection(Vector3.forward) * speed;
         secondsPast += Time.deltaTime;
         if (secondsPast >= secondsUntilExhaust) {
-            Destroy(gameObject);
+            DestroySafe();
         }
     }
 
     void OnTriggerEnter(Collider other) {
-        Destroy(gameObject);
+        DestroySafe();
         GameObject.Instantiate(explosion, transform.position, Quaternion.identity);
+    }
+
+    void DestroySafe() {
+        if (Network.isServer) {
+            Network.Destroy(gameObject);
+            Network.RemoveRPCs(networkView.viewID);
+        }
     }
 
     public void SetSpeed(float s) {
