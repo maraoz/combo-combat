@@ -29,10 +29,11 @@ public class FireballController : MonoBehaviour {
     }
 
     void DestroySafe() {
-        if (Network.isServer) {
+        Network.Destroy(gameObject);
+        /*if (Network.isServer) {
             Network.Destroy(gameObject);
             Network.RemoveRPCs(networkView.viewID);
-        }
+        }*/
     }
 
     public void SetSpeed(float s) {

@@ -6,7 +6,7 @@ public class Mage : MonoBehaviour {
 
     public float walkingSpeed = 6f;
     public float gravityMagnitude = 20.0f;
-    public GameObject fireball; 
+    public GameObject fireball;
 
     private CharacterController controller;
     private CollisionFlags collisionFlags;
@@ -60,7 +60,10 @@ public class Mage : MonoBehaviour {
                 hasCreatedFireball = true;
                 Vector3 forward = transform.TransformDirection(Vector3.forward);
                 Vector3 right = transform.TransformDirection(Vector3.right);
-                Network.Instantiate(fireball, transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f*right), transform.rotation, GameConstants.FIREBALL_GROUP);
+                NetworkViewID viewID = Network.AllocateViewID();
+                Vector3 spawnPosition = transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f * right);
+                //networkView.RPC("SpawnFireball", RPCMode.All, viewID, spawnPosition, transform.rotation);
+                Network.Instantiate(fireball, transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f * right), transform.rotation, GameConstants.FIREBALL_GROUP);
             }
             if (castingTime >= castingTimeNeeded) {
                 castingTime = 0f;
@@ -69,6 +72,12 @@ public class Mage : MonoBehaviour {
             }
 
         }
+    }
+
+    [RPC]
+    void Spawn(NetworkViewID viewID, Vector3 location, Quaternion rotation) {
+        Transform clone = Instantiate(fireball, location, Quaternion.identity) as Transform;
+        clone.GetComponent<NetworkView>().viewID = viewID;
     }
 
     void Update() {
