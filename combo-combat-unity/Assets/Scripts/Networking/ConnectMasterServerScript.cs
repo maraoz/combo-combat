@@ -48,13 +48,6 @@ public class ConnectMasterServerScript : MonoBehaviour {
         serverListRect = new Rect(0, 0, Screen.width - windowRect.width, 100);
         // Start connection test
         connectionTestResult = Network.TestConnection();
-
-        // What kind of IP does this machine have? TestConnection also indicates this in the
-        // test results
-        if (Network.HavePublicAddress())
-            Debug.Log("This machine has a public IP address");
-        else
-            Debug.Log("This machine has a private IP address");
     }
 
     void Update() {
@@ -135,8 +128,8 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 testMessage = "Error in test routine, got " + connectionTestResult;
                 break;
         }
-        if (!testMessage.Contains("Undetermined")) 
-        Debug.Log(testMessage);
+        if (!testMessage.Contains("Undetermined"))
+            Debug.Log(testMessage);
     }
 
     void RefreshServers() {

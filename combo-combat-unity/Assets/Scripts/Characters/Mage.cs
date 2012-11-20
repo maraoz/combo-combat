@@ -6,7 +6,7 @@ public class Mage : MonoBehaviour {
 
     public float walkingSpeed = 6f;
     public float gravityMagnitude = 20.0f;
-    public GameObject fireball; 
+    public GameObject fireball;
 
     private CharacterController controller;
     private CollisionFlags collisionFlags;
@@ -60,7 +60,8 @@ public class Mage : MonoBehaviour {
                 hasCreatedFireball = true;
                 Vector3 forward = transform.TransformDirection(Vector3.forward);
                 Vector3 right = transform.TransformDirection(Vector3.right);
-                Network.Instantiate(fireball, transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f*right), transform.rotation, 0);
+                Vector3 spawnPosition = transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f * right);
+                Network.Instantiate(fireball, spawnPosition, transform.rotation, GameConstants.FIREBALL_GROUP);
             }
             if (castingTime >= castingTimeNeeded) {
                 castingTime = 0f;
@@ -98,8 +99,11 @@ public class Mage : MonoBehaviour {
     }
 
     public void CastFireball(Vector3 v) {
-        isCasting = true;
-        target = Vector3.zero;
+        if (!isCasting) {
+            isCasting = true;
+            target = Vector3.zero;
+            transform.LookAt(v);
+        }
     }
 
     public float GetSpeed() {
