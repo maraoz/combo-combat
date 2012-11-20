@@ -60,10 +60,8 @@ public class Mage : MonoBehaviour {
                 hasCreatedFireball = true;
                 Vector3 forward = transform.TransformDirection(Vector3.forward);
                 Vector3 right = transform.TransformDirection(Vector3.right);
-                NetworkViewID viewID = Network.AllocateViewID();
                 Vector3 spawnPosition = transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f * right);
-                //networkView.RPC("SpawnFireball", RPCMode.All, viewID, spawnPosition, transform.rotation);
-                Network.Instantiate(fireball, transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f * right), transform.rotation, GameConstants.FIREBALL_GROUP);
+                Network.Instantiate(fireball, spawnPosition, transform.rotation, GameConstants.FIREBALL_GROUP);
             }
             if (castingTime >= castingTimeNeeded) {
                 castingTime = 0f;
@@ -72,12 +70,6 @@ public class Mage : MonoBehaviour {
             }
 
         }
-    }
-
-    [RPC]
-    void Spawn(NetworkViewID viewID, Vector3 location, Quaternion rotation) {
-        Transform clone = Instantiate(fireball, location, Quaternion.identity) as Transform;
-        clone.GetComponent<NetworkView>().viewID = viewID;
     }
 
     void Update() {
@@ -107,8 +99,11 @@ public class Mage : MonoBehaviour {
     }
 
     public void CastFireball(Vector3 v) {
-        isCasting = true;
-        target = Vector3.zero;
+        if (!isCasting) {
+            isCasting = true;
+            target = Vector3.zero;
+            transform.LookAt(v);
+        }
     }
 
     public float GetSpeed() {
