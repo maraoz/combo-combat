@@ -3,7 +3,6 @@ using System.Collections;
 
 public class NetworkInformationText : MonoBehaviour {
 
-    // Use this for initialization
     void Start () {
         DontDestroyOnLoad(this);
     }

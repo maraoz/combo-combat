@@ -18,4 +18,14 @@ public class NetworkLevelLoad : MonoBehaviour {
         // TODO: Reconnecting...
     }
 
+    void OnPlayerConnected(NetworkPlayer player) {
+        Debug.Log("Player connected from " + player.ipAddress + ":" + player.port);
+    }
+
+    void OnPlayerDisconnected(NetworkPlayer player) {
+        Debug.Log("Player disconnected: " + player);
+        Network.RemoveRPCs(player);
+        Network.DestroyPlayerObjects(player);
+    }
+
 }
