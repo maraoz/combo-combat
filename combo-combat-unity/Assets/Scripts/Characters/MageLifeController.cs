@@ -11,7 +11,7 @@ public class MageLifeController : MonoBehaviour {
         life = initialLife;
     }
     
-    void DoDamage(float damage) {
+    public void DoDamage(float damage) {
         life -= damage;
         if (life < 0) {
             life = 0;

@@ -5,6 +5,7 @@ public class FireballController : MonoBehaviour {
 
     public GameObject explosion;
     public float secondsUntilExhaust = 3.0f;
+    public float damage = 10;
 
     private float secondsPast;
     private float speed = .2f;
@@ -26,6 +27,10 @@ public class FireballController : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         DestroySafe();
         GameObject.Instantiate(explosion, transform.position, Quaternion.identity);
+        if (Network.isServer && other.tag == GameConstants.MAGE_TAG) {
+            MageLifeController mage = other.gameObject.GetComponent<MageLifeController>();
+            mage.DoDamage(damage);
+        }
     }
 
     void DestroySafe() {
