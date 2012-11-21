@@ -40,4 +40,6 @@ Temp
 
 build
 
+*.unityproj
+
 ############
