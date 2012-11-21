@@ -11,12 +11,9 @@ public class Mage : MonoBehaviour {
     private CharacterController controller;
     private CollisionFlags collisionFlags;
 
-    // Where the player is heading
-    private Vector3 target = Vector3.zero;
-    // ground x-z axis speed
-    private float groundSpeed = 0f;
-    // y axis speed
-    private float verticalSpeed = 0f;
+    private Vector3 target = Vector3.zero; // Where the player is heading
+    private float groundSpeed = 0f; // ground x-z axis speed
+    private float verticalSpeed = 0f; // y axis speed
 
     // TODO: sacar esto de aca
     public float castingTimeNeeded = 2;
