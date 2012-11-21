@@ -50,6 +50,17 @@ public class ConnectMasterServerScript : MonoBehaviour {
         connectionTestResult = Network.TestConnection();
     }
 
+    void DoStartServer() {
+        Network.InitializeServer(32, serverPort, useNat);
+        MasterServer.RegisterHost(gameName, serverName, serverComment);
+    }
+
+    void Start() {
+        if (allowsDedicatedServer && IsBatchMode()) {
+            DoStartServer();
+        }
+    }
+
     void Update() {
         // If test is undetermined, keep running
         if (!doneTesting)
@@ -143,9 +154,8 @@ public class ConnectMasterServerScript : MonoBehaviour {
             GUILayout.Space(10);
             // Start a new server
             if (allowsDedicatedServer) {
-                if (IsBatchMode() || GUILayout.Button("Start Server")) {
-                    Network.InitializeServer(32, serverPort, useNat);
-                    MasterServer.RegisterHost(gameName, serverName, serverComment);
+                if (GUILayout.Button("Start Server")) {
+                    DoStartServer();
                 }
             }
 

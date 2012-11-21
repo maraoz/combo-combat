@@ -1,10 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SpawnPlayerScript.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Characters\MageLifeController.cs">
     <Files>
-      <File FileName="Assets\Scripts\SpawnPlayerScript.cs" Line="9" Column="3" />
-      <File FileName="Assets\Networking Scripts\ConnectGuiMasterServer.js" Line="1" Column="1" />
-      <File FileName="Assets\Networking Scripts\NetworkLevelLoad.js" Line="10" Column="20" />
+      <File FileName="Assets\Scripts\Characters\MageLifeController.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
