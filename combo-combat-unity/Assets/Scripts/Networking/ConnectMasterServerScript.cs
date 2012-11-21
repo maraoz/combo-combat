@@ -4,7 +4,7 @@ using System.Collections;
 public class ConnectMasterServerScript : MonoBehaviour {
 
 
-    public string gameName = "You must change this";
+    public string gameName = "You must change this"; 
     public int serverPort = 25002;
     public bool allowsDedicatedServer = false;
     public string serverName = "Server Name";
