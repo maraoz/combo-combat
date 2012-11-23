@@ -128,7 +128,7 @@ public class Mage : MonoBehaviour {
         if (networkView.isMine) {
             if (hit.collider.tag == GameConstants.HEART_TAG) {
                 HeartController heart = hit.collider.gameObject.GetComponent<HeartController>();
-                heart.Destroy();
+                heart.DestroyedBy(gameObject);
                 SendMessage("DoDamage", -heart.healing);
             }
         }

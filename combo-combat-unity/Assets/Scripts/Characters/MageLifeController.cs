@@ -24,7 +24,6 @@ public class MageLifeController : MonoBehaviour {
             if (life > maxLife) {
                 life = maxLife;
             }
-            Debug.Log("Mage received " + damage + " damage and life is now " + life);
         }
     }
 
