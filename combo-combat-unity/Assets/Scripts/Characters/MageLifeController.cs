@@ -7,12 +7,12 @@ public class MageLifeController : MonoBehaviour {
     public Texture foregroundTexture;
     public int healthBarLength = 100;
     public int healthBarHeight = 10;
-    public int initialLife = 100;
+    public int maxLife = 100;
 
     private float life;
 
     void Awake() {
-        life = initialLife;
+        life = maxLife;
     }
 
     public void DoDamage(float damage) {
@@ -21,14 +21,16 @@ public class MageLifeController : MonoBehaviour {
             if (life < 0) {
                 life = 0;
             }
+            if (life > maxLife) {
+                life = maxLife;
+            }
             Debug.Log("Mage received " + damage + " damage and life is now " + life);
         }
     }
 
     void OnGUI() {
         Vector3 pos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
-        int lifePercent = (int) ((life * healthBarLength) / initialLife);
-        Debug.Log(lifePercent);
+        int lifePercent = (int) ((life * healthBarLength) / maxLife);
 
         GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, healthBarLength, healthBarHeight), backgroundTexture, ScaleMode.StretchToFill, true, 0);
         GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, lifePercent, healthBarHeight), foregroundTexture, ScaleMode.StretchToFill, true, 0);

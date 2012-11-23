@@ -123,4 +123,15 @@ public class Mage : MonoBehaviour {
         return (collisionFlags & CollisionFlags.CollidedBelow) != 0;
     }
 
+    void OnControllerColliderHit(ControllerColliderHit hit) {
+
+        if (networkView.isMine) {
+            if (hit.collider.tag == GameConstants.HEART_TAG) {
+                HeartController heart = hit.collider.gameObject.GetComponent<HeartController>();
+                heart.Destroy();
+                SendMessage("DoDamage", -heart.healing);
+            }
+        }
+    }
+
 }
