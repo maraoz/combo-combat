@@ -20,6 +20,7 @@ public class MageLifeController : MonoBehaviour {
             life -= damage;
             if (life < 0) {
                 life = 0;
+                SendMessage("DoDie");
             }
             if (life > maxLife) {
                 life = maxLife;

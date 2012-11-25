@@ -3,13 +3,16 @@ using System.Collections;
 
 public class IsometricCamera : MonoBehaviour {
 
-    // The target we are following
-    public Transform target;
+    Transform target;
 
     public float distance = 100.0f;
 
     public int maxScale = 12;
     public int minScale = 5;
+
+    void Start() {
+        camera.orthographicSize = maxScale;
+    }
 
     void LateUpdate() {
         if (!target)
@@ -26,14 +29,11 @@ public class IsometricCamera : MonoBehaviour {
 
         //default zoom
         if (Input.GetKeyDown(KeyCode.Mouse2)) {
-            camera.orthographicSize = 50;
+            camera.orthographicSize = maxScale;
         }
 
         transform.position = target.position + Vector3.up * 1;
         transform.position -= transform.rotation * Vector3.forward * distance;
-
-        // Always look at the target
-        //transform.LookAt (target);
     }
 
     void SetTarget(Transform t) {

@@ -5,6 +5,9 @@ public class CharacterSimpleAnimation : MonoBehaviour {
 
     public float runSpeedScale = 1.0f;
     public float walkSpeedScale = 1.0f;
+    public float dieDuration = 1f;
+
+    private float dieStart;
 
     void Awake() {
         // By default loop all animations
@@ -54,5 +57,20 @@ public class CharacterSimpleAnimation : MonoBehaviour {
             animation.CrossFade("punch");
             SendMessage("SyncAnimation", "punch");
         }
+        if (player.IsDying()) {
+            if (dieStart == null) {
+                dieStart = Time.time;
+                //SendMessage("SyncAnimation", "buttstomp");
+            } else {
+                if (Time.time - dieStart < dieDuration) {
+                    Vector3 euler = transform.rotation.eulerAngles;
+                    euler.x -= 45.0f / (Time.deltaTime / dieDuration);
+                    transform.rotation = Quaternion.Euler(euler);
+                }
+            }
+            animation.wrapMode = WrapMode.ClampForever;
+            animation.CrossFade("buttstomp");
+        }
+
     }
 }

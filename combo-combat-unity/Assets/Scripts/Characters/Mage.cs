@@ -20,6 +20,7 @@ public class Mage : MonoBehaviour {
     private float castingTime = 0f;
     private bool isCasting = false;
     private bool hasCreatedFireball = false;
+    private bool isDying = false;
 
     void Awake() {
         controller = GetComponent<CharacterController>();
@@ -113,6 +114,15 @@ public class Mage : MonoBehaviour {
 
     public bool IsCasting() {
         return isCasting;
+    }
+
+    public bool IsDying() {
+        return isDying;
+    }
+
+    public void DoDie() {
+        isDying = true;
+        this.enabled = false;
     }
 
     public float GetCastingTimeNeeded() {
