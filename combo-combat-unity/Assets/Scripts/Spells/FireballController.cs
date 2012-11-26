@@ -8,11 +8,21 @@ public class FireballController : MonoBehaviour {
     public float damage = 10;
     public float speed = .2f;
 
+
     private float secondsPast;
+    private MageLifeController caster;
 
     // Use this for initialization
     void Start() {
         secondsPast = 0.0f;
+    }
+
+    public void SetCaster(MageLifeController mage) {
+        caster = mage; 
+    }
+
+    public MageLifeController GetCaster() {
+        return caster;
     }
 
     // Update is called once per frame
@@ -25,19 +35,16 @@ public class FireballController : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-        DestroySafe();
-        GameObject.Instantiate(explosion, transform.position, Quaternion.identity);
         if (other.tag == GameConstants.MAGE_TAG) {
             MageLifeController mage = other.gameObject.GetComponent<MageLifeController>();
-            mage.DoDamage(damage);
+            mage.DoDamage(damage, caster);
         }
+        GameObject.Instantiate(explosion, transform.position, Quaternion.identity);
+        DestroySafe();
     }
 
     void DestroySafe() {
         Destroy(gameObject);
-        /*if (Network.isServer) {
-            Network.Destroy(gameObject);
-        }*/
     }
 
     void OnNetworkInstantiate(NetworkMessageInfo info) {

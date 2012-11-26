@@ -10,25 +10,34 @@ public class MageLifeController : MonoBehaviour {
     public int maxLife = 100;
 
     private float life;
+    private int level;
 
     void Awake() {
         RestartLife();
     }
 
-    void RestartLife() {
+    public void RestartLife() {
         life = maxLife;
+        level = 0;
     }
 
-    public void DoDamage(float damage) {
+    void LevelUp() {
+        level += 1;
+    }
+
+    public void DoDamage(float damage, MageLifeController source) {
         if (networkView.isMine) {
             life -= damage;
             if (life <= 0) {
                 life = 0;
-                SendMessage("DoDie");
+                GetComponent<Mage>().DoDie();
             }
             if (life > maxLife) {
                 life = maxLife;
             }
+        }
+        if (life == 10f && source != null) { // dont ask ...
+            source.LevelUp();
         }
     }
 
@@ -38,16 +47,22 @@ public class MageLifeController : MonoBehaviour {
 
         GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, healthBarLength, healthBarHeight), backgroundTexture, ScaleMode.StretchToFill, true, 0);
         GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, lifePercent, healthBarHeight), foregroundTexture, ScaleMode.StretchToFill, true, 0);
+        GUI.Label(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y+10, healthBarLength, 50), "" + level);
     }
 
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
         if (stream.isWriting) {
-            float send = life;
-            stream.Serialize(ref send);
+            float sendLife = life;
+            int sendLevel = level;
+            stream.Serialize(ref sendLife);
+            stream.Serialize(ref sendLevel);
         } else {
-            float rcv = 0;
-            stream.Serialize(ref rcv);
-            life = rcv;
+            float rcvLife = 0;
+            int rcvLevel = 0;
+            stream.Serialize(ref rcvLife);
+            stream.Serialize(ref rcvLevel);
+            life = rcvLife;
+            level = rcvLevel;
         }
 
     }

@@ -21,9 +21,13 @@ public class HeartController : MonoBehaviour {
     internal void DestroyedBy(GameObject mage) {
         Network.Destroy(gameObject);
         Network.RemoveRPCs(networkView.viewID);
+    }
+
+    public void SpawnEffect(GameObject mage) {
         if (effect != null) {
             GameObject instance = GameObject.Instantiate(effect, mage.transform.position, Quaternion.identity) as GameObject;
             instance.transform.parent = mage.transform;
         }
     }
+
 }

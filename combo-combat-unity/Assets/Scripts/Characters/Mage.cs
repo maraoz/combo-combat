@@ -68,7 +68,8 @@ public class Mage : MonoBehaviour {
                 Vector3 forward = transform.TransformDirection(Vector3.forward);
                 Vector3 right = transform.TransformDirection(Vector3.right);
                 Vector3 spawnPosition = transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f * right);
-                Network.Instantiate(fireball, spawnPosition, transform.rotation, GameConstants.FIREBALL_GROUP);
+                GameObject casted = Network.Instantiate(fireball, spawnPosition, transform.rotation, GameConstants.FIREBALL_GROUP) as GameObject;
+                casted.GetComponent<FireballController>().SetCaster(GetComponent<MageLifeController>());
             }
             if (castingTime >= castingTimeNeeded) {
                 castingTime = 0f;
@@ -89,7 +90,7 @@ public class Mage : MonoBehaviour {
     void Update() {
 
         if (!isDying) {
-            UpdateTimers(); 
+            UpdateTimers();
 
             // vertical movement
             ApplyGravity();
@@ -132,7 +133,7 @@ public class Mage : MonoBehaviour {
         transform.position = spawnPosition.position;
         transform.rotation = Quaternion.identity;
         target = Vector3.zero;
-        SendMessage("RestartLife");
+        GetComponent<MageLifeController>().RestartLife();
     }
 
     public float GetSpeed() {
@@ -166,12 +167,13 @@ public class Mage : MonoBehaviour {
 
     void OnControllerColliderHit(ControllerColliderHit hit) {
 
-        if (networkView.isMine) {
-            if (hit.collider.tag == GameConstants.HEART_TAG) {
-                HeartController heart = hit.collider.gameObject.GetComponent<HeartController>();
+        if (hit.collider.tag == GameConstants.HEART_TAG) {
+            HeartController heart = hit.collider.gameObject.GetComponent<HeartController>();
+            if (networkView.isMine) {
                 heart.DestroyedBy(gameObject);
-                SendMessage("DoDamage", -heart.healing);
+                GetComponent<MageLifeController>().DoDamage(-heart.healing, null);
             }
+            heart.SpawnEffect(gameObject);
         }
     }
 
