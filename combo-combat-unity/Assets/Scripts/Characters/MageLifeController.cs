@@ -47,7 +47,7 @@ public class MageLifeController : MonoBehaviour {
 
         GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, healthBarLength, healthBarHeight), backgroundTexture, ScaleMode.StretchToFill, true, 0);
         GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, lifePercent, healthBarHeight), foregroundTexture, ScaleMode.StretchToFill, true, 0);
-        GUI.Label(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y+10, healthBarLength, 50), "" + level);
+        GUI.Label(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y+10, healthBarLength, 50), "Level " + level);
     }
 
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
