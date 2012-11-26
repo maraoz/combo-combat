@@ -18,7 +18,7 @@ public class FireballController : MonoBehaviour {
     }
 
     public void SetCaster(MageLifeController mage) {
-        caster = mage; 
+        caster = mage;
     }
 
     public MageLifeController GetCaster() {
@@ -39,8 +39,10 @@ public class FireballController : MonoBehaviour {
             MageLifeController mage = other.gameObject.GetComponent<MageLifeController>();
             mage.DoDamage(damage, caster);
         }
-        GameObject.Instantiate(explosion, transform.position, Quaternion.identity);
-        DestroySafe();
+        if (other.tag != GameConstants.HEART_TAG) {
+            GameObject.Instantiate(explosion, transform.position, Quaternion.identity);
+            DestroySafe();
+        }
     }
 
     void DestroySafe() {
