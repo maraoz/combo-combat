@@ -58,18 +58,20 @@ public class CharacterSimpleAnimation : MonoBehaviour {
             SendMessage("SyncAnimation", "punch");
         }
         if (player.IsDying()) {
-            if (dieStart == null) {
+            if (dieStart == 0f) {
                 dieStart = Time.time;
                 //SendMessage("SyncAnimation", "buttstomp");
             } else {
                 if (Time.time - dieStart < dieDuration) {
                     Vector3 euler = transform.rotation.eulerAngles;
-                    euler.x -= 45.0f / (Time.deltaTime / dieDuration);
+                    euler.x -= 90.0f * (Time.deltaTime / dieDuration);
                     transform.rotation = Quaternion.Euler(euler);
+                } else {
+                    dieStart = 0f;
                 }
             }
             animation.wrapMode = WrapMode.ClampForever;
-            animation.CrossFade("buttstomp");
+            animation.CrossFade("idle");
         }
 
     }

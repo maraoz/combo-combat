@@ -39,4 +39,9 @@ public class IsometricCamera : MonoBehaviour {
     void SetTarget(Transform t) {
         target = t;
     }
+
+    public void SetGrayscale(bool value) {
+        GetComponent<GrayscaleEffect>().enabled = value;
+    }
+
 }

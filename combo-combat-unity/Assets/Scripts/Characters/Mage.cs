@@ -22,8 +22,17 @@ public class Mage : MonoBehaviour {
     private bool hasCreatedFireball = false;
     private bool isDying = false;
 
+    // death
+    private Transform spawnPosition;
+    public float deathTime = 15.0f;
+    private float deathTimeSpent = 0f;
+
     void Awake() {
         controller = GetComponent<CharacterController>();
+    }
+
+    public void SetSpawnPosition(Transform spawner) {
+        spawnPosition = spawner;
     }
 
     void ApplyGravity() {
@@ -70,24 +79,35 @@ public class Mage : MonoBehaviour {
         }
     }
 
+    void UpdateDeathTimer() {
+        deathTimeSpent += Time.deltaTime;
+        if (deathTimeSpent >= deathTime) {
+            Respawn();
+        }
+    }
+
     void Update() {
 
-        UpdateTimers();
+        if (!isDying) {
+            UpdateTimers();
 
-        // vertical movement
-        ApplyGravity();
-        Vector3 verticalVelocity = new Vector3(0, verticalSpeed, 0);
+            // vertical movement
+            ApplyGravity();
+            Vector3 verticalVelocity = new Vector3(0, verticalSpeed, 0);
 
-        // ground movement
-        ApplyTargetHunt();
-        Vector3 forward = transform.TransformDirection(Vector3.forward);
-        Vector3 groundVelocity = groundSpeed * forward;
+            // ground movement
+            ApplyTargetHunt();
+            Vector3 forward = transform.TransformDirection(Vector3.forward);
+            Vector3 groundVelocity = groundSpeed * forward;
 
-        // compute total movement
-        Vector3 totalVelocity = verticalVelocity + groundVelocity;
+            // compute total movement
+            Vector3 totalVelocity = verticalVelocity + groundVelocity;
 
-        // apply movement for this period of time
-        collisionFlags = controller.Move(totalVelocity * Time.deltaTime);
+            // apply movement for this period of time
+            collisionFlags = controller.Move(totalVelocity * Time.deltaTime);
+        } else {
+            UpdateDeathTimer();
+        }
     }
 
 
@@ -97,11 +117,22 @@ public class Mage : MonoBehaviour {
     }
 
     public void CastFireball(Vector3 v) {
-        if (!isCasting) {
+        if (!isCasting && !isDying) {
             isCasting = true;
             target = Vector3.zero;
             transform.LookAt(v);
         }
+    }
+
+    void Respawn() {
+        enabled = true;
+        isDying = false;
+        deathTimeSpent = 0f;
+        Camera.main.GetComponent<IsometricCamera>().SetGrayscale(false);
+        transform.position = spawnPosition.position;
+        transform.rotation = Quaternion.identity;
+        target = Vector3.zero;
+        SendMessage("RestartLife");
     }
 
     public float GetSpeed() {
@@ -122,7 +153,7 @@ public class Mage : MonoBehaviour {
 
     public void DoDie() {
         isDying = true;
-        this.enabled = false;
+        Camera.main.GetComponent<IsometricCamera>().SetGrayscale(true);
     }
 
     public float GetCastingTimeNeeded() {

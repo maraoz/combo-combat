@@ -12,13 +12,17 @@ public class MageLifeController : MonoBehaviour {
     private float life;
 
     void Awake() {
+        RestartLife();
+    }
+
+    void RestartLife() {
         life = maxLife;
     }
 
     public void DoDamage(float damage) {
         if (networkView.isMine) {
             life -= damage;
-            if (life < 0) {
+            if (life <= 0) {
                 life = 0;
                 SendMessage("DoDie");
             }

@@ -3,13 +3,15 @@ using System.Collections;
 
 public class SpawnMageScript : MonoBehaviour {
 
-    public Transform playerPrefab;
+    public GameObject playerPrefab;
 
     void Start() {
         Network.isMessageQueueRunning = true;
         Network.SetSendingEnabled(0, true);
         if (Network.isClient) {
-            Network.Instantiate(playerPrefab, transform.position, Quaternion.identity, GameConstants.MAGE_GROUP);
+            GameObject mageObject = Network.Instantiate(playerPrefab, transform.position, Quaternion.identity, GameConstants.MAGE_GROUP) as GameObject;
+            Mage mage = mageObject.GetComponent<Mage>();
+            mage.SetSpawnPosition(transform);
         }
     }
 }
