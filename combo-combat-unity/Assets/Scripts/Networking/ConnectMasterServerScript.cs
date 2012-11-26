@@ -97,7 +97,6 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 useNat = false;
                 // If no NAT punchthrough test has been performed on this public IP, force a test
                 if (!probingPublicIP) {
-                    Debug.Log("Testing if firewall can be circumvented");
                     connectionTestResult = Network.TestConnectionNAT();
                     probingPublicIP = true;
                     timer = Time.time + 10;
@@ -114,14 +113,12 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 break;
 
             case ConnectionTesterStatus.LimitedNATPunchthroughPortRestricted:
-                Debug.Log("LimitedNATPunchthroughPortRestricted");
                 testMessage = "Limited NAT punchthrough capabilities. Cannot connect to all types of NAT servers.";
                 useNat = true;
                 doneTesting = true;
                 break;
 
             case ConnectionTesterStatus.LimitedNATPunchthroughSymmetric:
-                Debug.Log("LimitedNATPunchthroughSymmetric");
                 testMessage = "Limited NAT punchthrough capabilities. Cannot connect to all types of NAT servers. Running a server is ill adviced as not everyone can connect.";
                 useNat = true;
                 doneTesting = true;
@@ -129,7 +126,6 @@ public class ConnectMasterServerScript : MonoBehaviour {
 
             case ConnectionTesterStatus.NATpunchthroughAddressRestrictedCone:
             case ConnectionTesterStatus.NATpunchthroughFullCone:
-                Debug.Log("NATpunchthroughAddressRestrictedCone || NATpunchthroughFullCone");
                 testMessage = "NAT punchthrough capable. Can connect to all servers and receive connections from all clients. Enabling NAT punchthrough functionality.";
                 useNat = true;
                 doneTesting = true;

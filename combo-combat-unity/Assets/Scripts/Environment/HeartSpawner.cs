@@ -26,7 +26,6 @@ public class HeartSpawner : MonoBehaviour {
                 Vector3 pos = new Vector3(transform.position.x + Random.Range(-range, range),
                     transform.position.y-170,
                     transform.position.z + Random.Range(-range, range));
-                Debug.Log(pos);
                 Network.Instantiate(heartPrefab, pos, Quaternion.identity, GameConstants.HEART_GROUP);
             }
         }
