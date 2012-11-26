@@ -89,7 +89,7 @@ public class Mage : MonoBehaviour {
     void Update() {
 
         if (!isDying) {
-            UpdateTimers();
+            UpdateTimers(); 
 
             // vertical movement
             ApplyGravity();
