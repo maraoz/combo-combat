@@ -3,9 +3,10 @@ using System.Collections;
 
 public class ClickPlayerMovementScript : MonoBehaviour {
 
-    private Mage player;
-    public float floorYOffset = -1.0f;
+    public GameObject clickFeedback;
+
     private Camera referencedCamera;
+    private Mage player;
 
     void Awake() {
         this.player = this.gameObject.GetComponent<Mage>();
@@ -17,8 +18,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
         Vector2 screenPosition = Input.mousePosition;
         Ray ray = referencedCamera.ScreenPointToRay(new Vector3(screenPosition.x, screenPosition.y, 1));
 
-        float floorY = this.transform.position.y + floorYOffset;
-        float distanceToFloorY = (floorY - ray.origin.y) / ray.direction.y;
+        float distanceToFloorY = (this.transform.position.y - ray.origin.y) / ray.direction.y;
 
         // Check collision
         RaycastHit hitInfo = new RaycastHit();
@@ -30,12 +30,21 @@ public class ClickPlayerMovementScript : MonoBehaviour {
             if (hitInfo.collider == null || !hitInfo.collider.gameObject.CompareTag("Enemy")) {
                 Vector3 planePosition = ray.origin + distanceToFloorY * ray.direction;
 
+
                 if (Input.GetMouseButton(MouseButton.RIGHT)) {
                     player.PlanMove(planePosition);
-
                 }
                 if (Input.GetMouseButtonDown(MouseButton.LEFT)) {
                     player.CastFireball(planePosition);
+                }
+                if (Input.GetMouseButtonDown(MouseButton.RIGHT) || Input.GetMouseButtonDown(MouseButton.LEFT)) {
+                    Vector3 clickFeedbackPosition = planePosition + Vector3.up * 0.1f;
+                    GameObject feedback = GameObject.Instantiate(clickFeedback, clickFeedbackPosition, Quaternion.identity) as GameObject;
+                    if (Input.GetMouseButtonDown(MouseButton.LEFT)) {
+                        feedback.GetComponent<ClickFeedback>().SetColor(Color.red);
+                    } else {
+                        feedback.GetComponent<ClickFeedback>().SetColor(Color.green);
+                    }
                 }
             }
         }

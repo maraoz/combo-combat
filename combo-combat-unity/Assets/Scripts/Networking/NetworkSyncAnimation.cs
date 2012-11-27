@@ -22,8 +22,8 @@ public class NetworkSyncAnimation : MonoBehaviour {
         jumpland
     }
 
-    public AniStates currentAnimation = AniStates.idle;
-    public AniStates lastAnimation = AniStates.idle;
+    private AniStates currentAnimation = AniStates.idle;
+    private AniStates lastAnimation = AniStates.idle;
 
     public void SyncAnimation(String animationValue) {
         currentAnimation = (AniStates) Enum.Parse(typeof(AniStates), animationValue);
