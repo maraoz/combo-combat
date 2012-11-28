@@ -12,4 +12,13 @@ public class GameConstants {
     public static string MAGE_TAG = "Mage";
     public static string HEART_TAG = "Heart";
 
+    // layers
+
+    public static int LAYER_UNCLICKABLE = 8;
+    public static int LAYER_MASK_UNCLICKABLE = 1 << LAYER_UNCLICKABLE;
+
+    public static int Invert(int mask) {
+        return ~(mask);
+    }
+
 }
