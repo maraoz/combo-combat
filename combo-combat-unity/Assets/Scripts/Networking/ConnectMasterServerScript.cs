@@ -4,11 +4,12 @@ using System.Collections;
 public class ConnectMasterServerScript : MonoBehaviour {
 
 
-    public string gameName = "You must change this"; 
+    public string gameName = "You must change this";
     public int serverPort = 25002;
     public bool allowsDedicatedServer = false;
     public string serverName = "Server Name";
     public string serverComment = "Server Comment";
+    public GUISkin customSkin;
 
     private double lastHostListRequest = -1000.0;
     private double hostListRefreshTimeout = 10.0;
@@ -24,8 +25,6 @@ public class ConnectMasterServerScript : MonoBehaviour {
     private Rect serverListRect;
     private string testMessage = "Undetermined NAT capabilities";
 
-    // Enable this if not running a client on the server machine
-    //MasterServer.dedicatedServer = true; 
 
     void OnFailedToConnectToMasterServer(NetworkConnectionError info) {
         Debug.Log(info);
@@ -36,6 +35,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
     }
 
     void OnGUI() {
+        GUI.skin = customSkin;
         if (Network.peerType == NetworkPeerType.Disconnected || Network.isServer) {
             windowRect = GUILayout.Window(0, windowRect, MakeWindow, "Server Controls");
         }
@@ -56,6 +56,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
     }
 
     void Start() {
+        MasterServer.dedicatedServer = true;
         if (allowsDedicatedServer && IsBatchMode()) {
             DoStartServer();
         }
