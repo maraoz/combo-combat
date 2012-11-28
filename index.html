@@ -18,7 +18,11 @@
 		}
 		if (typeof unityObject != "undefined") {
                         var params = {
-				disableContextMenu: true
+				disableContextMenu: true,
+				logoimage : "images/logo.png",
+				progressbarimage: "images/front.png",
+				progressframeimage: "images/back.png"
+
 			};
 			unityObject.embedUnity("unityPlayer", "WebPlayer/WebPlayer.unity3d", 960, 600, params);
 			
