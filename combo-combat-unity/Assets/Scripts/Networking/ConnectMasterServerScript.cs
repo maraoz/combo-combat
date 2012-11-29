@@ -11,8 +11,8 @@ public class ConnectMasterServerScript : MonoBehaviour {
     public string serverComment = "Server Comment";
     public GUISkin customSkin;
 
+    public double serverListRefreshTime = 3.0;
     private double lastHostListRequest = -1000.0;
-    private double hostListRefreshTimeout = 10.0;
 
     private ConnectionTesterStatus connectionTestResult = ConnectionTesterStatus.Undetermined;
     private bool filterNATHosts = false;
@@ -37,15 +37,15 @@ public class ConnectMasterServerScript : MonoBehaviour {
     void OnGUI() {
         GUI.skin = customSkin;
         if (Network.peerType == NetworkPeerType.Disconnected || Network.isServer) {
-            windowRect = GUILayout.Window(0, windowRect, MakeWindow, "Server Controls");
+            windowRect = GUILayout.Window(0, windowRect, MakeWindow, "");
         }
         if (Network.peerType == NetworkPeerType.Disconnected)
-            serverListRect = GUILayout.Window(1, serverListRect, MakeClientWindow, "Server List");
+            serverListRect = GUILayout.Window(1, serverListRect, MakeClientWindow, "");
     }
 
     void Awake() {
-        windowRect = new Rect(Screen.width - 300, 0, 300, 100);
-        serverListRect = new Rect(0, 0, Screen.width - windowRect.width, 100);
+        windowRect = new Rect(Screen.width/2-200, 0, 400, 100);
+        serverListRect = new Rect(Screen.width / 2 - Screen.width * 0.45f, 150, Screen.width * 0.9f, 500);
         // Start connection test
         connectionTestResult = Network.TestConnection();
     }
@@ -66,7 +66,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
         // If test is undetermined, keep running
         if (!doneTesting)
             TestConnection();
-        if (Time.realtimeSinceStartup > lastHostListRequest + hostListRefreshTimeout) {
+        if (Time.realtimeSinceStartup > lastHostListRequest + serverListRefreshTime) {
             RefreshServers();
         }
     }
@@ -147,6 +147,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
 
     void MakeWindow(int id) {
         if (Network.peerType == NetworkPeerType.Disconnected) {
+            GUILayout.Space(50);
             GUILayout.BeginHorizontal();
             GUILayout.Space(10);
             // Start a new server
@@ -183,7 +184,9 @@ public class ConnectMasterServerScript : MonoBehaviour {
 
         HostData[] data = MasterServer.PollHostList();
         foreach (HostData element in data) {
+            GUILayout.Space(50);
             GUILayout.BeginHorizontal();
+            
 
             // Do not display NAT enabled games if we cannot do NAT punchthrough
             if (!(filterNATHosts && element.useNat)) {
@@ -194,7 +197,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 GUILayout.Space(5);
                 var hostInfo = "";
 
-                // Indicate if NAT punchthrough will be performed, omit showing GUID
+                // Indicate if NAT punchthrough will be performed
                 if (element.useNat) {
                     GUILayout.Label("NAT");
                     GUILayout.Space(5);
@@ -212,7 +215,8 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 GUILayout.Label(element.comment);
                 GUILayout.Space(5);
                 GUILayout.FlexibleSpace();
-                if (GUILayout.Button("Connect")) {
+                GUILayout.Width(100);
+                if (GUILayout.Button("Connect", "ShortButton")) {
                     Network.Connect(element);
                     this.enabled = false;
                 }
