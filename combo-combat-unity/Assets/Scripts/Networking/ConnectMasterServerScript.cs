@@ -56,7 +56,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
     }
 
     void Start() {
-        MasterServer.dedicatedServer = true;
+        //MasterServer.dedicatedServer = true;
         if (allowsDedicatedServer && IsBatchMode()) {
             DoStartServer();
         }
