@@ -23,12 +23,14 @@ public class Mage : MonoBehaviour {
     private bool isDying = false;
 
     // death
+    private MessageSystem messages;
     private Transform spawnPosition;
     public float deathTime = 15.0f;
     private float deathTimeSpent = 0f;
 
     void Awake() {
         controller = GetComponent<CharacterController>();
+        messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
     }
 
     public void SetSpawnPosition(Transform spawner) {
@@ -153,8 +155,11 @@ public class Mage : MonoBehaviour {
     }
 
     public void DoDie() {
-        isDying = true;
-        Camera.main.GetComponent<IsometricCamera>().SetGrayscale(true);
+        if (!isDying) {
+            isDying = true;
+            messages.AddSystemMessage("You died. Please wait " + deathTime + " seconds to respawn.", false);
+            Camera.main.GetComponent<IsometricCamera>().SetGrayscale(true);
+        }
     }
 
     public float GetCastingTimeNeeded() {

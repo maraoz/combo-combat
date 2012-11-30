@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MessageSystem : MonoBehaviour {
-    public int maxEntriesShown = 5;
+
+    public int maxEntriesShown = 6;
 
     public int entryHeight = 25;
     public int entryWidth = 150;
@@ -15,24 +16,28 @@ public class MessageSystem : MonoBehaviour {
     private bool showChatInput = true;
     private string inputField = "";
     private List<ChatEntry> entries = new List<ChatEntry>();
+    private string chatUsername;
+
 
     class ChatEntry {
         public string sender = "";
         public string text = "";
-        public bool mine = true;
+        public Color color;
     }
 
     void Awake() {
         textInputRect = new Rect(entryHPad, Screen.height - entryVPad, entryWidth, entryHeight);
+        chatUsername = "Player";
     }
 
 
     void OnGUI() {
+
+        // check chat input logic
         if (Event.current.type == EventType.keyDown && Event.current.character == '\n') {
             if (showChatInput) {
                 if (inputField.Length > 0) {
-                    ApplyGlobalChatText(inputField, 1);
-                    networkView.RPC("ApplyGlobalChatText", RPCMode.Others, inputField, 0);
+                    AddMessage(chatUsername, inputField, Color.white, true);
                     inputField = "";
                 }
                 showChatInput = false;
@@ -43,34 +48,53 @@ public class MessageSystem : MonoBehaviour {
             }
         }
 
+        // render messages
         for (int i = 0; i < entries.Count; i++) {
             ChatEntry entry = entries[entries.Count - 1 - i];
-            GUI.Label(new Rect(entryHPad, Screen.height - (entryVPad + entryHeight * (i + 1)), entryWidth, entryHeight), entry.text);
+            Rect entryRect = new Rect(entryHPad, Screen.height - (entryVPad + entryHeight * (i + 1)), entryWidth, entryHeight);
+            string message = "["+entry.sender+"]: "+entry.text;
+            GUIStyle entryStyle = new GUIStyle();
+            entryStyle.normal.textColor = entry.color;
+            GUI.Label(entryRect, message, entryStyle);
         }
+
+        // render chat
         if (showChatInput) {
             GUI.SetNextControlName(CHAT_INPUT_NAME);
             inputField = GUI.TextField(textInputRect, inputField);
         }
 
+        // GUI Focused update
         CheckGUIFocused();
     }
 
     void CheckGUIFocused() {
-
         if (GUIUtility.hotControl != 0) {
             GuiUtils.SetGUIFocused(true);
         }
     }
 
+    public void AddSystemMessage(string text, bool broadcast) {
+        AddMessage("System", text, Color.cyan, broadcast);
+    }
+
+    public void AddMessage(string sender, string text, Color color, bool broadcast) {
+        Vector3 colorVec = new Vector3(color.r, color.g, color.b);
+        if (broadcast) {
+            networkView.RPC("DoAddMessage", RPCMode.All, sender, text, colorVec);
+        } else {
+            DoAddMessage(sender, text, colorVec);
+        }
+    }
+
+
 
     [RPC]
-    void ApplyGlobalChatText(string str, int mine) {
+    void DoAddMessage(string sender, string text, Vector3 color) {
         var entry = new ChatEntry();
-        entry.sender = "Not implemented";
-        entry.text = str;
-        if (mine == 1) entry.mine = true;
-        else entry.mine = false;
-
+        entry.sender = sender;
+        entry.text = text;
+        entry.color = new Color(color.x, color.y, color.z);
         entries.Add(entry);
 
         if (entries.Count > maxEntriesShown)

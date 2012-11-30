@@ -13,9 +13,14 @@ public class ClickPlayerMovementScript : MonoBehaviour {
         referencedCamera = Camera.main;
     }
 
+
+    private bool CanIssueCommands() {
+        return !GuiUtils.IsGUIFocused() && !player.IsDying();
+    }
+
     void Update() {
 
-        if (!GuiUtils.IsGUIFocused() && (Input.GetMouseButton(MouseButton.RIGHT) || Input.GetMouseButtonDown(MouseButton.LEFT))) {
+        if (CanIssueCommands() && (Input.GetMouseButton(MouseButton.RIGHT) || Input.GetMouseButtonDown(MouseButton.LEFT))) {
             Vector2 screenPosition = Input.mousePosition;
             Ray ray = referencedCamera.ScreenPointToRay(new Vector3(screenPosition.x, screenPosition.y, 1));
 
