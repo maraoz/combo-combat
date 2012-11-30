@@ -9,8 +9,10 @@ public class MessageSystem : MonoBehaviour {
     public int entryWidth = 150;
     public int entryHPad = 10;
     public int entryVPad = 50;
+    private Rect textInputRect;
 
-    private bool chatInputFocused = false;
+    private static string CHAT_INPUT_NAME = "Chat input field";
+    private bool showChatInput = true;
     private string inputField = "";
     private List<ChatEntry> entries = new List<ChatEntry>();
 
@@ -20,29 +22,43 @@ public class MessageSystem : MonoBehaviour {
         public bool mine = true;
     }
 
+    void Awake() {
+        textInputRect = new Rect(entryHPad, Screen.height - entryVPad, entryWidth, entryHeight);
+    }
+
 
     void OnGUI() {
         if (Event.current.type == EventType.keyDown && Event.current.character == '\n') {
-            if (chatInputFocused) {
+            if (showChatInput) {
                 if (inputField.Length > 0) {
                     ApplyGlobalChatText(inputField, 1);
                     networkView.RPC("ApplyGlobalChatText", RPCMode.Others, inputField, 0);
                     inputField = "";
                 }
-                chatInputFocused = false;
+                showChatInput = false;
+                GUI.FocusControl("");
             } else {
-                chatInputFocused = true;
-                GUI.FocusControl("Chat input field");
+                showChatInput = true;
+                GUI.FocusControl(CHAT_INPUT_NAME);
             }
         }
 
         for (int i = 0; i < entries.Count; i++) {
-            ChatEntry entry = entries[entries.Count-1- i];
+            ChatEntry entry = entries[entries.Count - 1 - i];
             GUI.Label(new Rect(entryHPad, Screen.height - (entryVPad + entryHeight * (i + 1)), entryWidth, entryHeight), entry.text);
         }
-        if (chatInputFocused) {
-            GUI.SetNextControlName("Chat input field");
-            inputField = GUI.TextField(new Rect(entryHPad, Screen.height - entryVPad, entryWidth, entryHeight), inputField);
+        if (showChatInput) {
+            GUI.SetNextControlName(CHAT_INPUT_NAME);
+            inputField = GUI.TextField(textInputRect, inputField);
+        }
+
+        CheckGUIFocused();
+    }
+
+    void CheckGUIFocused() {
+
+        if (GUIUtility.hotControl != 0) {
+            GuiUtils.SetGUIFocused(true);
         }
     }
 

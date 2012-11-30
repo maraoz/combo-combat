@@ -15,7 +15,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
     void Update() {
 
-        if (Input.GetMouseButton(MouseButton.RIGHT) || Input.GetMouseButtonDown(MouseButton.LEFT)) {
+        if (!GuiUtils.IsGUIFocused() && (Input.GetMouseButton(MouseButton.RIGHT) || Input.GetMouseButtonDown(MouseButton.LEFT))) {
             Vector2 screenPosition = Input.mousePosition;
             Ray ray = referencedCamera.ScreenPointToRay(new Vector3(screenPosition.x, screenPosition.y, 1));
 
