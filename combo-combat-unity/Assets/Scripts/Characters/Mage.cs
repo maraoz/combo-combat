@@ -169,17 +169,4 @@ public class Mage : MonoBehaviour {
     public bool IsGrounded() {
         return (collisionFlags & CollisionFlags.CollidedBelow) != 0;
     }
-
-    void OnControllerColliderHit(ControllerColliderHit hit) {
-
-        if (hit.collider.tag == GameConstants.HEART_TAG) {
-            HeartController heart = hit.collider.gameObject.GetComponent<HeartController>();
-            if (networkView.isMine) {
-                heart.DestroyedBy(gameObject);
-                GetComponent<MageLifeController>().DoDamage(-heart.healing, null);
-            }
-            heart.SpawnEffect(gameObject);
-        }
-    }
-
 }
