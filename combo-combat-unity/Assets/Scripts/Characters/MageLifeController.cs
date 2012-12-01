@@ -36,7 +36,7 @@ public class MageLifeController : MonoBehaviour {
                 life = maxLife;
             }
         }
-        if (life == 10f && source != null) { // dont ask ...
+        if (life <= damage && source != null) {
             source.LevelUp();
         }
     }
