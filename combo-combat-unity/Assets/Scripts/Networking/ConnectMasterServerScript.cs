@@ -45,7 +45,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
 
     void Awake() {
         windowRect = new Rect(Screen.width/2-200, 0, 400, 100);
-        serverListRect = new Rect(Screen.width / 2 - Screen.width * 0.45f, 150, Screen.width * 0.9f, 500);
+        serverListRect = new Rect(Screen.width / 2 - Screen.width * 0.45f, 150, Screen.width * 0.9f, 400);
         // Start connection test
         connectionTestResult = Network.TestConnection();
     }
