@@ -5,6 +5,7 @@ public class MageLifeController : MonoBehaviour {
 
     public Texture backgroundTexture;
     public Texture foregroundTexture;
+    public Texture frameTexture;
     public int healthBarLength = 100;
     public int healthBarHeight = 10;
     public int maxLife = 100;
@@ -45,8 +46,10 @@ public class MageLifeController : MonoBehaviour {
         Vector3 pos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
         int lifePercent = (int) ((life * healthBarLength) / maxLife);
 
-        GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, healthBarLength, healthBarHeight), backgroundTexture, ScaleMode.StretchToFill, true, 0);
+        Rect frameRect = new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, healthBarLength, healthBarHeight);
+        GUI.DrawTexture(frameRect, backgroundTexture, ScaleMode.StretchToFill, true, 0);
         GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, lifePercent, healthBarHeight), foregroundTexture, ScaleMode.StretchToFill, true, 0);
+        GUI.DrawTexture(frameRect, frameTexture, ScaleMode.StretchToFill, true, 0);
         GUI.Label(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y+10, healthBarLength, 50), "Level " + level);
     }
 
