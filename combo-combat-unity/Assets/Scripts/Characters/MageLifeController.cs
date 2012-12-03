@@ -27,18 +27,20 @@ public class MageLifeController : MonoBehaviour {
     }
 
     public void DoDamage(float damage, MageLifeController source) {
-        if (networkView.isMine) {
-            life -= damage;
-            if (life <= 0) {
-                life = 0;
-                GetComponent<Mage>().DoDie();
+        if (life > 0) {
+            if (networkView.isMine) {
+                life -= damage;
+                if (life <= 0) {
+                    life = 0;
+                    GetComponent<Mage>().DoDie();
+                }
+                if (life > maxLife) {
+                    life = maxLife;
+                }
             }
-            if (life > maxLife) {
-                life = maxLife;
+            if (life <= damage && source != null) {
+                source.LevelUp();
             }
-        }
-        if (life <= damage && source != null) {
-            source.LevelUp();
         }
     }
 
@@ -50,7 +52,7 @@ public class MageLifeController : MonoBehaviour {
         GUI.DrawTexture(frameRect, backgroundTexture, ScaleMode.StretchToFill, true, 0);
         GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, lifePercent, healthBarHeight), foregroundTexture, ScaleMode.StretchToFill, true, 0);
         GUI.DrawTexture(frameRect, frameTexture, ScaleMode.StretchToFill, true, 0);
-        GUI.Label(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y+10, healthBarLength, 50), "Level " + level);
+        GUI.Label(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y + 10, healthBarLength, 50), "Kills: " + level);
     }
 
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
