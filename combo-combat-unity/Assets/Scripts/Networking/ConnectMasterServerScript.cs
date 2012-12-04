@@ -10,6 +10,9 @@ public class ConnectMasterServerScript : MonoBehaviour {
     public string serverName = "Server Name";
     public string serverComment = "Server Comment";
     public GUISkin customSkin;
+    public int maxUsernameLength = 20;
+    public string DEFAULT_USERNAME = "Player";
+    public PlayerConnectionHandler playerConnectionHandler;
 
     public double serverListRefreshTime = 3.0;
     private double lastHostListRequest = -1000.0;
@@ -24,6 +27,8 @@ public class ConnectMasterServerScript : MonoBehaviour {
     private Rect windowRect;
     private Rect serverListRect;
     private string testMessage = "Undetermined NAT capabilities";
+    private string USERNAME_INPUT_NAME = "Username text field";
+    private string usernameField = "";
 
 
     void OnFailedToConnectToMasterServer(NetworkConnectionError info) {
@@ -44,7 +49,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
     }
 
     void Awake() {
-        windowRect = new Rect(Screen.width/2-200, 0, 400, 100);
+        windowRect = new Rect(Screen.width/2-300, 0, 600, 100);
         serverListRect = new Rect(Screen.width / 2 - Screen.width * 0.45f, 150, Screen.width * 0.9f, 400);
         // Start connection test
         connectionTestResult = Network.TestConnection();
@@ -56,6 +61,10 @@ public class ConnectMasterServerScript : MonoBehaviour {
     }
 
     void Start() {
+        usernameField = PlayerPrefs.GetString(GameConstants.PREFS_USERNAME);
+        if (usernameField == "") {
+            usernameField = DEFAULT_USERNAME;
+        }
         //MasterServer.dedicatedServer = true;
         if (allowsDedicatedServer && IsBatchMode()) {
             DoStartServer();
@@ -163,6 +172,9 @@ public class ConnectMasterServerScript : MonoBehaviour {
             }
 
             GUILayout.FlexibleSpace();
+            GUILayout.Label("Username:", "PlainText");
+            GUI.SetNextControlName(USERNAME_INPUT_NAME);
+            usernameField = GUILayout.TextField(usernameField, maxUsernameLength, GUILayout.MinWidth(150));
 
             GUILayout.EndHorizontal();
         } else {
@@ -217,6 +229,8 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 GUILayout.FlexibleSpace();
                 GUILayout.Width(100);
                 if (GUILayout.Button("Connect", "ShortButton")) {
+                    PlayerPrefs.SetString(GameConstants.PREFS_USERNAME, usernameField);
+                    playerConnectionHandler.SetUsername(usernameField);
                     Network.Connect(element);
                     this.enabled = false;
                 }

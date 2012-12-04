@@ -4,9 +4,19 @@ using System.Collections;
 public class PlayerConnectionHandler : MonoBehaviour {
 
     private MessageSystem messages;
+    private string username;
+
+    public void SetUsername(string username) {
+        this.username = username;
+    }
+
+    public string GetUsername() {
+        return username;
+    }
 
     void Awake() {
         DontDestroyOnLoad(gameObject);
+        username = "";
     }
 
     // called on client

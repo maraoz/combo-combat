@@ -8,6 +8,9 @@ public class GameConstants {
     public static int FIREBALL_GROUP = 1;
     public static int HEART_GROUP = 2;
 
+    // player prefs
+    public static string PREFS_USERNAME = "username";
+
     //tags
     public static string MAGE_TAG = "Mage";
     public static string HEART_TAG = "Heart";

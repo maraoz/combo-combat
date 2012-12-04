@@ -10,11 +10,17 @@ public class MageLifeController : MonoBehaviour {
     public int healthBarHeight = 10;
     public int maxLife = 100;
 
+    private string username;
     private float life;
     private int level;
 
     void Awake() {
         RestartLife();
+        if (networkView.isMine) {
+            string u = (GameObject.Find("PlayerConnectionHandler") as GameObject).GetComponent<PlayerConnectionHandler>().GetUsername();
+            networkView.RPC("SetUsername", RPCMode.AllBuffered, u);
+            Debug.Log("calling setusername");
+        }
     }
 
     public void RestartLife() {
@@ -45,14 +51,22 @@ public class MageLifeController : MonoBehaviour {
     }
 
     void OnGUI() {
-        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
+        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 2.5f);
         int lifePercent = (int) ((life * healthBarLength) / maxLife);
 
         Rect frameRect = new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, healthBarLength, healthBarHeight);
         GUI.DrawTexture(frameRect, backgroundTexture, ScaleMode.StretchToFill, true, 0);
         GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, lifePercent, healthBarHeight), foregroundTexture, ScaleMode.StretchToFill, true, 0);
         GUI.DrawTexture(frameRect, frameTexture, ScaleMode.StretchToFill, true, 0);
-        GUI.Label(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y + 10, healthBarLength, 50), "Kills: " + level);
+        GUIStyle centeredStyle = new GUIStyle(GUI.skin.label);
+        centeredStyle.alignment = TextAnchor.UpperCenter;
+        GUI.Label(new Rect(pos.x - healthBarLength*2, Screen.height - pos.y - 25, healthBarLength*4, 50), username + " (" + level+")", centeredStyle);
+    }
+
+    [RPC]
+    void SetUsername(string u) {
+        this.username = u;
+        Debug.Log(u);
     }
 
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
