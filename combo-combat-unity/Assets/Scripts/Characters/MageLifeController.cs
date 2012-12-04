@@ -19,7 +19,6 @@ public class MageLifeController : MonoBehaviour {
         if (networkView.isMine) {
             string u = (GameObject.Find("PlayerConnectionHandler") as GameObject).GetComponent<PlayerConnectionHandler>().GetUsername();
             networkView.RPC("SetUsername", RPCMode.AllBuffered, u);
-            Debug.Log("calling setusername");
         }
     }
 
@@ -66,7 +65,6 @@ public class MageLifeController : MonoBehaviour {
     [RPC]
     void SetUsername(string u) {
         this.username = u;
-        Debug.Log(u);
     }
 
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {

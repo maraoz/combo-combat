@@ -202,7 +202,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
 
             // Do not display NAT enabled games if we cannot do NAT punchthrough
             if (!(filterNATHosts && element.useNat)) {
-                var connections = element.connectedPlayers + "/" + element.playerLimit;
+                var connections = (element.connectedPlayers-1) + "/" + (element.playerLimit-1);
                 GUILayout.Label(element.gameName);
                 GUILayout.Space(5);
                 GUILayout.Label(connections);
