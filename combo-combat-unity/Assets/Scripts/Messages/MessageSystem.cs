@@ -27,7 +27,7 @@ public class MessageSystem : MonoBehaviour {
 
     void Awake() {
         textInputRect = new Rect(entryHPad, Screen.height - entryVPad, entryWidth, entryHeight);
-        chatUsername = "Player";
+        chatUsername = GameObject.Find("PlayerConnectionHandler").GetComponent<PlayerConnectionHandler>().GetUsername();
     }
 
 
