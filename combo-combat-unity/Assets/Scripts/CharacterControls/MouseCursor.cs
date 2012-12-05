@@ -29,4 +29,14 @@ public class MouseCursor : MonoBehaviour {
         currentCursor = attackCursor;
     }
 
+    public void SetMoveCursor() {
+        currentCursor = defaultCursor;
+    }
+
+    // TODO: do this like this, with hardware cursors
+    private void SetCursor(Texture2D cursor) {
+        Debug.Log("changing state");
+        Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
+    }
+
 }
