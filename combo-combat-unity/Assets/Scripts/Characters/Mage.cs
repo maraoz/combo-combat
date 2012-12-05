@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(CharacterController))]
 public class Mage : MonoBehaviour {
@@ -7,6 +8,7 @@ public class Mage : MonoBehaviour {
     public float walkingSpeed = 6f;
     public float gravityMagnitude = 20.0f;
     public GameObject fireball;
+    public GameObject wall;
 
     private CharacterController controller;
     private CollisionFlags collisionFlags;
@@ -119,6 +121,26 @@ public class Mage : MonoBehaviour {
         target = v;
     }
 
+    public void CastWall(List<Vector3> points) {
+        int count = points.Count;
+        for (int i = 0; i < count - 1; i++) {
+            Vector3 current = points[i];
+            Vector3 next = points[i + 1];
+
+            Vector3 middle = (current + next) / 2;
+            float dist = Vector3.Distance(current, next);
+
+            GameObject piece = GameObject.Instantiate(wall, middle, Quaternion.identity) as GameObject;
+            piece.transform.LookAt(next);
+            Vector3 euler = piece.transform.eulerAngles;
+            euler.y += 90;
+            piece.transform.eulerAngles = euler;
+
+            piece.transform.localScale *= dist / 10.0f;
+
+        }
+    }
+
     public void CastFireball(Vector3 v) {
         if (!isCasting && !isDying) {
             isCasting = true;
@@ -170,4 +192,5 @@ public class Mage : MonoBehaviour {
     public bool IsGrounded() {
         return (collisionFlags & CollisionFlags.CollidedBelow) != 0;
     }
+
 }

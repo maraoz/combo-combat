@@ -1,15 +1,20 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ClickPlayerMovementScript : MonoBehaviour {
 
     public GameObject clickFeedback;
+    public float wallDrawResolution = 1.0f;
+    public int wallDrawMaxPoints = 5;
 
     private Camera referencedCamera;
     private Mage player;
 
     private ControlState oldState;
     private ControlState state;
+
+    private List<Vector3> points = new List<Vector3>();
 
     public enum ControlState {
         moving = 0,
@@ -34,14 +39,23 @@ public class ClickPlayerMovementScript : MonoBehaviour {
             return;
         }
 
+        // KEYBOARD
         if (Input.GetKeyDown(Hotkeys.FIREBALL_HOTKEY)) {
             state = ControlState.targetingFireball;
+        } else if (Input.GetKeyDown(Hotkeys.WALL_HOTKEY)) {
+            state = ControlState.drawingWall;
         }
 
-        bool rightPressed = Input.GetMouseButton(MouseButton.RIGHT);
-        bool leftDown = Input.GetMouseButtonDown(MouseButton.LEFT);
 
-        if (rightPressed || leftDown) {
+        // MOUSE
+        bool rightPressed = Input.GetMouseButton(MouseButton.RIGHT);
+        bool rightDown = Input.GetMouseButtonDown(MouseButton.RIGHT);
+        bool leftPressed = Input.GetMouseButton(MouseButton.LEFT);
+        bool leftDown = Input.GetMouseButtonDown(MouseButton.LEFT);
+        bool leftUp = Input.GetMouseButtonUp(MouseButton.LEFT);
+        Vector3 mousePos = Input.mousePosition;
+
+        if (rightPressed || leftPressed || leftUp) {
             if (state != ControlState.moving && rightPressed) {
                 state = ControlState.moving;
             }
@@ -62,13 +76,13 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
                 bool giveFeedback = false;
                 // right click handler
-                if (Input.GetMouseButton(MouseButton.RIGHT)) {
+                if (rightPressed) {
                     giveFeedback = true;
                     player.PlanMove(planePosition);
                 }
 
                 // left click handler
-                if (Input.GetMouseButtonDown(MouseButton.LEFT)) {
+                if (leftDown) {
                     switch (state) {
                         case ControlState.targetingFireball:
                             player.CastFireball(planePosition);
@@ -79,9 +93,32 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                             break;
                     }
                 }
+                if (leftPressed) {
+                    switch (state) {
+                        case ControlState.drawingWall:
+                            int count = points.Count;
+                            if (count <= wallDrawMaxPoints) {
+                                if (count == 0 || Vector3.Distance(points[count - 1], planePosition) > wallDrawResolution) {
+                                    points.Add(planePosition);
+                                }
+                            }
+                            break;
+                    }
+                }
+                if (leftUp) {
+                    switch (state) {
+                        case ControlState.drawingWall:
+                            if (points.Count > 1) {
+                                player.CastWall(points);
+                            }
+                            points.Clear();
+                            state = ControlState.moving;
+                            break;
+                    }
+                }
 
                 // click feedback
-                if (hitInfo.collider != null && (Input.GetMouseButtonDown(MouseButton.RIGHT) || Input.GetMouseButtonDown(MouseButton.LEFT))) {
+                if (hitInfo.collider != null && (rightDown || leftDown)) {
                     Vector3 clickFeedbackPosition = hitInfo.point + Vector3.up * 0.1f;
                     if (giveFeedback) {
                         GameObject feedback = GameObject.Instantiate(clickFeedback, clickFeedbackPosition, Quaternion.identity) as GameObject;
@@ -109,6 +146,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
             case ControlState.moving:
                 MouseCursor.main.SetMoveCursor();
                 break;
+            case ControlState.drawingWall:
             case ControlState.targetingFireball:
                 MouseCursor.main.SetAttackCursor();
                 break;
