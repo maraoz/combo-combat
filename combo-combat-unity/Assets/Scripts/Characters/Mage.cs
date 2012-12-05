@@ -157,6 +157,7 @@ public class Mage : MonoBehaviour {
     public void DoDie() {
         if (!isDying) {
             isDying = true;
+            isCasting = false;
             messages.AddSystemMessage("You died. Please wait " + deathTime + " seconds to respawn.", false);
             Camera.main.GetComponent<IsometricCamera>().SetGrayscale(true);
         }
