@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class MageHeartCollide : MonoBehaviour {
+public class MageHeartCollider : MonoBehaviour {
 
     public GameObject effect;
 

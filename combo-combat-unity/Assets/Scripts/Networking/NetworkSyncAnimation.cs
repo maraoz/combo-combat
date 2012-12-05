@@ -29,7 +29,6 @@ public class NetworkSyncAnimation : MonoBehaviour {
         currentAnimation = (AniStates) Enum.Parse(typeof(AniStates), animationValue);
     }
 
-    // Update is called once per frame
     void Update() {
 
         if (lastAnimation != currentAnimation) {
@@ -47,7 +46,6 @@ public class NetworkSyncAnimation : MonoBehaviour {
         } else {
             char ani = (char) 0;
             stream.Serialize(ref ani);
-
             currentAnimation = (AniStates) ani;
         }
 
