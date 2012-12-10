@@ -77,9 +77,7 @@ public class Mage : MonoBehaviour {
                 casted.GetComponent<FireballController>().SetCaster(GetComponent<MageLifeController>());
             }
             if (castingTime >= castingTimeNeeded) {
-                castingTime = 0f;
-                isCasting = false;
-                hasCreatedFireball = false;
+                FinishCastingFireball();
             }
 
         }
@@ -116,10 +114,17 @@ public class Mage : MonoBehaviour {
         }
     }
 
-
+    void FinishCastingFireball() {
+        castingTime = 0f;
+        isCasting = false;
+        hasCreatedFireball = false;
+    }
 
     public void PlanMove(Vector3 v) {
         target = v;
+        if (isCasting && !hasCreatedFireball) {
+            FinishCastingFireball();
+        }
     }
 
     public void CastWall(List<Vector3> points) {
