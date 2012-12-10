@@ -81,15 +81,17 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 bool giveFeedback = false;
                 // right click handler
                 if (rightPressed) {
-                    giveFeedback = true;
                     player.PlanMove(planePosition);
+                }
+                if (rightDown) {
+                    giveFeedback = true;
                 }
 
                 // left click handler
                 if (leftDown) {
                     switch (state) {
                         case ControlState.targetingFireball:
-                            player.CastFireball(planePosition);
+                            player.PlanCastFireball(planePosition);
                             state = ControlState.moving;
                             giveFeedback = true;
                             break;
@@ -134,7 +136,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                     Vector3 clickFeedbackPosition = hitInfo.point + Vector3.up * 0.1f;
                     if (giveFeedback) {
                         GameObject feedback = GameObject.Instantiate(clickFeedback, clickFeedbackPosition, Quaternion.identity) as GameObject;
-                        if (Input.GetMouseButtonDown(MouseButton.LEFT)) {
+                        if (leftDown) {
                             feedback.GetComponent<ClickFeedback>().SetColor(Color.red);
                         } else {
                             feedback.GetComponent<ClickFeedback>().SetColor(Color.green);
