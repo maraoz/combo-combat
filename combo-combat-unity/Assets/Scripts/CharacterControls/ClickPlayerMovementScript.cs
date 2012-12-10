@@ -7,6 +7,9 @@ public class ClickPlayerMovementScript : MonoBehaviour {
     public GameObject clickFeedback;
     public float wallDrawResolution = 1.0f;
     public int wallDrawMaxPoints = 5;
+    public float wallMaxLength = 6.0f;
+
+    private float wallLength;
 
     private Camera referencedCamera;
     private Mage player;
@@ -27,6 +30,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
         referencedCamera = Camera.main;
         state = ControlState.moving;
         oldState = ControlState.moving;
+        wallLength = 0;
     }
 
 
@@ -97,9 +101,21 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                     switch (state) {
                         case ControlState.drawingWall:
                             int count = points.Count;
-                            if (count <= wallDrawMaxPoints) {
-                                if (count == 0 || Vector3.Distance(points[count - 1], planePosition) > wallDrawResolution) {
-                                    points.Add(planePosition);
+                            if (count == 0) {
+                                points.Add(planePosition);
+                            } else {
+                                float distanceToLast = Vector3.Distance(points[count - 1], planePosition);
+                                if (distanceToLast > wallDrawResolution) {
+                                    if (wallLength + distanceToLast <= wallMaxLength) {
+                                        points.Add(planePosition);
+                                        wallLength += distanceToLast;
+                                        if (wallLength + wallDrawResolution >= wallMaxLength) {
+                                            DoCastWall();
+                                        }
+                                    } else {
+                                        // TODO: agregar que se complete lo que falto hasta maxLength
+                                        DoCastWall();
+                                    }
                                 }
                             }
                             break;
@@ -108,11 +124,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 if (leftUp) {
                     switch (state) {
                         case ControlState.drawingWall:
-                            if (points.Count > 1) {
-                                player.CastWall(points);
-                            }
-                            points.Clear();
-                            state = ControlState.moving;
+                            DoCastWall();
                             break;
                     }
                 }
@@ -135,6 +147,15 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
         UpdateMouseCursor();
 
+    }
+
+    private void DoCastWall() {
+        if (points.Count > 1) {
+            player.CastWall(points);
+        }
+        points.Clear();
+        wallLength = 0;
+        state = ControlState.moving;
     }
 
     private void UpdateMouseCursor() {
