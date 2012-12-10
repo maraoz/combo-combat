@@ -9,6 +9,7 @@ public class Mage : MonoBehaviour {
     public float gravityMagnitude = 20.0f;
     public GameObject fireball;
     public GameObject wall;
+    public float wallBrickLength = 1.0f;
 
     private CharacterController controller;
     private CollisionFlags collisionFlags;
@@ -127,16 +128,28 @@ public class Mage : MonoBehaviour {
             Vector3 current = points[i];
             Vector3 next = points[i + 1];
 
-            Vector3 middle = (current + next) / 2;
             float dist = Vector3.Distance(current, next);
 
-            GameObject piece = GameObject.Instantiate(wall, middle, Quaternion.identity) as GameObject;
-            piece.transform.LookAt(next);
-            Vector3 euler = piece.transform.eulerAngles;
-            euler.y += 90;
-            piece.transform.eulerAngles = euler;
+            int bricksNeeded = (int) (dist / wallBrickLength);
+            float adaptedBrickLenght = dist / bricksNeeded;
+            for (int j = 0; j < bricksNeeded; j++) {
 
-            piece.transform.localScale *= dist / 10.0f;
+                Vector3 currentBrick = Vector3.Lerp(current, next, adaptedBrickLenght * j / dist);
+                Vector3 nextBrick = Vector3.Lerp(current, next, adaptedBrickLenght * (j + 1) / dist);
+                Vector3 middleBrick = (currentBrick + nextBrick) / 2;
+
+                GameObject piece = GameObject.Instantiate(wall, middleBrick, Quaternion.identity) as GameObject;
+                piece.transform.LookAt(next);
+                Vector3 euler = piece.transform.eulerAngles;
+                euler.y += 90;
+                piece.transform.eulerAngles = euler;
+                Vector3 scale = piece.transform.localScale;
+                scale.x *= adaptedBrickLenght;
+                piece.transform.localScale = scale;
+                Vector3 position = piece.transform.position;
+                position.y += 1.5f;
+                piece.transform.position = position;
+            }
 
         }
     }

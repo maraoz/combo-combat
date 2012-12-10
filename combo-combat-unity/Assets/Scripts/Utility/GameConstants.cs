@@ -17,8 +17,8 @@ public class GameConstants {
 
     // layers
 
-    public static int LAYER_UNCLICKABLE = 8;
-    public static int LAYER_MASK_UNCLICKABLE = 1 << LAYER_UNCLICKABLE;
+    public static int LAYER_CLICKABLE = 8;
+    public static int LAYER_MASK_CLICKABLE = 1 << LAYER_CLICKABLE;
 
     public static int Invert(int mask) {
         return ~(mask);

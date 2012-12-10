@@ -64,8 +64,8 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
 
             RaycastHit hitInfo = new RaycastHit();
-            int allButUnclickable = GameConstants.Invert(GameConstants.LAYER_MASK_UNCLICKABLE);
-            Physics.Raycast(ray, out hitInfo, Mathf.Infinity, allButUnclickable);
+            int clickableLayer = GameConstants.LAYER_MASK_CLICKABLE;
+            Physics.Raycast(ray, out hitInfo, Mathf.Infinity, clickableLayer);
 
 
             if (hitInfo.collider == null || !hitInfo.collider.gameObject.CompareTag("Enemy")) {
