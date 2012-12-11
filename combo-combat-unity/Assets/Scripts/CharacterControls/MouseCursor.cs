@@ -6,36 +6,34 @@ public class MouseCursor : MonoBehaviour {
     public Texture2D defaultCursor;
     public Texture2D attackCursor;
     public static MouseCursor main;
+    public float timeToStart = 1.0f;
+    private float timePast;
 
-    private Texture2D currentCursor; 
+    private bool customCursorSet = false;
 
     void Awake() {
-        Screen.showCursor = false;
         DontDestroyOnLoad(gameObject);
         main = this;
-        currentCursor = defaultCursor;
+        timePast = 0f;
     }
 
-    void OnGUI() {
-        GUI.depth = 0;
-        GUI.DrawTexture(new Rect(Input.mousePosition.x,
-                               Screen.height - Input.mousePosition.y,
-                               currentCursor.width,
-                               currentCursor.height),
-                         currentCursor);
+    void Update() {
+        timePast += Time.deltaTime;
+        // horrible hack because Cursor API doesnt work at startup
+        if (timePast >= timeToStart) {
+            SetCursor(defaultCursor);
+            this.enabled = false;
+        }
     }
-
     public void SetAttackCursor() {
-        currentCursor = attackCursor;
+        SetCursor(attackCursor);
     }
 
     public void SetMoveCursor() {
-        currentCursor = defaultCursor;
+        SetCursor(defaultCursor);
     }
 
-    // TODO: do this like this, with hardware cursors
     private void SetCursor(Texture2D cursor) {
-        Debug.Log("changing state");
         Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
     }
 
