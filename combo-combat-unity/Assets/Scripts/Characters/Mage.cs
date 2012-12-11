@@ -126,9 +126,6 @@ public class Mage : MonoBehaviour {
 
     public void PlanMove(Vector3 v) {
         target = v;
-        if (isCasting && !hasCreatedFireball) {
-            FinishCastingFireball();
-        }
     }
 
     public void CastWall(List<Vector3> points) {
@@ -147,7 +144,7 @@ public class Mage : MonoBehaviour {
                 Vector3 middleBrick = (currentBrick + nextBrick) / 2;
 
                 networkView.RPC("SpawnBrick", RPCMode.All, middleBrick, next, adaptedBrickLenght);
-                
+
             }
 
         }
