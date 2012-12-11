@@ -52,15 +52,19 @@ public class CharacterSimpleAnimation : MonoBehaviour {
             SendMessage("SyncAnimation", "jump");
         }
         if (player.IsCasting()) {
-            AnimationState state = animation["punch"];
-            state.speed = state.length / player.GetCastingTimeNeeded();
-            animation.CrossFade("punch");
-            SendMessage("SyncAnimation", "punch");
+            SpellCaster spell = player.GetCurrentSpellCaster();
+            float fullCastingTime = spell.GetFullCastingTime();
+            if (fullCastingTime > 0) {
+                string aniName = spell.GetAnimationName();
+                AnimationState state = animation[aniName];
+                state.speed = state.length / fullCastingTime;
+                animation.CrossFade(aniName);
+                SendMessage("SyncAnimation", aniName);
+            }
         }
         if (player.IsDying()) {
             if (dieStart == 0f) {
                 dieStart = Time.time;
-                //SendMessage("SyncAnimation", "buttstomp");
             } else {
                 if (Time.time - dieStart < dieDuration) {
                     Vector3 euler = transform.rotation.eulerAngles;

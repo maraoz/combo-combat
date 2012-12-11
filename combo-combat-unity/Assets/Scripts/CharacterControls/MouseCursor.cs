@@ -9,8 +9,6 @@ public class MouseCursor : MonoBehaviour {
     public float timeToStart = 1.0f;
     private float timePast;
 
-    private bool customCursorSet = false;
-
     void Awake() {
         DontDestroyOnLoad(gameObject);
         main = this;

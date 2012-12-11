@@ -57,7 +57,6 @@ public class ClickPlayerMovementScript : MonoBehaviour {
         bool leftPressed = Input.GetMouseButton(MouseButton.LEFT);
         bool leftDown = Input.GetMouseButtonDown(MouseButton.LEFT);
         bool leftUp = Input.GetMouseButtonUp(MouseButton.LEFT);
-        Vector3 mousePos = Input.mousePosition;
 
         if (rightPressed || leftPressed || leftUp) {
             if (state != ControlState.moving && rightPressed) {
@@ -91,8 +90,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 if (leftDown) {
                     switch (state) {
                         case ControlState.targetingFireball:
-                            player.PlanCastFireball(planePosition);
-                            state = ControlState.moving;
+                            DoCastFireball(planePosition);
                             giveFeedback = true;
                             break;
                         default:
@@ -151,9 +149,14 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
     }
 
+    private void DoCastFireball(Vector3 target) {
+        player.PlanCastFireball(target);
+        state = ControlState.moving;
+    }
+
     private void DoCastWall() {
         if (points.Count > 1) {
-            player.CastWall(points);
+            player.PlanCastWall(points);
         }
         points.Clear();
         wallLength = 0;
