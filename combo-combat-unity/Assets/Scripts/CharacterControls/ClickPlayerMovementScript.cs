@@ -170,11 +170,11 @@ public class ClickPlayerMovementScript : MonoBehaviour {
         oldState = state;
         switch (state) {
             case ControlState.moving:
-                MouseCursor.main.SetMoveCursor();
+                MouseCursor.SetMoveCursor();
                 break;
             case ControlState.drawingWall:
             case ControlState.targetingFireball:
-                MouseCursor.main.SetAttackCursor();
+                MouseCursor.SetAttackCursor();
                 break;
             default:
                 throw new System.NotImplementedException();

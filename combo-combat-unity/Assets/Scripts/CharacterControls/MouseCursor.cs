@@ -3,15 +3,20 @@ using System.Collections;
 
 public class MouseCursor : MonoBehaviour {
 
-    public Texture2D defaultCursor;
-    public Texture2D attackCursor;
-    public static MouseCursor main;
+    public static Texture2D defaultCursor;
+    public static Texture2D attackCursor;
+
+    public Texture2D _defaultCursor;
+    public Texture2D _attackCursor;
+
+
     public float timeToStart = 1.0f;
     private float timePast;
 
     void Awake() {
         DontDestroyOnLoad(gameObject);
-        main = this;
+        defaultCursor = _defaultCursor;
+        attackCursor = _attackCursor;
         timePast = 0f;
     }
 
@@ -23,15 +28,15 @@ public class MouseCursor : MonoBehaviour {
             this.enabled = false;
         }
     }
-    public void SetAttackCursor() {
+    public static void SetAttackCursor() {
         SetCursor(attackCursor);
     }
 
-    public void SetMoveCursor() {
+    public static void SetMoveCursor() {
         SetCursor(defaultCursor);
     }
 
-    private void SetCursor(Texture2D cursor) {
+    private static void SetCursor(Texture2D cursor) {
         Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
     }
 

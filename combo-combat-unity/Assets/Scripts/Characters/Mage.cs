@@ -60,6 +60,7 @@ public class Mage : MonoBehaviour {
 
 
     void Update() {
+
         // vertical movement
         ApplyGravity();
         Vector3 verticalVelocity = new Vector3(0, verticalSpeed, 0);
