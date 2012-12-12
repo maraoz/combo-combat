@@ -13,6 +13,30 @@ public class WallCaster : SpellCaster {
         return PlanCast();
     }
 
+    public override void DoCastSpell() {
+        int count = points.Count;
+        int totalBricks = 0;
+        for (int i = 0; i < count - 1; i++) {
+            Vector3 current = points[i];
+            Vector3 next = points[i + 1];
+
+            float dist = Vector3.Distance(current, next);
+
+            int bricksNeeded = (int) (dist / wallBrickLength);
+            if (bricksNeeded == 0) bricksNeeded = 1;
+            float adaptedBrickLenght = dist / bricksNeeded;
+            for (int j = 0; j < bricksNeeded; j++) {
+                Vector3 currentBrick = Vector3.Lerp(current, next, adaptedBrickLenght * j / dist);
+                Vector3 nextBrick = Vector3.Lerp(current, next, adaptedBrickLenght * (j + 1) / dist);
+                Vector3 middleBrick = (currentBrick + nextBrick) / 2;
+
+                networkView.RPC("SpawnBrick", RPCMode.All, middleBrick, next, adaptedBrickLenght);
+            }
+            totalBricks += bricksNeeded;
+        }
+        Debug.Log(totalBricks);
+    }
+
     [RPC]
     public void SpawnBrick(Vector3 middleBrick, Vector3 next, float adaptedBrickLenght) {
         GameObject piece = GameObject.Instantiate(brick, middleBrick, Quaternion.identity) as GameObject;
@@ -26,26 +50,6 @@ public class WallCaster : SpellCaster {
         Vector3 position = piece.transform.position;
         position.y += 1.5f;
         piece.transform.position = position;
-    }
-
-    public override void DoCastSpell() {
-        int count = points.Count;
-        for (int i = 0; i < count - 1; i++) {
-            Vector3 current = points[i];
-            Vector3 next = points[i + 1];
-
-            float dist = Vector3.Distance(current, next);
-
-            int bricksNeeded = (int) (dist / wallBrickLength);
-            float adaptedBrickLenght = dist / bricksNeeded;
-            for (int j = 0; j < bricksNeeded; j++) {
-                Vector3 currentBrick = Vector3.Lerp(current, next, adaptedBrickLenght * j / dist);
-                Vector3 nextBrick = Vector3.Lerp(current, next, adaptedBrickLenght * (j + 1) / dist);
-                Vector3 middleBrick = (currentBrick + nextBrick) / 2;
-
-                networkView.RPC("SpawnBrick", RPCMode.All, middleBrick, next, adaptedBrickLenght);
-            }
-        }
     }
 
     public override void OnFinishCasting() {

@@ -6,7 +6,6 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
     public GameObject clickFeedback;
     public float wallDrawResolution = 1.0f;
-    public int wallDrawMaxPoints = 5;
     public float wallMaxLength = 6.0f;
 
     private float wallLength;
@@ -113,6 +112,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                                             DoCastWall();
                                         }
                                     } else {
+                                        CompleteWall(planePosition, wallMaxLength - wallLength);
                                         // TODO: agregar que se complete lo que falto hasta maxLength
                                         DoCastWall();
                                     }
@@ -124,6 +124,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 if (leftUp) {
                     switch (state) {
                         case ControlState.drawingWall:
+                            CompleteWall(planePosition, wallMaxLength - wallLength);
                             DoCastWall();
                             break;
                     }
@@ -147,6 +148,16 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
         UpdateMouseCursor();
 
+    }
+
+    private void CompleteWall(Vector3 point, float remainingDistance) {
+        int count = points.Count;
+        if (count > 1) {
+            Vector3 last = points[count - 1];
+            float realDistance = Vector3.Distance(last, point);
+            Vector3 correction = Vector3.Lerp(last, point, remainingDistance / realDistance);
+            points.Add(correction);
+        }
     }
 
     private void DoCastFireball(Vector3 target) {
