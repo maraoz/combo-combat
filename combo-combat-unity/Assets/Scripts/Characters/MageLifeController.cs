@@ -10,19 +10,42 @@ public class MageLifeController : MonoBehaviour {
     public int healthBarHeight = 10;
     public int maxLife = 100;
 
+    private Mage mage;
     private string username;
     private float life;
     private int level;
 
+    // death
+    private bool isDying = false;
+    private MessageSystem messages;
+    private Transform spawnPosition;
+    public float deathTime = 15.0f;
+    private float deathTimeSpent = 0f;
+
+
     void Awake() {
         RestartLife();
+        mage = GetComponent<Mage>();
+        messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
         if (networkView.isMine) {
             string u = (GameObject.Find("PlayerConnectionHandler") as GameObject).GetComponent<PlayerConnectionHandler>().GetUsername();
             networkView.RPC("SetUsername", RPCMode.AllBuffered, u);
         }
     }
 
+    void Update() {
+        if (isDying) {
+            deathTimeSpent += Time.deltaTime;
+            if (deathTimeSpent >= deathTime) {
+                Respawn();
+            }
+        }
+
+    }
+
+
     public void RestartLife() {
+        isDying = false;
         life = maxLife;
         level = 0;
     }
@@ -37,7 +60,7 @@ public class MageLifeController : MonoBehaviour {
                 life -= damage;
                 if (life <= 0) {
                     life = 0;
-                    GetComponent<Mage>().DoDie();
+                    DoDie();
                 }
                 if (life > maxLife) {
                     life = maxLife;
@@ -49,17 +72,42 @@ public class MageLifeController : MonoBehaviour {
         }
     }
 
+    void Respawn() {
+        deathTimeSpent = 0f;
+        transform.position = spawnPosition.position;
+        transform.rotation = Quaternion.identity;
+        Camera.main.GetComponent<IsometricCamera>().SetGrayscale(false);
+        mage.OnRespawn();
+        RestartLife();
+    }
+
+    public void DoDie() {
+        if (!isDying) {
+            mage.OnDied();
+            messages.AddSystemMessage("You died. Please wait " + deathTime + " seconds to respawn.", false);
+            Camera.main.GetComponent<IsometricCamera>().SetGrayscale(true);
+            isDying = true;
+        }
+    }
+
+    public bool IsDying() {
+        return isDying;
+    }
+
+    public void SetSpawnPosition(Transform spawner) {
+        spawnPosition = spawner;
+    }
+
     void OnGUI() {
         Vector3 pos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 2.5f);
         int lifePercent = (int) ((life * healthBarLength) / maxLife);
-
         Rect frameRect = new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, healthBarLength, healthBarHeight);
         GUI.DrawTexture(frameRect, backgroundTexture, ScaleMode.StretchToFill, true, 0);
         GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, lifePercent, healthBarHeight), foregroundTexture, ScaleMode.StretchToFill, true, 0);
         GUI.DrawTexture(frameRect, frameTexture, ScaleMode.StretchToFill, true, 0);
         GUIStyle centeredStyle = new GUIStyle(GUI.skin.label);
         centeredStyle.alignment = TextAnchor.UpperCenter;
-        GUI.Label(new Rect(pos.x - healthBarLength*2, Screen.height - pos.y - 25, healthBarLength*4, 50), username + " (" + level+")", centeredStyle);
+        GUI.Label(new Rect(pos.x - healthBarLength * 2, Screen.height - pos.y - 25, healthBarLength * 4, 50), username + " (" + level + ")", centeredStyle);
     }
 
     [RPC]

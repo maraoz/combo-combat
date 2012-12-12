@@ -10,7 +10,7 @@ public class SpawnMageScript : MonoBehaviour {
         Network.SetSendingEnabled(0, true);
         if (Network.isClient) {
             GameObject mageObject = Network.Instantiate(playerPrefab, transform.position, Quaternion.identity, GameConstants.MAGE_GROUP) as GameObject;
-            Mage mage = mageObject.GetComponent<Mage>();
+            MageLifeController mage = mageObject.GetComponent<MageLifeController>();
             mage.SetSpawnPosition(transform);
         }
     }

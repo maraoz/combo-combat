@@ -8,8 +8,11 @@ public class CharacterSimpleAnimation : MonoBehaviour {
     public float dieDuration = 1f;
 
     private float dieStart;
+    private Mage player;
 
     void Awake() {
+        player = GetComponent<Mage>();
+
         // By default loop all animations
         animation.wrapMode = WrapMode.Loop;
 
@@ -18,7 +21,7 @@ public class CharacterSimpleAnimation : MonoBehaviour {
         animation.Play("idle");
     }
     void Update() {
-        Mage player = GetComponent<Mage>();
+        
         float currentSpeed = player.GetSpeed();
         animation.wrapMode = WrapMode.Loop;
 
@@ -46,11 +49,6 @@ public class CharacterSimpleAnimation : MonoBehaviour {
         animation["run"].normalizedSpeed = runSpeedScale;
         animation["walk"].normalizedSpeed = walkSpeedScale;
 
-        if (player.IsJumping()) {
-            animation.wrapMode = WrapMode.ClampForever;
-            animation.CrossFade("jump", 0.2f);
-            SendMessage("SyncAnimation", "jump");
-        }
         if (player.IsCasting()) {
             SpellCaster spell = player.GetCurrentSpellCaster();
             float fullCastingTime = spell.GetFullCastingTime();

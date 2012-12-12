@@ -9,6 +9,9 @@ public class Mage : MonoBehaviour {
     public float walkingSpeed = 6f;
     public float gravityMagnitude = 20.0f;
 
+    // life
+    private MageLifeController life;
+
     // movement
     private CharacterController controller;
     private CollisionFlags collisionFlags;
@@ -21,25 +24,13 @@ public class Mage : MonoBehaviour {
     private FireballCaster fireballCaster;
     private WallCaster wallCaster;
 
-    // TODO: sacar esto de aca
-    private bool isDying = false;
-
-    // death
-    private MessageSystem messages;
-    private Transform spawnPosition;
-    public float deathTime = 15.0f;
-    private float deathTimeSpent = 0f;
-
     void Awake() {
+        life = GetComponent<MageLifeController>();
         controller = GetComponent<CharacterController>();
         currentSpellCaster = null;
         fireballCaster = GetComponent<FireballCaster>();
         wallCaster = GetComponent<WallCaster>();
-        messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
-    }
 
-    public void SetSpawnPosition(Transform spawner) {
-        spawnPosition = spawner;
     }
 
     void ApplyGravity() {
@@ -68,33 +59,21 @@ public class Mage : MonoBehaviour {
     }
 
 
-    void UpdateDeathTimer() {
-        deathTimeSpent += Time.deltaTime;
-        if (deathTimeSpent >= deathTime) {
-            Respawn();
-        }
-    }
-
     void Update() {
+        // vertical movement
+        ApplyGravity();
+        Vector3 verticalVelocity = new Vector3(0, verticalSpeed, 0);
 
-        if (!isDying) {
-            // vertical movement
-            ApplyGravity();
-            Vector3 verticalVelocity = new Vector3(0, verticalSpeed, 0);
+        // ground movement
+        ApplyTargetHunt();
+        Vector3 forward = transform.TransformDirection(Vector3.forward);
+        Vector3 groundVelocity = groundSpeed * forward;
 
-            // ground movement
-            ApplyTargetHunt();
-            Vector3 forward = transform.TransformDirection(Vector3.forward);
-            Vector3 groundVelocity = groundSpeed * forward;
+        // compute total movement
+        Vector3 totalVelocity = verticalVelocity + groundVelocity;
 
-            // compute total movement
-            Vector3 totalVelocity = verticalVelocity + groundVelocity;
-
-            // apply movement for this period of time
-            collisionFlags = controller.Move(totalVelocity * Time.deltaTime);
-        } else {
-            UpdateDeathTimer();
-        }
+        // apply movement for this period of time
+        collisionFlags = controller.Move(totalVelocity * Time.deltaTime);
     }
 
     public void PlanMove(Vector3 v) {
@@ -114,39 +93,25 @@ public class Mage : MonoBehaviour {
         }
     }
 
-    void Respawn() {
-        enabled = true;
-        currentSpellCaster = null;
-        isDying = false;
-        deathTimeSpent = 0f;
-        Camera.main.GetComponent<IsometricCamera>().SetGrayscale(false);
-        transform.position = spawnPosition.position;
-        transform.rotation = Quaternion.identity;
-        target = Vector3.zero;
-        GetComponent<MageLifeController>().RestartLife();
-    }
 
     public float GetSpeed() {
         return controller.velocity.magnitude;
     }
 
-    public bool IsJumping() {
-        return false;
+    public void OnDied() {
+        enabled = false;
+        currentSpellCaster = null;
+    }
+
+    public void OnRespawn() {
+        enabled = true;
+        currentSpellCaster = null;
+        target = Vector3.zero;
     }
 
     public bool IsDying() {
-        return isDying;
+        return life.IsDying();
     }
-
-    public void DoDie() {
-        if (!isDying) {
-            isDying = true;
-            currentSpellCaster = null;
-            messages.AddSystemMessage("You died. Please wait " + deathTime + " seconds to respawn.", false);
-            Camera.main.GetComponent<IsometricCamera>().SetGrayscale(true);
-        }
-    }
-
 
     public bool IsGrounded() {
         return (collisionFlags & CollisionFlags.CollidedBelow) != 0;
