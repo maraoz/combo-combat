@@ -9,7 +9,7 @@ public class MessageSystem : MonoBehaviour {
     public int entryHeight = 25;
     public int entryWidth = 150;
     public int entryHPad = 10;
-    public int entryVPad = 50;
+    public int entryVPad = 10;
     private Rect textInputRect;
 
     private static string CHAT_INPUT_NAME = "Chat input field";

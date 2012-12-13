@@ -3,15 +3,18 @@ using System.Collections;
 
 public class NetworkInformationText : MonoBehaviour {
 
+    private Rect textPosition;
+
     void Start() {
         DontDestroyOnLoad(this);
     }
 
     void OnGUI() {
+        textPosition = new Rect(10, 5, 500, 20);
         if (Network.isServer)
-            GUI.Label(new Rect(20, Screen.height - 20, 500, 20), "Running as a dedicated server");
+            GUI.Label(textPosition, "Running as a dedicated server");
         if (Network.isClient) {
-            GUI.Label(new Rect(20, Screen.height - 20, 500, 20), "Combo Combat version " + GameConstants.gameVersion);
+            GUI.Label(textPosition, "Combo Combat version " + GameConstants.gameVersion);
         }
     }
 }
