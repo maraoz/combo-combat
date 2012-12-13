@@ -34,7 +34,6 @@ public class WallCaster : SpellCaster {
             }
             totalBricks += bricksNeeded;
         }
-        Debug.Log(totalBricks);
     }
 
     [RPC]
