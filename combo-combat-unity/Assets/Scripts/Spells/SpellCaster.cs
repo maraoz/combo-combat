@@ -7,6 +7,8 @@ public abstract class SpellCaster : MonoBehaviour {
     public float preCastingTime = 1;
     public string animationName = "punch";
     public float cooldown = 5.0f;
+    public Texture2D icon;
+    public string tooltip = "no tooltip";
 
     private float lastCastTimestamp;
     private float castingTime = 0f;
@@ -74,4 +76,12 @@ public abstract class SpellCaster : MonoBehaviour {
     public abstract void OnFinishCasting();
 
 
+
+    internal string GetTooltip() {
+        return tooltip;
+    }
+
+    internal Texture GetIcon() {
+        return icon;
+    }
 }

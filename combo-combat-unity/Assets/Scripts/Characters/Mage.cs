@@ -136,4 +136,11 @@ public class Mage : MonoBehaviour {
             target = Vector3.zero;
         }
     }
+
+    internal List<SpellCaster> GetSpellCasters() {
+        List<SpellCaster> ret = new List<SpellCaster>();
+        ret.Add(fireballCaster);
+        ret.Add(wallCaster);
+        return ret;
+    }
 }
