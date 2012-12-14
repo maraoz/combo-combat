@@ -37,6 +37,17 @@ public class ClickPlayerMovementScript : MonoBehaviour {
         return !GuiUtils.IsGUIFocused() && !player.IsDying();
     }
 
+
+    public void SimulateSpellHotkey(SpellCaster spell) {
+        if (spell is FireballCaster) {
+            state = ControlState.targetingFireball;
+        } else if (spell is WallCaster) {
+            state = ControlState.drawingWall;
+        } else {
+            Debug.Log("Unknown spell");
+        }
+    }
+
     void Update() {
         if (!CanIssueCommands()) {
             return;

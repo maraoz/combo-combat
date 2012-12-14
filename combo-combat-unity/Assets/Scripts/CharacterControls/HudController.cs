@@ -18,6 +18,7 @@ public class HudController : MonoBehaviour {
 
     private List<SpellCaster> spells;
     private MageLifeController life;
+    private ClickPlayerMovementScript controls;
 
     private Rect spellBarRect;
     private Rect lifeBarRect;
@@ -41,7 +42,7 @@ public class HudController : MonoBehaviour {
             SpellCaster spell = spells[i];
             spellRect = new Rect(spellRect.x + spellMargin, spellRect.y, fSize, fSize);
             if (GUI.Button(spellRect, new GUIContent(spell.GetIcon(), spell.GetTooltip()), spellButtonStyle)) {
-                Debug.Log(spell.GetTooltip());
+                controls.SimulateSpellHotkey(spell);
             }
         }
         for (int i = 0; i < spellsShown - spells.Count; i++) {
@@ -76,6 +77,7 @@ public class HudController : MonoBehaviour {
     public void SetMageOwner(GameObject mage) {
         life = mage.GetComponent<MageLifeController>();
         spells = mage.GetComponent<Mage>().GetSpellCasters();
+        controls = mage.GetComponent<ClickPlayerMovementScript>();
     }
 
 }
