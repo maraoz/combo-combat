@@ -130,4 +130,10 @@ public class Mage : MonoBehaviour {
     internal void FinishedCasting() {
         currentSpellCaster = null;
     }
+
+    internal void PlanStop() {
+        if (!IsCasting()) {
+            target = Vector3.zero;
+        }
+    }
 }

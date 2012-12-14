@@ -49,6 +49,10 @@ public class ClickPlayerMovementScript : MonoBehaviour {
             state = ControlState.drawingWall;
         }
 
+        if (Input.GetKeyDown(Hotkeys.STOP_HOTKEY)) {
+            player.PlanStop();
+        }
+
 
         // MOUSE
         bool rightPressed = Input.GetMouseButton(MouseButton.RIGHT);
