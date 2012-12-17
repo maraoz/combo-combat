@@ -12,6 +12,9 @@ public class HudController : MonoBehaviour {
     public float spellHpad;
     public float spellVPad;
     public float spellMargin;
+    public float hotkeyVPad;
+    public Texture2D cooldownOverlay;
+    public Texture2D cooldownBack;
     public Texture2D empty;
 
     public int spellsShown = 4;
@@ -25,8 +28,8 @@ public class HudController : MonoBehaviour {
     private Rect spellRect;
 
     void Awake() {
-        int spellBarWidth = spellBar.width / 4;
-        int spellBarHeight = spellBar.height / 4;
+        int spellBarWidth = spellBar.width / 3;
+        int spellBarHeight = spellBar.height / 3;
         int lifeBarWidth = lifeBarFrame.width;
         int lifeBarHeight = (int) (lifeBarFrame.height * 0.8f);
         spellBarRect = new Rect(Screen.width / 2 - spellBarWidth / 2, (int) Screen.height - spellBarHeight * 1.0f, spellBarWidth, spellBarHeight);
@@ -34,28 +37,47 @@ public class HudController : MonoBehaviour {
     }
 
     void OnGUI() {
+        // spell
         float fSize = spellBarRect.height * 0.73f;
         GUIStyle spellButtonStyle = GUI.skin.button;
         spellButtonStyle.padding = new RectOffset(0, 0, 0, 0);
         spellRect = new Rect(spellBarRect.x + spellHpad - spellMargin, spellBarRect.y + spellVPad, fSize, fSize);
         for (int i = 0; i < spells.Count; i++) {
             SpellCaster spell = spells[i];
+
+            // button
             spellRect = new Rect(spellRect.x + spellMargin, spellRect.y, fSize, fSize);
             if (GUI.Button(spellRect, new GUIContent(spell.GetIcon(), spell.GetTooltip()), spellButtonStyle)) {
                 controls.SimulateSpellHotkey(spell);
             }
+
+            // cooldown effect
+            float percentage = spell.GetCooldownPercentage();
+            if (percentage > 0) {
+                GUI.DrawTexture(spellRect, cooldownBack);
+                Rect cdRect = new Rect(spellRect);
+                cdRect.height *= percentage;
+                GUI.DrawTexture(cdRect, cooldownOverlay);
+            }
+
+            // hotkey
             string hotkey = ("" + System.Convert.ToChar(spell.GetHotkey())).ToUpper();
             Rect hotkeyRect = new Rect(spellRect);
-            hotkeyRect.y += 9;
+            hotkeyRect.y += hotkeyVPad;
             GUI.Label(hotkeyRect, hotkey);
         }
+
+        // non assigned spells
         for (int i = 0; i < spellsShown - spells.Count; i++) {
             spellRect = new Rect(spellRect.x + spellMargin, spellRect.y, fSize, fSize);
             GUI.DrawTexture(spellRect, empty);
         }
 
+        // spell bar
         GUI.DrawTexture(spellBarRect, spellBar);
 
+
+        // life bar
         Rect lifeBarFrontRect = new Rect(lifeBarRect);
         lifeBarFrontRect.width *= life.GetLifePercentage();
         GUI.DrawTexture(lifeBarRect, lifeBarBack);

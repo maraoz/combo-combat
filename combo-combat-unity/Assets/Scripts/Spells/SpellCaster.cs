@@ -44,7 +44,7 @@ public abstract class SpellCaster : MonoBehaviour {
 
     protected bool PlanCast() {
         float now = Time.time;
-        if (lastCastTimestamp != 0f && now - lastCastTimestamp < cooldown) {
+        if (IsCooldownActive(now)) {
             return false;
         }
         lastCastTimestamp = now;
@@ -53,6 +53,10 @@ public abstract class SpellCaster : MonoBehaviour {
             return true;
         }
         return false;
+    }
+
+    private bool IsCooldownActive(float now) {
+        return (lastCastTimestamp != 0f && now - lastCastTimestamp < cooldown);
     }
 
     public void InterruptSpell() {
@@ -71,13 +75,6 @@ public abstract class SpellCaster : MonoBehaviour {
         return animationName;
     }
 
-    public abstract void DoCastSpell();
-
-    public abstract void OnFinishCasting();
-
-    public abstract KeyCode GetHotkey();
-
-
     internal string GetTooltip() {
         return tooltip;
     }
@@ -86,4 +83,18 @@ public abstract class SpellCaster : MonoBehaviour {
         return icon;
     }
 
+    internal float GetCooldownPercentage() {
+        float now = Time.time;
+        if (!IsCooldownActive(now)) {
+            return 0f;
+        }
+        return 1-(now - lastCastTimestamp) / cooldown;
+    }
+
+    public abstract void DoCastSpell();
+
+    public abstract void OnFinishCasting();
+
+    public abstract KeyCode GetHotkey();
+    
 }
