@@ -65,7 +65,8 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 // losing focus handlers
                 switch (state) {
                     case ControlState.drawingWall:
-                        DoCastWall();
+                        if (points.Count > 0)
+                            DoCastWall();
                         break;
                     default:
                         break;
