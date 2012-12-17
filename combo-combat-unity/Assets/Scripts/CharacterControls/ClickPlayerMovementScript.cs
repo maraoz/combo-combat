@@ -5,8 +5,12 @@ using System.Collections.Generic;
 public class ClickPlayerMovementScript : MonoBehaviour {
 
     public GameObject clickFeedback;
+
+    // cosas que hay que volar de aca
     public float wallDrawResolution = 1.0f;
     public float wallMaxLength = 6.0f;
+    public Color wallDrawColor = Color.yellow;
+    private LineRenderer lineRenderer;
 
     private float wallLength;
 
@@ -25,11 +29,16 @@ public class ClickPlayerMovementScript : MonoBehaviour {
     }
 
     void Awake() {
+        if (!networkView.isMine) {
+            return;
+        }
         this.player = this.gameObject.GetComponent<Mage>();
         referencedCamera = Camera.main;
         state = ControlState.moving;
         oldState = ControlState.moving;
         wallLength = 0;
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.SetVertexCount(0);
     }
 
 
@@ -116,10 +125,12 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 if (leftPressed) {
                     switch (state) {
                         case ControlState.drawingWall:
+
                             int count = points.Count;
                             if (count == 0) {
                                 points.Add(planePosition);
                             } else {
+                                RenderWallLineFeedback();
                                 float distanceToLast = Vector3.Distance(points[count - 1], planePosition);
                                 if (distanceToLast > wallDrawResolution) {
                                     if (wallLength + distanceToLast <= wallMaxLength) {
@@ -130,7 +141,6 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                                         }
                                     } else {
                                         CompleteWall(planePosition, wallMaxLength - wallLength);
-                                        // TODO: agregar que se complete lo que falto hasta maxLength
                                         DoCastWall();
                                     }
                                 }
@@ -165,6 +175,21 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
     }
 
+    private void RenderWallLineFeedback() {
+        int count = points.Count;
+        lineRenderer.SetVertexCount(count+1);
+        int i = 0;
+        lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+        lineRenderer.SetColors(wallDrawColor, wallDrawColor);
+        lineRenderer.SetWidth(0.1F, 0.1F);
+        while (i < count) {
+            Vector3 point = new Vector3(points[i].x, points[0].y+0.1f, points[i].z);
+            lineRenderer.SetPosition(i, point);
+            i++;
+        }
+        lineRenderer.SetPosition(i, transform.position+Vector3.up*2);
+    }
+
     private void CompleteWall(Vector3 point, float remainingDistance) {
         int count = points.Count;
         if (count > 1) {
@@ -181,6 +206,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
     }
 
     private void DoCastWall() {
+        lineRenderer.SetVertexCount(0);
         if (points.Count > 1) {
             player.PlanCastWall(points);
         }
