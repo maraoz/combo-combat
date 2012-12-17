@@ -49,6 +49,8 @@ public class ClickPlayerMovementScript : MonoBehaviour {
     }
 
     void Update() {
+        UpdateMouseCursor();
+
         if (!CanIssueCommands()) {
             return;
         }
@@ -160,8 +162,6 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 }
             }
         }
-
-        UpdateMouseCursor();
 
     }
 

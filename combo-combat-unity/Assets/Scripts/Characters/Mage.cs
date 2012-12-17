@@ -84,7 +84,7 @@ public class Mage : MonoBehaviour {
     public void PlanCastFireball(Vector3 v) {
         if (fireballCaster.PlanCast(v)) {
             currentSpellCaster = fireballCaster;
-            target = Vector3.zero;
+            //target = Vector3.zero;
         }
     }
 
