@@ -61,6 +61,16 @@ public class ClickPlayerMovementScript : MonoBehaviour {
         UpdateMouseCursor();
 
         if (!CanIssueCommands()) {
+            if (!player.IsDying()) {
+                // losing focus handlers
+                switch (state) {
+                    case ControlState.drawingWall:
+                        DoCastWall();
+                        break;
+                    default:
+                        break;
+                }
+            }
             return;
         }
 
