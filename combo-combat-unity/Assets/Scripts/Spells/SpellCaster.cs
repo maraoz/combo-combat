@@ -75,6 +75,7 @@ public abstract class SpellCaster : MonoBehaviour {
 
     public abstract void OnFinishCasting();
 
+    public abstract KeyCode GetHotkey();
 
 
     internal string GetTooltip() {
@@ -84,4 +85,5 @@ public abstract class SpellCaster : MonoBehaviour {
     internal Texture GetIcon() {
         return icon;
     }
+
 }

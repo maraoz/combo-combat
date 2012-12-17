@@ -55,4 +55,8 @@ public class WallCaster : SpellCaster {
         points = null;
     }
 
+    public override KeyCode GetHotkey() {
+        return Hotkeys.WALL_HOTKEY;
+    }
+
 }

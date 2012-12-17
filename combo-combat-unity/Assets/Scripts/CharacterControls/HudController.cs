@@ -44,6 +44,10 @@ public class HudController : MonoBehaviour {
             if (GUI.Button(spellRect, new GUIContent(spell.GetIcon(), spell.GetTooltip()), spellButtonStyle)) {
                 controls.SimulateSpellHotkey(spell);
             }
+            string hotkey = ("" + System.Convert.ToChar(spell.GetHotkey())).ToUpper();
+            Rect hotkeyRect = new Rect(spellRect);
+            hotkeyRect.y += 9;
+            GUI.Label(hotkeyRect, hotkey);
         }
         for (int i = 0; i < spellsShown - spells.Count; i++) {
             spellRect = new Rect(spellRect.x + spellMargin, spellRect.y, fSize, fSize);

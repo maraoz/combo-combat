@@ -25,7 +25,12 @@ public class FireballCaster : SpellCaster {
         casted.GetComponent<FireballController>().SetCaster(GetComponent<MageLifeController>());
     }
 
-    override public void OnFinishCasting() {
+    public override void OnFinishCasting() {
         // nothing for now
     }
+
+    public override KeyCode GetHotkey() {
+        return Hotkeys.FIREBALL_HOTKEY;
+    }
+
 }
