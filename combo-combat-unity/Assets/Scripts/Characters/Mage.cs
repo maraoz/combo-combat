@@ -20,14 +20,14 @@ public class Mage : MonoBehaviour {
     private float verticalSpeed = 0f; // y axis speed
 
     // spells
-    private SpellCaster currentSpellCaster;
+    private SpellCaster currentSpellBeingCasted;
     private FireballCaster fireballCaster;
     private WallCaster wallCaster;
 
     void Awake() {
         life = GetComponent<MageLifeController>();
         controller = GetComponent<CharacterController>();
-        currentSpellCaster = null;
+        currentSpellBeingCasted = null;
         fireballCaster = GetComponent<FireballCaster>();
         wallCaster = GetComponent<WallCaster>();
 
@@ -46,7 +46,7 @@ public class Mage : MonoBehaviour {
 
     void ApplyTargetHunt() {
         groundSpeed = 0f;
-        if (target != Vector3.zero && currentSpellCaster == null) {
+        if (target != Vector3.zero && currentSpellBeingCasted == null) {
             target.y = transform.position.y;
             if (CheckArrivedTarget()) {
                 transform.position = target;
@@ -81,19 +81,9 @@ public class Mage : MonoBehaviour {
         target = v;
     }
 
-    public void PlanCastFireball(Vector3 v) {
-        if (fireballCaster.PlanCast(v)) {
-            currentSpellCaster = fireballCaster;
-            //target = Vector3.zero;
-        }
+    public void OnSpellStartedCasting(SpellCaster spell) {
+        currentSpellBeingCasted = spell;
     }
-
-    public void PlanCastWall(List<Vector3> points) {
-        if (wallCaster.PlanCast(points)) {
-            currentSpellCaster = wallCaster;
-        }
-    }
-
 
     public float GetSpeed() {
         return controller.velocity.magnitude;
@@ -101,12 +91,12 @@ public class Mage : MonoBehaviour {
 
     public void OnDied() {
         enabled = false;
-        currentSpellCaster = null;
+        currentSpellBeingCasted = null;
     }
 
     public void OnRespawn() {
         enabled = true;
-        currentSpellCaster = null;
+        currentSpellBeingCasted = null;
         target = Vector3.zero;
     }
 
@@ -120,21 +110,19 @@ public class Mage : MonoBehaviour {
 
 
     public bool IsCasting() {
-        return currentSpellCaster != null;
+        return currentSpellBeingCasted != null;
     }
 
     public SpellCaster GetCurrentSpellCaster() {
-        return currentSpellCaster;
+        return currentSpellBeingCasted;
     }
 
     internal void FinishedCasting() {
-        currentSpellCaster = null;
+        currentSpellBeingCasted = null;
     }
 
     internal void PlanStop() {
-        if (!IsCasting()) {
-            target = Vector3.zero;
-        }
+        target = Vector3.zero;
     }
 
     internal List<SpellCaster> GetSpellCasters() {

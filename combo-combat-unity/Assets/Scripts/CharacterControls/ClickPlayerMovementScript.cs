@@ -6,22 +6,12 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
     public GameObject clickFeedback;
 
-    // cosas que hay que volar de aca
-    public float wallCastMaxHeight = 0f;
-    public float wallDrawResolution = 1.0f;
-    public float wallMaxLength = 6.0f;
-    public Color wallDrawColor = Color.yellow;
-    private LineRenderer lineRenderer;
-
-    private float wallLength;
-
     private Mage player;
     private List<SpellCaster> spells;
+    private SpellCaster currentSpell;
 
     private ControlState oldState;
     private ControlState state;
-
-    private List<Vector3> points = new List<Vector3>();
 
     public enum ControlState {
         moving = 0,
@@ -29,23 +19,16 @@ public class ClickPlayerMovementScript : MonoBehaviour {
         drawingWall
     }
 
-    void Awake() {
+    void Start() {
         if (!networkView.isMine) {
             return;
         }
         this.player = this.gameObject.GetComponent<Mage>();
         this.spells = player.GetSpellCasters();
+        this.currentSpell = null;
 
         state = ControlState.moving;
         oldState = ControlState.moving;
-
-        // wall vvv
-        wallLength = 0;
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
-        lineRenderer.SetVertexCount(0);
-        lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
-        lineRenderer.SetColors(wallDrawColor, wallDrawColor);
-        lineRenderer.SetWidth(0.1F, 0.1F);
     }
 
 
@@ -54,35 +37,35 @@ public class ClickPlayerMovementScript : MonoBehaviour {
     }
 
 
-    public void SimulateSpellHotkey(SpellCaster spell) {
+    public bool OnSpellHotkey(SpellCaster spell) {
+        float now = Time.time;
+        if (spell.IsCooldownActive(now) || spell.IsCasting()) {
+            return false;
+        }
+        currentSpell = spell;
         state = spell.GetInputControlState();
+        return true;
     }
 
     void Update() {
         UpdateMouseCursor();
 
         if (!CanIssueCommands()) {
-            if (!player.IsDying()) {
-                // losing focus handlers
-                switch (state) {
-                    case ControlState.drawingWall:
-                        if (points.Count > 0)
-                            DoCastWall();
-                        break;
-                    default:
-                        break;
-                }
+            if (!player.IsDying() && currentSpell != null) {
+                // if focus was lost to GUI/HUD, let spell know
+                currentSpell.OnInputFocusLost();
             }
             return;
         }
 
         // KEYBOARD
-        if (Input.GetKeyDown(Hotkeys.FIREBALL_HOTKEY)) {
-            state = ControlState.targetingFireball;
-        } else if (Input.GetKeyDown(Hotkeys.WALL_HOTKEY)) {
-            state = ControlState.drawingWall;
+        foreach (SpellCaster spell in spells) {
+            if (Input.GetKeyDown(spell.GetHotkey())) {
+                if (OnSpellHotkey(spell)) {
+                    break;
+                }
+            }
         }
-
         if (Input.GetKeyDown(Hotkeys.STOP_HOTKEY)) {
             player.PlanStop();
         }
@@ -125,51 +108,13 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
                 // left click handler
                 if (leftDown) {
-                    switch (state) {
-                        case ControlState.targetingFireball:
-                            DoCastFireball(planePosition);
-                            giveFeedback = true;
-                            break;
-                        default:
-                            break;
-                    }
+                    currentSpell.OnClickDown(planePosition);
                 }
                 if (leftPressed) {
-                    switch (state) {
-                        case ControlState.drawingWall:
-                            if (transform.position.y > wallCastMaxHeight) {
-                                break;
-                            }
-                            Vector3 nextPoint = planePosition;
-                            int count = points.Count;
-                            if (count == 0) {
-                                points.Add(nextPoint);
-                            } else {
-                                RenderWallLineFeedback();
-                                float distanceToLast = Vector3.Distance(points[count - 1], nextPoint);
-                                if (distanceToLast > wallDrawResolution) {
-                                    if (wallLength + distanceToLast <= wallMaxLength) {
-                                        points.Add(nextPoint);
-                                        wallLength += distanceToLast;
-                                        if (wallLength + wallDrawResolution >= wallMaxLength) {
-                                            DoCastWall();
-                                        }
-                                    } else {
-                                        CompleteWall(nextPoint, wallMaxLength - wallLength);
-                                        DoCastWall();
-                                    }
-                                }
-                            }
-                            break;
-                    }
+                    currentSpell.OnClickDragged(planePosition);
                 }
                 if (leftUp) {
-                    switch (state) {
-                        case ControlState.drawingWall:
-                            CompleteWall(planePosition, wallMaxLength - wallLength);
-                            DoCastWall();
-                            break;
-                    }
+                    currentSpell.OnClickUp(planePosition);
                 }
 
                 // click feedback
@@ -188,43 +133,6 @@ public class ClickPlayerMovementScript : MonoBehaviour {
             }
         }
 
-    }
-
-    private void RenderWallLineFeedback() {
-        int count = points.Count;
-        lineRenderer.SetVertexCount(count + 1);
-        int i = 0;
-        while (i < count) {
-            Vector3 point = new Vector3(points[i].x, points[0].y + 0.1f, points[i].z);
-            lineRenderer.SetPosition(i, point);
-            i++;
-        }
-        lineRenderer.SetPosition(i, transform.position + Vector3.up * 2);
-    }
-
-    private void CompleteWall(Vector3 point, float remainingDistance) {
-        int count = points.Count;
-        if (count > 1) {
-            Vector3 last = points[count - 1];
-            float realDistance = Vector3.Distance(last, point);
-            Vector3 correction = Vector3.Lerp(last, point, remainingDistance / realDistance);
-            points.Add(correction);
-        }
-    }
-
-    private void DoCastFireball(Vector3 target) {
-        player.PlanCastFireball(target);
-        state = ControlState.moving;
-    }
-
-    private void DoCastWall() {
-        lineRenderer.SetVertexCount(0);
-        if (points.Count > 1) {
-            player.PlanCastWall(points);
-        }
-        points.Clear();
-        wallLength = 0;
-        state = ControlState.moving;
     }
 
     private void UpdateMouseCursor() {

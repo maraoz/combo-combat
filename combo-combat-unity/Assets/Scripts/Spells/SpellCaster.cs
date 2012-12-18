@@ -17,7 +17,7 @@ public abstract class SpellCaster : MonoBehaviour {
     private bool hasCastedSpell = false;
     private Mage mage;
 
-    void Awake() {
+    internal void Awake() {
         mage = GetComponent<Mage>();
         lastCastTimestamp = 0f;
     }
@@ -43,21 +43,28 @@ public abstract class SpellCaster : MonoBehaviour {
         hasCastedSpell = false;
     }
 
-    protected bool PlanCast() {
+    protected void PlanCast() {
         float now = Time.time;
         if (IsCooldownActive(now)) {
-            return false;
+            return;
         }
         lastCastTimestamp = now;
         if (!isCasting) {
             isCasting = true;
-            return true;
+            mage.OnSpellStartedCasting(this);
         }
-        return false;
     }
 
-    private bool IsCooldownActive(float now) {
+    internal bool IsCooldownActive(float now) {
         return (lastCastTimestamp != 0f && now - lastCastTimestamp < cooldown);
+    }
+
+    internal float GetCooldownPercentage() {
+        float now = Time.time;
+        if (!IsCooldownActive(now)) {
+            return 0f;
+        }
+        return 1 - (now - lastCastTimestamp) / cooldown;
     }
 
     public void InterruptSpell() {
@@ -84,22 +91,32 @@ public abstract class SpellCaster : MonoBehaviour {
         return icon;
     }
 
-    internal float GetCooldownPercentage() {
-        float now = Time.time;
-        if (!IsCooldownActive(now)) {
-            return 0f;
-        }
-        return 1-(now - lastCastTimestamp) / cooldown;
-    }
-
-    public abstract void DoCastSpell();
-
-    public abstract void OnFinishCasting();
-
-    public abstract KeyCode GetHotkey();
-
-
     internal ClickPlayerMovementScript.ControlState GetInputControlState() {
         return inputControlState;
     }
+
+
+    // called when pre casting time elapsed and spell effect should be created
+    public abstract void DoCastSpell();
+
+    // called when full casting time elapsed
+    public abstract void OnFinishCasting();
+
+    // returns the spells hotkey
+    public abstract KeyCode GetHotkey();
+
+    // called when spell performance was finished. If performance is correct must call PlanCast (FIX this? maybe returns if performance was right)
+    public abstract void OnFinishPerforming();
+
+    // called when user clicks mouse down on the world position
+    public abstract void OnClickDown(Vector3 position);
+
+    // called when user drags mouse over world position
+    public abstract void OnClickDragged(Vector3 position);
+
+    // called when user releases the mouse on the world position
+    public abstract void OnClickUp(Vector3 position);
+
+    // called when input focus is lost to GUI/HUD when casting spell
+    public abstract void OnInputFocusLost();
 }

@@ -48,7 +48,7 @@ public class HudController : MonoBehaviour {
             // button
             spellRect = new Rect(spellRect.x + spellMargin, spellRect.y, fSize, fSize);
             if (GUI.Button(spellRect, new GUIContent(spell.GetIcon(), spell.GetTooltip()), spellButtonStyle)) {
-                controls.SimulateSpellHotkey(spell);
+                controls.OnSpellHotkey(spell);
             }
 
             // cooldown effect

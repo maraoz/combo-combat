@@ -5,16 +5,14 @@ public class FireballCaster : SpellCaster {
 
     public GameObject fireball;
 
+    private Vector3 target;
+
     void Start() {
 
     }
 
-    public bool PlanCast(Vector3 v) {
-        bool casting = this.PlanCast();
-        if (casting) {
-            transform.LookAt(v);
-        }
-        return casting;
+    public override KeyCode GetHotkey() {
+        return Hotkeys.FIREBALL_HOTKEY;
     }
 
     public override void DoCastSpell() {
@@ -29,8 +27,28 @@ public class FireballCaster : SpellCaster {
         // nothing for now
     }
 
-    public override KeyCode GetHotkey() {
-        return Hotkeys.FIREBALL_HOTKEY;
+    public override void OnFinishPerforming() {
+        if (target != Vector3.zero) {
+            transform.LookAt(target);
+            PlanCast();
+        }
+    }
+
+    public override void OnClickDown(Vector3 position) {
+        target = position;
+        OnFinishPerforming();
+    }
+
+    public override void OnClickDragged(Vector3 position) {
+        // nothing for now
+    }
+
+    public override void OnClickUp(Vector3 position) {
+        // nothing for now
+    }
+
+    public override void OnInputFocusLost() {
+        // nothing for now
     }
 
 }

@@ -6,11 +6,24 @@ public class WallCaster : SpellCaster {
 
     public GameObject brick;
     public float wallBrickLength = 1.0f;
-    private List<Vector3> points;
+    public float wallCastMaxHeight = -4.5f;
+    public float wallDrawResolution = 1.5f;
+    public float wallMaxLength = 20.0f;
+    public Color wallDrawColor = Color.yellow;
 
-    public bool PlanCast(List<Vector3> pts) {
-        this.points = new List<Vector3>(pts);
-        return PlanCast();
+    private LineRenderer lineRenderer;
+    private List<Vector3> points;
+    private float wallLength;
+
+    void Awake() {
+        base.Awake();
+        points = new List<Vector3>();
+        wallLength = 0;
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.SetVertexCount(0);
+        lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+        lineRenderer.SetColors(wallDrawColor, wallDrawColor);
+        lineRenderer.SetWidth(0.1F, 0.1F);
     }
 
     public override void DoCastSpell() {
@@ -51,12 +64,84 @@ public class WallCaster : SpellCaster {
         piece.transform.position = position;
     }
 
-    public override void OnFinishCasting() {
-        points = null;
-    }
-
     public override KeyCode GetHotkey() {
         return Hotkeys.WALL_HOTKEY;
+    }
+
+    public override void OnFinishCasting() {
+        points.Clear();
+    }
+
+    public override void OnFinishPerforming() {
+        lineRenderer.SetVertexCount(0);
+        if (points.Count > 1) {
+            PlanCast();
+        }
+        wallLength = 0;
+    }
+
+    public override void OnClickDown(Vector3 position) {
+        // nothing for now
+    }
+
+    public override void OnClickDragged(Vector3 position) {
+        if (transform.position.y > wallCastMaxHeight) {
+            return;
+        }
+        int count = points.Count;
+        if (count == 0) {
+            points.Add(position);
+        } else {
+            RenderWallLineFeedback();
+            float distanceToLast = Vector3.Distance(points[count - 1], position);
+            if (distanceToLast > wallDrawResolution) {
+                if (wallLength + distanceToLast <= wallMaxLength) {
+                    points.Add(position);
+                    wallLength += distanceToLast;
+                    if (wallLength + wallDrawResolution >= wallMaxLength) {
+                        OnFinishPerforming();
+                    }
+                } else {
+                    CompleteWall(position, wallMaxLength - wallLength);
+                    OnFinishPerforming();
+                }
+            }
+        }
+    }
+
+    public override void OnClickUp(Vector3 position) {
+        CompleteWall(position, wallMaxLength - wallLength);
+        OnFinishPerforming();
+    }
+
+
+
+
+
+    private void RenderWallLineFeedback() {
+        int count = points.Count;
+        lineRenderer.SetVertexCount(count + 1);
+        int i = 0;
+        while (i < count) {
+            Vector3 point = new Vector3(points[i].x, points[0].y + 0.1f, points[i].z);
+            lineRenderer.SetPosition(i, point);
+            i++;
+        }
+        lineRenderer.SetPosition(i, transform.position + Vector3.up * 2);
+    }
+
+    private void CompleteWall(Vector3 point, float remainingDistance) {
+        int count = points.Count;
+        if (count > 1) {
+            Vector3 last = points[count - 1];
+            float realDistance = Vector3.Distance(last, point);
+            Vector3 correction = Vector3.Lerp(last, point, remainingDistance / realDistance);
+            points.Add(correction);
+        }
+    }
+
+    public override void OnInputFocusLost() {
+        OnFinishPerforming();
     }
 
 }
