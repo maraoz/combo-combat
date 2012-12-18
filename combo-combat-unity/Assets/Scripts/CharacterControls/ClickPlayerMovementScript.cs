@@ -39,6 +39,9 @@ public class ClickPlayerMovementScript : MonoBehaviour {
         wallLength = 0;
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.SetVertexCount(0);
+        lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+        lineRenderer.SetColors(wallDrawColor, wallDrawColor);
+        lineRenderer.SetWidth(0.1F, 0.1F);
     }
 
 
@@ -188,17 +191,14 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
     private void RenderWallLineFeedback() {
         int count = points.Count;
-        lineRenderer.SetVertexCount(count+1);
+        lineRenderer.SetVertexCount(count + 1);
         int i = 0;
-        lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
-        lineRenderer.SetColors(wallDrawColor, wallDrawColor);
-        lineRenderer.SetWidth(0.1F, 0.1F);
         while (i < count) {
-            Vector3 point = new Vector3(points[i].x, points[0].y+0.1f, points[i].z);
+            Vector3 point = new Vector3(points[i].x, points[0].y + 0.1f, points[i].z);
             lineRenderer.SetPosition(i, point);
             i++;
         }
-        lineRenderer.SetPosition(i, transform.position+Vector3.up*2);
+        lineRenderer.SetPosition(i, transform.position + Vector3.up * 2);
     }
 
     private void CompleteWall(Vector3 point, float remainingDistance) {
