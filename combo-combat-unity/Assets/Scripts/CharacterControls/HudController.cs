@@ -38,7 +38,7 @@ public class HudController : MonoBehaviour {
 
     void OnGUI() {
         // spell
-        float fSize = spellBarRect.height * 0.73f;
+        float fSize = spellBarRect.height * 0.74f;
         GUIStyle spellButtonStyle = GUI.skin.button;
         spellButtonStyle.padding = new RectOffset(0, 0, 0, 0);
         spellRect = new Rect(spellBarRect.x + spellHpad - spellMargin, spellBarRect.y + spellVPad, fSize, fSize);
