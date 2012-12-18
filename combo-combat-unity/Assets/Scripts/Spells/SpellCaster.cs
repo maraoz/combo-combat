@@ -9,6 +9,7 @@ public abstract class SpellCaster : MonoBehaviour {
     public float cooldown = 5.0f;
     public Texture2D icon;
     public string tooltip = "no tooltip";
+    public ClickPlayerMovementScript.ControlState inputControlState;
 
     private float lastCastTimestamp;
     private float castingTime = 0f;
@@ -96,5 +97,9 @@ public abstract class SpellCaster : MonoBehaviour {
     public abstract void OnFinishCasting();
 
     public abstract KeyCode GetHotkey();
-    
+
+
+    internal ClickPlayerMovementScript.ControlState GetInputControlState() {
+        return inputControlState;
+    }
 }

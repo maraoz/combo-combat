@@ -15,8 +15,8 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
     private float wallLength;
 
-    private Camera referencedCamera;
     private Mage player;
+    private List<SpellCaster> spells;
 
     private ControlState oldState;
     private ControlState state;
@@ -34,9 +34,12 @@ public class ClickPlayerMovementScript : MonoBehaviour {
             return;
         }
         this.player = this.gameObject.GetComponent<Mage>();
-        referencedCamera = Camera.main;
+        this.spells = player.GetSpellCasters();
+
         state = ControlState.moving;
         oldState = ControlState.moving;
+
+        // wall vvv
         wallLength = 0;
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.SetVertexCount(0);
@@ -52,13 +55,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
 
     public void SimulateSpellHotkey(SpellCaster spell) {
-        if (spell is FireballCaster) {
-            state = ControlState.targetingFireball;
-        } else if (spell is WallCaster) {
-            state = ControlState.drawingWall;
-        } else {
-            Debug.Log("Unknown spell");
-        }
+        state = spell.GetInputControlState();
     }
 
     void Update() {
@@ -103,7 +100,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 state = ControlState.moving;
             }
             Vector2 screenPosition = Input.mousePosition;
-            Ray ray = referencedCamera.ScreenPointToRay(new Vector3(screenPosition.x, screenPosition.y, 1));
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(screenPosition.x, screenPosition.y, 1));
 
 
             RaycastHit hitInfo = new RaycastHit();
