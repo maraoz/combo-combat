@@ -7,6 +7,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
     public GameObject clickFeedback;
 
     // cosas que hay que volar de aca
+    public float wallCastMaxHeight = 0f;
     public float wallDrawResolution = 1.0f;
     public float wallMaxLength = 6.0f;
     public Color wallDrawColor = Color.yellow;
@@ -139,22 +140,25 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 if (leftPressed) {
                     switch (state) {
                         case ControlState.drawingWall:
-
+                            if (transform.position.y > wallCastMaxHeight) {
+                                break;
+                            }
+                            Vector3 nextPoint = planePosition;
                             int count = points.Count;
                             if (count == 0) {
-                                points.Add(planePosition);
+                                points.Add(nextPoint);
                             } else {
                                 RenderWallLineFeedback();
-                                float distanceToLast = Vector3.Distance(points[count - 1], planePosition);
+                                float distanceToLast = Vector3.Distance(points[count - 1], nextPoint);
                                 if (distanceToLast > wallDrawResolution) {
                                     if (wallLength + distanceToLast <= wallMaxLength) {
-                                        points.Add(planePosition);
+                                        points.Add(nextPoint);
                                         wallLength += distanceToLast;
                                         if (wallLength + wallDrawResolution >= wallMaxLength) {
                                             DoCastWall();
                                         }
                                     } else {
-                                        CompleteWall(planePosition, wallMaxLength - wallLength);
+                                        CompleteWall(nextPoint, wallMaxLength - wallLength);
                                         DoCastWall();
                                     }
                                 }
