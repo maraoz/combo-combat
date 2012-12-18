@@ -80,7 +80,9 @@ public class ClickPlayerMovementScript : MonoBehaviour {
 
         if (rightPressed || leftPressed || leftUp) {
             if (state != ControlState.moving && rightPressed) {
-                state = ControlState.moving;
+                if (!currentSpell.IsCasting()) {
+                    state = ControlState.moving;
+                }
             }
             Vector2 screenPosition = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(screenPosition.x, screenPosition.y, 1));
@@ -107,13 +109,13 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 }
 
                 // left click handler
-                if (leftDown) {
+                if (leftDown && currentSpell != null) {
                     currentSpell.OnClickDown(planePosition);
                 }
-                if (leftPressed) {
+                if (leftPressed && currentSpell != null) {
                     currentSpell.OnClickDragged(planePosition);
                 }
-                if (leftUp) {
+                if (leftUp && currentSpell != null) {
                     currentSpell.OnClickUp(planePosition);
                 }
 
@@ -132,7 +134,11 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 }
             }
         }
+    }
 
+    internal void FinishedCasting() {
+        currentSpell = null;
+        state = ControlState.moving;
     }
 
     private void UpdateMouseCursor() {

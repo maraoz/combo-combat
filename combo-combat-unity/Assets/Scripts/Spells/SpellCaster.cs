@@ -16,9 +16,11 @@ public abstract class SpellCaster : MonoBehaviour {
     private bool isCasting = false;
     private bool hasCastedSpell = false;
     private Mage mage;
+    private ClickPlayerMovementScript controls;
 
     internal void Awake() {
         mage = GetComponent<Mage>();
+        controls = GetComponent<ClickPlayerMovementScript>();
         lastCastTimestamp = 0f;
     }
 
@@ -38,6 +40,7 @@ public abstract class SpellCaster : MonoBehaviour {
 
     private void ResetCaster() {
         mage.FinishedCasting();
+        controls.FinishedCasting();
         castingTime = 0f;
         isCasting = false;
         hasCastedSpell = false;
