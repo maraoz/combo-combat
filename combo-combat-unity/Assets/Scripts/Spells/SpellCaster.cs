@@ -18,7 +18,7 @@ public abstract class SpellCaster : MonoBehaviour {
     private Mage mage;
     private ClickPlayerMovementScript controls;
 
-    internal void Awake() {
+    internal virtual void Awake() {
         mage = GetComponent<Mage>();
         controls = GetComponent<ClickPlayerMovementScript>();
         lastCastTimestamp = 0f;

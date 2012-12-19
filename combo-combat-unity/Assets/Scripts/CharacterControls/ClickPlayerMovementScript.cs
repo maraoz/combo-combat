@@ -37,10 +37,13 @@ public class ClickPlayerMovementScript : MonoBehaviour {
     }
 
 
-    public bool OnSpellHotkey(SpellCaster spell) {
+    public bool OnSpellHotkeyPressed(SpellCaster spell) {
         float now = Time.time;
         if (spell.IsCooldownActive(now) || spell.IsCasting()) {
             return false;
+        }
+        if (currentSpell != null) {
+            currentSpell.OnFinishPerforming();
         }
         currentSpell = spell;
         state = spell.GetInputControlState();
@@ -61,7 +64,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
         // KEYBOARD
         foreach (SpellCaster spell in spells) {
             if (Input.GetKeyDown(spell.GetHotkey())) {
-                if (OnSpellHotkey(spell)) {
+                if (OnSpellHotkeyPressed(spell)) {
                     break;
                 }
             }

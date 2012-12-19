@@ -24,7 +24,7 @@ public class FireballCaster : SpellCaster {
     }
 
     public override void OnFinishCasting() {
-        // nothing for now
+        target = Vector3.zero;
     }
 
     public override void OnFinishPerforming() {

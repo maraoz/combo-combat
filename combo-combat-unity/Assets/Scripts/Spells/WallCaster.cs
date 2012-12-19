@@ -15,7 +15,7 @@ public class WallCaster : SpellCaster {
     private List<Vector3> points;
     private float wallLength;
 
-    void Awake() {
+    internal override void Awake() {
         base.Awake();
         points = new List<Vector3>();
         wallLength = 0;
@@ -34,6 +34,9 @@ public class WallCaster : SpellCaster {
             Vector3 next = points[i + 1];
 
             float dist = Vector3.Distance(current, next);
+            if (dist <= 0) {
+                continue;
+            }
 
             int bricksNeeded = (int) (dist / wallBrickLength);
             if (bricksNeeded == 0) bricksNeeded = 1;
