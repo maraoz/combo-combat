@@ -28,26 +28,25 @@ public class HudController : MonoBehaviour {
     private Rect spellRect;
 
     void Awake() {
+    }
+
+    void OnGUI() {
+        GUI.skin = GUISkinProvider.GetSkin();
         int spellBarWidth = spellBar.width / 3;
         int spellBarHeight = spellBar.height / 3;
         int lifeBarWidth = lifeBarFrame.width;
         int lifeBarHeight = (int) (lifeBarFrame.height * 0.8f);
         spellBarRect = new Rect(Screen.width / 2 - spellBarWidth / 2, (int) Screen.height - spellBarHeight * 1.0f, spellBarWidth, spellBarHeight);
         lifeBarRect = new Rect(Screen.width / 2 - lifeBarWidth / 2, (int) Screen.height - spellBarHeight * 1.74f, lifeBarWidth, lifeBarHeight);
-    }
-
-    void OnGUI() {
         // spell
         float fSize = spellBarRect.height * 0.74f;
-        GUIStyle spellButtonStyle = GUI.skin.button;
-        spellButtonStyle.padding = new RectOffset(0, 0, 0, 0);
         spellRect = new Rect(spellBarRect.x + spellHpad - spellMargin, spellBarRect.y + spellVPad, fSize, fSize);
         for (int i = 0; i < spells.Count; i++) {
             SpellCaster spell = spells[i];
 
             // button
             spellRect = new Rect(spellRect.x + spellMargin, spellRect.y, fSize, fSize);
-            if (GUI.Button(spellRect, new GUIContent(spell.GetIcon(), spell.GetTooltip()), spellButtonStyle)) {
+            if (GUI.Button(spellRect, new GUIContent(spell.GetIcon(), spell.GetTooltip()), "Spell Icon")) {
                 controls.OnSpellHotkeyPressed(spell);
             }
 

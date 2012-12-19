@@ -41,6 +41,13 @@ public class ConnectMasterServerScript : MonoBehaviour {
 
     void OnGUI() {
         GUI.skin = customSkin;
+        windowRect = new Rect(Screen.width / 2 - 300, 0, 600, 100);
+        float serverListHeight = 400;
+        float serverListY = Screen.height - serverListHeight - 50;
+        if (serverListY < 150) {
+            serverListY = 150;
+        }
+        serverListRect = new Rect(Screen.width / 2 - Screen.width * 0.45f, serverListY, Screen.width * 0.9f, serverListHeight);
         if (Network.peerType == NetworkPeerType.Disconnected || Network.isServer) {
             windowRect = GUILayout.Window(0, windowRect, MakeWindow, "");
         }
@@ -49,9 +56,6 @@ public class ConnectMasterServerScript : MonoBehaviour {
     }
 
     void Awake() {
-        windowRect = new Rect(Screen.width/2-300, 0, 600, 100);
-        serverListRect = new Rect(Screen.width / 2 - Screen.width * 0.45f, 150, Screen.width * 0.9f, 400);
-        // Start connection test
         connectionTestResult = Network.TestConnection();
     }
 
@@ -198,11 +202,11 @@ public class ConnectMasterServerScript : MonoBehaviour {
         foreach (HostData element in data) {
             GUILayout.Space(50);
             GUILayout.BeginHorizontal();
-            
+
 
             // Do not display NAT enabled games if we cannot do NAT punchthrough
             if (!(filterNATHosts && element.useNat)) {
-                var connections = (element.connectedPlayers-1) + "/" + (element.playerLimit-1);
+                var connections = (element.connectedPlayers - 1) + "/" + (element.playerLimit - 1);
                 GUILayout.Label(element.gameName);
                 GUILayout.Space(5);
                 GUILayout.Label(connections);

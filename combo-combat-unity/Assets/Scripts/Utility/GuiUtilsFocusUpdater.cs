@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class GuiUtilsUpdater : MonoBehaviour {
+public class GuiUtilsFocusUpdater : MonoBehaviour {
 
     void Awake() {
         DontDestroyOnLoad(gameObject);
