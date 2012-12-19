@@ -114,10 +114,6 @@ public class WallCaster : SpellCaster {
         OnFinishPerforming();
     }
 
-
-
-
-
     private void RenderWallLineFeedback() {
         int count = points.Count;
         lineRenderer.SetVertexCount(count + 1);
