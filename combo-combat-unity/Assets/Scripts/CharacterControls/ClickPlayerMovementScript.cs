@@ -108,28 +108,26 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                     giveFeedback = true;
                 }
 
-                // left click handler
-                if (leftDown && currentSpell != null) {
-                    currentSpell.OnClickDown(planePosition);
-                }
-                if (leftPressed && currentSpell != null) {
-                    currentSpell.OnClickDragged(planePosition);
-                }
-                if (leftUp && currentSpell != null) {
-                    currentSpell.OnClickUp(planePosition);
-                }
+                // left click handler for spells
+                if (currentSpell != null && !currentSpell.IsCasting()) {
+                    if (leftDown && currentSpell != null) {
+                        giveFeedback = true;
+                        currentSpell.OnClickDown(planePosition);
+                    }
+                    if (leftPressed && currentSpell != null) {
+                        currentSpell.OnClickDragged(planePosition);
+                    }
+                    if (leftUp && currentSpell != null) {
+                        currentSpell.OnClickUp(planePosition);
+                    }
 
+                }
                 // click feedback
                 if (hitInfo.collider != null && (rightDown || leftDown)) {
                     Vector3 clickFeedbackPosition = hitInfo.point + Vector3.up * 0.1f;
                     if (giveFeedback) {
                         GameObject feedback = GameObject.Instantiate(clickFeedback, clickFeedbackPosition, Quaternion.identity) as GameObject;
-                        if (leftDown) {
-                            feedback.GetComponent<ClickFeedback>().SetColor(Color.red);
-                        } else {
-                            feedback.GetComponent<ClickFeedback>().SetColor(Color.green);
-                        }
-
+                        feedback.GetComponent<ClickFeedback>().SetColor(leftDown ? Color.red : Color.green);
                     }
                 }
             }
