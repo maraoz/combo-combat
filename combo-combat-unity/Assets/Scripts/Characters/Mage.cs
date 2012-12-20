@@ -156,6 +156,5 @@ public class Mage : MonoBehaviour {
 
     internal void ApplyKnockback(Vector3 force) {
         externalForce += force;
-        Debug.Log(externalForce);
     }
 }
