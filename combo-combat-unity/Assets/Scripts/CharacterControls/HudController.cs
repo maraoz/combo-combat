@@ -23,6 +23,8 @@ public class HudController : MonoBehaviour {
     private MageLifeController life;
     private ClickPlayerMovementScript controls;
 
+    private GUIStyle hotkeyStyle;
+    private GUIStyle spellIconStyle;
     private Rect spellBarRect;
     private Rect lifeBarRect;
     private Rect spellRect;
@@ -32,6 +34,13 @@ public class HudController : MonoBehaviour {
 
     void OnGUI() {
         GUI.skin = GUISkinProvider.GetSkin();
+
+        // initialize styles once
+        if (hotkeyStyle == null) {
+            hotkeyStyle = GUI.skin.GetStyle("PlainText");
+            spellIconStyle = GUI.skin.GetStyle("Spell Icon");
+        }
+
         int spellBarWidth = spellBar.width / 3;
         int spellBarHeight = spellBar.height / 3;
         int lifeBarWidth = lifeBarFrame.width;
@@ -46,7 +55,7 @@ public class HudController : MonoBehaviour {
 
             // button
             spellRect = new Rect(spellRect.x + spellMargin, spellRect.y, fSize, fSize);
-            if (GUI.Button(spellRect, new GUIContent(spell.GetIcon(), spell.GetTooltip()), "Spell Icon")) {
+            if (GUI.Button(spellRect, new GUIContent(spell.GetIcon(), spell.GetTooltip()), spellIconStyle)) {
                 controls.OnSpellHotkeyPressed(spell);
             }
 
@@ -63,7 +72,7 @@ public class HudController : MonoBehaviour {
             string hotkey = ("" + System.Convert.ToChar(spell.GetHotkey())).ToUpper();
             Rect hotkeyRect = new Rect(spellRect);
             hotkeyRect.y += hotkeyVPad;
-            GUI.Label(hotkeyRect, hotkey);
+            GUI.Label(hotkeyRect, hotkey, hotkeyStyle);
         }
 
         // non assigned spells

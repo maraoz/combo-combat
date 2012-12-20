@@ -176,7 +176,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
             }
 
             GUILayout.FlexibleSpace();
-            GUILayout.Label("Username:", "PlainText");
+            GUILayout.Label("Username:");
             GUI.SetNextControlName(USERNAME_INPUT_NAME);
             usernameField = GUILayout.TextField(usernameField, maxUsernameLength, GUILayout.MinWidth(150));
 
