@@ -12,7 +12,6 @@ public class MageNetworkInstantiate : MonoBehaviour {
             GetComponent<ClickPlayerMovementScript>().enabled = false;
             GetComponent<CharacterSimpleAnimation>().enabled = false;
             GetComponent<NetworkInterpolatedTransform>().enabled = true;
-            GetComponent<Mage>().enabled = false;
         }
     }
 

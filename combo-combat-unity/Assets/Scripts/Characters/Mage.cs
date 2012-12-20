@@ -113,11 +113,12 @@ public class Mage : MonoBehaviour {
 
     public void OnDied() {
         enabled = false;
-        currentSpellBeingCasted = null;
     }
 
     public void OnRespawn() {
         enabled = true;
+        externalForce = Vector3.zero;
+        externalVelocity = Vector3.zero;
         currentSpellBeingCasted = null;
         target = Vector3.zero;
     }
