@@ -16,8 +16,14 @@ public class Mage : MonoBehaviour {
     private CharacterController controller;
     private CollisionFlags collisionFlags;
     private Vector3 target = Vector3.zero; // Where the player is heading
-    private float groundSpeed = 0f; // ground x-z axis speed
+    private float groundSpeed = 0f; // ground x-z axis speed in the direction the mage is looking at
     private float verticalSpeed = 0f; // y axis speed
+
+    // external forces
+    private Vector3 externalForce = Vector3.zero; // external forces applied to mage
+    public float amortiguationCoefficient = 0.8f; // damping coefficient for external forces
+    public float epsilonMagnitude = 0.1f; // min considerable external force magnitude
+    private Vector3 externalVelocity = Vector3.zero; // external velocity
 
     // spells
     private SpellCaster currentSpellBeingCasted;
@@ -58,20 +64,36 @@ public class Mage : MonoBehaviour {
         }
     }
 
+    void ApplyExternalForces() {
+        // external force instant application
+        externalVelocity += externalForce;
+        // amortiguation
+        externalVelocity -= externalVelocity  * amortiguationCoefficient * Time.deltaTime;
+        if (externalForce.magnitude > 0) {
+            externalForce = Vector3.zero;
+        } 
+
+        // update external velocity
+        if (externalVelocity.magnitude < epsilonMagnitude) {
+            externalVelocity = Vector3.zero;
+        }
+
+    }
+
 
     void Update() {
-
         // vertical movement
         ApplyGravity();
         Vector3 verticalVelocity = new Vector3(0, verticalSpeed, 0);
 
         // ground movement
         ApplyTargetHunt();
+        ApplyExternalForces();
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 groundVelocity = groundSpeed * forward;
 
         // compute total movement
-        Vector3 totalVelocity = verticalVelocity + groundVelocity;
+        Vector3 totalVelocity = verticalVelocity + groundVelocity + externalVelocity;
 
         // apply movement for this period of time
         collisionFlags = controller.Move(totalVelocity * Time.deltaTime);
@@ -130,5 +152,10 @@ public class Mage : MonoBehaviour {
         ret.Add(fireballCaster);
         ret.Add(wallCaster);
         return ret;
+    }
+
+    internal void ApplyKnockback(Vector3 force) {
+        externalForce += force;
+        Debug.Log(externalForce);
     }
 }

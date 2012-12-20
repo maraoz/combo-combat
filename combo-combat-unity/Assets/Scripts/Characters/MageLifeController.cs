@@ -99,7 +99,7 @@ public class MageLifeController : MonoBehaviour {
     }
 
     public float GetLifePercentage() {
-        return  (life / maxLife);
+        return (life / maxLife);
     }
 
     void OnGUI() {
@@ -136,7 +136,4 @@ public class MageLifeController : MonoBehaviour {
         }
 
     }
-
-
-
 }

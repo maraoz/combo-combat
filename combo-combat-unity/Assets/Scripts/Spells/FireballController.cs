@@ -7,7 +7,7 @@ public class FireballController : MonoBehaviour {
     public float secondsUntilExhaust = 3.0f;
     public float damage = 10;
     public float speed = .2f;
-
+    public float knockbackMagnitude = 20f;
 
     private float secondsPast;
     private MageLifeController caster;
@@ -36,8 +36,11 @@ public class FireballController : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (other.tag == GameConstants.MAGE_TAG) {
-            MageLifeController mage = other.gameObject.GetComponent<MageLifeController>();
-            mage.DoDamage(damage, caster);
+            MageLifeController mageLife = other.gameObject.GetComponent<MageLifeController>();
+            Mage mage = other.gameObject.GetComponent<Mage>();
+            mageLife.DoDamage(damage, caster);
+            Vector3 forward = transform.TransformDirection(Vector3.forward);
+            mage.ApplyKnockback(forward*knockbackMagnitude);
         }
         if (other.tag != GameConstants.HEART_TAG) {
             GameObject.Instantiate(explosion, transform.position, Quaternion.identity);
