@@ -26,12 +26,12 @@ public class MessageSystem : MonoBehaviour {
     }
 
     void Awake() {
-        textInputRect = new Rect(entryHPad, Screen.height - entryVPad, entryWidth, entryHeight);
         chatUsername = GameObject.Find("PlayerConnectionHandler").GetComponent<PlayerConnectionHandler>().GetUsername();
     }
 
 
     void OnGUI() {
+        textInputRect = new Rect(entryHPad, Screen.height - entryVPad, entryWidth, entryHeight);
 
         // check chat input logic
         if (Event.current.type == EventType.keyDown && Event.current.character == '\n') {
@@ -52,7 +52,7 @@ public class MessageSystem : MonoBehaviour {
         for (int i = 0; i < entries.Count; i++) {
             ChatEntry entry = entries[entries.Count - 1 - i];
             Rect entryRect = new Rect(entryHPad, Screen.height - (entryVPad + entryHeight * (i + 1)), entryWidth, entryHeight);
-            string message = "["+entry.sender+"]: "+entry.text;
+            string message = "[" + entry.sender + "]: " + entry.text;
             GUIStyle entryStyle = new GUIStyle();
             entryStyle.normal.textColor = entry.color;
             GUI.Label(entryRect, message, entryStyle);
