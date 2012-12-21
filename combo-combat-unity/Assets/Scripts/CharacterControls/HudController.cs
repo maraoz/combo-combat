@@ -30,6 +30,9 @@ public class HudController : MonoBehaviour {
     private Rect spellRect;
 
     void Awake() {
+        if (Network.isServer) {
+            enabled = false;
+        }
     }
 
     void OnGUI() {
