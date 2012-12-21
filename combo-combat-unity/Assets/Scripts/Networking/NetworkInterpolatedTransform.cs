@@ -59,11 +59,11 @@ public class NetworkInterpolatedTransform : MonoBehaviour {
 					Debug.Log("State inconsistent");
 			}
 			
-			//Debug.Log("stamp: " + info.timestamp + "my time: " + Network.time + "delta: " + (Network.time - info.timestamp));
+			//Debug.Log("stamp: " + info.timestamp + "my time: " + Network.time + "delta: " + 1000*(Network.time - info.timestamp)+" ms");
 		}
 	}
 	
-	// This only runs where the component is enabled, which is only on remote peers (server/clients)
+	// This only runs where the component is enabled, which is only on remote Mages
 	void Update () {
 		double currentTime = Network.time;
 		double interpolationTime = currentTime - interpolationBackTime;

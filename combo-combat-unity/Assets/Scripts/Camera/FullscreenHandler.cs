@@ -7,11 +7,15 @@ public class FullscreenHandler : MonoBehaviour {
     public Texture2D fullscreenOffTexture;
     public float pad;
     private float width, height;
+    private Resolution minimizedResolution;
 
     void Awake() {
         DontDestroyOnLoad(gameObject);
         width = fullscreenOnTexture.width / 2;
         height = fullscreenOnTexture.height / 2;
+        minimizedResolution = new Resolution();
+        minimizedResolution.width = Screen.width;
+        minimizedResolution.height = Screen.height;
     }
 
     void FullscreenOn() {
@@ -25,7 +29,7 @@ public class FullscreenHandler : MonoBehaviour {
         if (!Screen.fullScreen) {
             return;
         }
-        Screen.fullScreen = false;
+        Screen.SetResolution(minimizedResolution.width, minimizedResolution.height, false);
     }
 
     void Update() {
