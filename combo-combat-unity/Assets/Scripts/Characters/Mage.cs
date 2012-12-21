@@ -9,7 +9,7 @@ public class Mage : MonoBehaviour {
     public float walkingSpeed = 6f;
     public float gravityMagnitude = 20.0f;
 
-    // life
+    // life and death
     private MageLifeController life;
 
     // movement
@@ -68,10 +68,10 @@ public class Mage : MonoBehaviour {
         // external force instant application
         externalVelocity += externalForce;
         // amortiguation
-        externalVelocity -= externalVelocity  * amortiguationCoefficient * Time.deltaTime;
+        externalVelocity -= externalVelocity * amortiguationCoefficient * Time.deltaTime;
         if (externalForce.magnitude > 0) {
             externalForce = Vector3.zero;
-        } 
+        }
 
         // update external velocity
         if (externalVelocity.magnitude < epsilonMagnitude) {
@@ -97,10 +97,6 @@ public class Mage : MonoBehaviour {
 
         // apply movement for this period of time
         collisionFlags = controller.Move(totalVelocity * Time.deltaTime);
-    }
-
-    public void PlanMove(Vector3 v) {
-        target = v;
     }
 
     public void OnSpellStartedCasting(SpellCaster spell) {
@@ -144,10 +140,6 @@ public class Mage : MonoBehaviour {
         currentSpellBeingCasted = null;
     }
 
-    internal void PlanStop() {
-        target = Vector3.zero;
-    }
-
     internal List<SpellCaster> GetSpellCasters() {
         List<SpellCaster> ret = new List<SpellCaster>();
         ret.Add(fireballCaster);
@@ -155,7 +147,33 @@ public class Mage : MonoBehaviour {
         return ret;
     }
 
-    internal void ApplyKnockback(Vector3 force) {
+
+    [RPC]
+    internal void PlanMove(Vector3 currentPosition, Vector3 targetPosition) {
+        networkView.Others("PlanMove", currentPosition, targetPosition);
+        transform.position = currentPosition; // TODO: A interpolate between current and updated?
+                                                // TODO: B interpolate towards target with time elapsed??
+        target = targetPosition;
+    }
+
+    [RPC]
+    internal void PlanStop(Vector3 currentPosition) {
+        networkView.Others("PlanStop", currentPosition);
+        transform.position = currentPosition; // TODO: A interpolate between current and updated?
+        target = Vector3.zero; 
+    }
+
+    [RPC]
+    internal void ApplyKnockback(Vector3 currentPosition, Vector3 force) {
+        networkView.Others("ApplyKnockback", currentPosition, force);
+        transform.position = currentPosition; // TODO: A interpolate between current and updated?
+                                            // TODO: C interpolate applying force with time elapsed??
         externalForce += force;
+    }
+
+    [RPC]
+    internal void LookAt(Vector3 currentPosition, Vector3 target) {
+        networkView.Others("LookAt", currentPosition, target);
+        transform.LookAt(target);
     }
 }

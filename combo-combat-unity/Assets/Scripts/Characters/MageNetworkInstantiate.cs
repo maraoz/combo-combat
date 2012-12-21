@@ -10,8 +10,9 @@ public class MageNetworkInstantiate : MonoBehaviour {
         } else {
             name += "Remote";
             GetComponent<ClickPlayerMovementScript>().enabled = false;
-            GetComponent<CharacterSimpleAnimation>().enabled = false;
-            GetComponent<NetworkInterpolatedTransform>().enabled = true;
+            GetComponent<CharacterSimpleAnimation>().enabled = true;
+            GetComponent<NetworkSyncAnimation>().enabled = false;
+            GetComponent<NetworkInterpolatedTransform>().enabled = false;
         }
     }
 

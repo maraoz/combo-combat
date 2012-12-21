@@ -3,6 +3,7 @@ using System.Collections;
 
 public class MageLifeController : MonoBehaviour {
 
+    // lifebar
     public Texture backgroundTexture;
     public Texture foregroundTexture;
     public Texture frameTexture;
@@ -10,6 +11,7 @@ public class MageLifeController : MonoBehaviour {
     public int healthBarHeight = 10;
     public int maxLife = 100;
 
+    // mage info (shouldnt be here, but hey)
     private Mage mage;
     private string username;
     private float life;
@@ -21,6 +23,9 @@ public class MageLifeController : MonoBehaviour {
     private Transform spawnPosition;
     public float deathTime = 15.0f;
     private float deathTimeSpent = 0f;
+
+    public float dieDuration = 1f;
+    private float dieStart;
 
 
     void Awake() {
@@ -35,6 +40,18 @@ public class MageLifeController : MonoBehaviour {
 
     void Update() {
         if (isDying) {
+            if (dieStart == 0f) {
+                dieStart = Time.time;
+            } else {
+                if (Time.time - dieStart < dieDuration) {
+                    Vector3 euler = transform.rotation.eulerAngles;
+                    euler.x -= 90.0f * (Time.deltaTime / dieDuration);
+                    transform.rotation = Quaternion.Euler(euler);
+                } else {
+                    dieStart = 0f;
+                }
+            }
+
             deathTimeSpent += Time.deltaTime;
             if (deathTimeSpent >= deathTime) {
                 Respawn();

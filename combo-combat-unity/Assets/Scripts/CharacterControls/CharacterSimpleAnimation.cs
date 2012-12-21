@@ -5,9 +5,7 @@ public class CharacterSimpleAnimation : MonoBehaviour {
 
     public float runSpeedScale = 1.0f;
     public float walkSpeedScale = 1.0f;
-    public float dieDuration = 1f;
 
-    private float dieStart;
     private Mage player;
 
     void Awake() {
@@ -61,19 +59,9 @@ public class CharacterSimpleAnimation : MonoBehaviour {
             }
         }
         if (player.IsDying()) {
-            if (dieStart == 0f) {
-                dieStart = Time.time;
-            } else {
-                if (Time.time - dieStart < dieDuration) {
-                    Vector3 euler = transform.rotation.eulerAngles;
-                    euler.x -= 90.0f * (Time.deltaTime / dieDuration);
-                    transform.rotation = Quaternion.Euler(euler);
-                } else {
-                    dieStart = 0f;
-                }
-            }
             animation.wrapMode = WrapMode.ClampForever;
-            animation.CrossFade("idle");
+            animation.CrossFade("hurt");
+            SendMessage("SyncAnimation", "hurt");
         }
 
     }

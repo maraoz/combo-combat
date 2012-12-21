@@ -70,7 +70,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
             }
         }
         if (Input.GetKeyDown(Hotkeys.STOP_HOTKEY)) {
-            player.PlanStop();
+            player.PlanStop(transform.position);
         }
 
 
@@ -105,7 +105,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 bool giveFeedback = false;
                 // right click handler
                 if (rightPressed) {
-                    player.PlanMove(planePosition);
+                    player.PlanMove(transform.position, planePosition);
                 }
                 if (rightDown) {
                     giveFeedback = true;

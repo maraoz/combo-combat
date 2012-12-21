@@ -78,6 +78,10 @@ public abstract class SpellCaster : MonoBehaviour {
         return isCasting;
     }
 
+    protected Mage GetMage() {
+        return mage;
+    }
+
     public float GetFullCastingTime() {
         return fullCastingTime;
     }

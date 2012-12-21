@@ -27,6 +27,9 @@ public class WallCaster : SpellCaster {
     }
 
     public override void DoCastSpell() {
+        if (!networkView.isMine) {
+            return;
+        }
         int count = points.Count;
         int totalBricks = 0;
         for (int i = 0; i < count - 1; i++) {
@@ -46,7 +49,7 @@ public class WallCaster : SpellCaster {
                 Vector3 nextBrick = Vector3.Lerp(current, next, adaptedBrickLenght * (j + 1) / dist);
                 Vector3 middleBrick = (currentBrick + nextBrick) / 2;
 
-                networkView.RPC("SpawnBrick", RPCMode.All, middleBrick, next, adaptedBrickLenght);
+                SpawnBrick(middleBrick, next, adaptedBrickLenght);
             }
             totalBricks += bricksNeeded;
         }
@@ -54,6 +57,7 @@ public class WallCaster : SpellCaster {
 
     [RPC]
     public void SpawnBrick(Vector3 middleBrick, Vector3 next, float adaptedBrickLenght) {
+        networkView.Others("SpawnBrick", middleBrick, next, adaptedBrickLenght);
         GameObject piece = GameObject.Instantiate(brick, middleBrick, Quaternion.identity) as GameObject;
         piece.transform.LookAt(next);
         Vector3 euler = piece.transform.eulerAngles;
@@ -78,9 +82,15 @@ public class WallCaster : SpellCaster {
     public override void OnFinishPerforming() {
         lineRenderer.SetVertexCount(0);
         if (points.Count > 1) {
-            PlanCast();
+            PlanCastWall();
         }
         wallLength = 0;
+    }
+
+    [RPC]
+    void PlanCastWall() {
+        networkView.Others("PlanCastWall");
+        PlanCast();
     }
 
     public override void OnClickDown(Vector3 position) {

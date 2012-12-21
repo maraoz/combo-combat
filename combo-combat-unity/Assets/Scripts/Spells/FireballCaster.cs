@@ -7,10 +7,6 @@ public class FireballCaster : SpellCaster {
 
     private Vector3 target;
 
-    void Start() {
-
-    }
-
     public override KeyCode GetHotkey() {
         return Hotkeys.FIREBALL_HOTKEY;
     }
@@ -19,19 +15,25 @@ public class FireballCaster : SpellCaster {
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
         Vector3 spawnPosition = transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f * right);
-        GameObject casted = Network.Instantiate(fireball, spawnPosition, transform.rotation, GameConstants.FIREBALL_GROUP) as GameObject;
+        GameObject casted = Instantiate(fireball, spawnPosition, transform.rotation) as GameObject;
         casted.GetComponent<FireballController>().SetCaster(GetComponent<MageLifeController>());
     }
 
     public override void OnFinishCasting() {
-        target = Vector3.zero;
     }
 
     public override void OnFinishPerforming() {
         if (target != Vector3.zero) {
-            transform.LookAt(target);
-            PlanCast();
+            Mage mage = GetMage();
+            mage.LookAt(mage.transform.position, target);
+            PlanCastFireball();
         }
+    }
+
+    [RPC]
+    void PlanCastFireball() {
+        networkView.Others("PlanCastFireball");
+        PlanCast();
     }
 
     public override void OnClickDown(Vector3 position) {
