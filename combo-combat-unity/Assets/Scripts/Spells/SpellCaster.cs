@@ -9,18 +9,18 @@ public abstract class SpellCaster : MonoBehaviour {
     public float cooldown = 5.0f;
     public Texture2D icon;
     public string tooltip = "no tooltip";
-    public ClickPlayerMovementScript.ControlState inputControlState;
+    public UserInputController.ControlState inputControlState;
 
     private float lastCastTimestamp;
     private float castingTime = 0f;
     private bool isCasting = false;
     private bool hasCastedSpell = false;
     private Mage mage;
-    private ClickPlayerMovementScript controls;
+    private UserInputController controls;
 
     internal virtual void Awake() {
         mage = GetComponent<Mage>();
-        controls = GetComponent<ClickPlayerMovementScript>();
+        controls = GetComponent<UserInputController>();
         lastCastTimestamp = 0f;
     }
 
@@ -98,7 +98,7 @@ public abstract class SpellCaster : MonoBehaviour {
         return icon;
     }
 
-    internal ClickPlayerMovementScript.ControlState GetInputControlState() {
+    internal UserInputController.ControlState GetInputControlState() {
         return inputControlState;
     }
 

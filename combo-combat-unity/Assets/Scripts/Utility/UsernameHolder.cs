@@ -3,7 +3,7 @@ using System.Collections;
 
 public class UsernameHolder : MonoBehaviour {
 
-    private string username;
+    private string username = "Server";
 
     void Awake() {
         DontDestroyOnLoad(gameObject);
@@ -15,5 +15,9 @@ public class UsernameHolder : MonoBehaviour {
 
     public string GetUsername() {
         return username;
+    }
+
+    public static string MyUsername() {
+        return GameObject.Find("UsernameHolder").GetComponent<UsernameHolder>().GetUsername();
     }
 }

@@ -27,7 +27,7 @@ public class WallCaster : SpellCaster {
     }
 
     public override void DoCastSpell() {
-        if (!networkView.isMine) {
+        if (!Network.isServer) {
             return;
         }
         int count = points.Count;
@@ -57,7 +57,7 @@ public class WallCaster : SpellCaster {
 
     [RPC]
     public void SpawnBrick(Vector3 middleBrick, Vector3 next, float adaptedBrickLenght) {
-        networkView.Others("SpawnBrick", middleBrick, next, adaptedBrickLenght);
+        networkView.Clients("SpawnBrick", middleBrick, next, adaptedBrickLenght);
         GameObject piece = GameObject.Instantiate(brick, middleBrick, Quaternion.identity) as GameObject;
         piece.transform.LookAt(next);
         Vector3 euler = piece.transform.eulerAngles;
@@ -89,7 +89,7 @@ public class WallCaster : SpellCaster {
 
     [RPC]
     void PlanCastWall() {
-        networkView.Others("PlanCastWall");
+        networkView.Clients("PlanCastWall");
         PlanCast();
     }
 

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ClickPlayerMovementScript : MonoBehaviour {
+public class UserInputController : MonoBehaviour {
 
     public GameObject clickFeedback;
 
@@ -20,10 +20,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
     }
 
     void Start() {
-        if (!networkView.isMine) {
-            return;
-        }
-        this.player = this.gameObject.GetComponent<Mage>();
+        this.player = GetComponent<Mage>();
         this.spells = player.GetSpellCasters();
         this.currentSpell = null;
 
@@ -105,7 +102,7 @@ public class ClickPlayerMovementScript : MonoBehaviour {
                 bool giveFeedback = false;
                 // right click handler
                 if (rightPressed) {
-                    player.PlanMove(transform.position, planePosition);
+                    RequestPlanMove(planePosition);
                 }
                 if (rightDown) {
                     giveFeedback = true;
@@ -158,6 +155,18 @@ public class ClickPlayerMovementScript : MonoBehaviour {
             default:
                 throw new System.NotImplementedException();
 
+        }
+    }
+
+
+    // user input controller RPCs
+    [RPC]
+    void RequestPlanMove(Vector3 target) {
+        if (networkView.Server("RequestPlanMove", target)) {
+            if (player == null) {
+                player = GetComponent<Mage>();
+            }
+            player.PlanMove(transform.position, target);
         }
     }
 

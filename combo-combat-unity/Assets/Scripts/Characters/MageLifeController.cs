@@ -69,7 +69,7 @@ public class MageLifeController : MonoBehaviour {
 
     public void DoDamage(float damage, MageLifeController source) {
         if (life > 0) {
-            if (networkView.isMine) {
+            if (Network.isServer) {
                 life -= damage;
                 if (life <= 0) {
                     life = 0;
@@ -130,7 +130,17 @@ public class MageLifeController : MonoBehaviour {
 
     [RPC]
     public void SetUsername(string u) {
-        networkView.Others("SetUsername", u);
+        networkView.Clients("SetUsername", u);
+        if (u == UsernameHolder.MyUsername()) {
+            Camera.main.SendMessage("SetTarget", transform);
+            GameObject.Find("Hud").GetComponent<HudController>().SetMageOwner(gameObject);
+        } else {
+            name += "Remote";
+            GetComponent<UserInputController>().enabled = false;
+            GetComponent<CharacterSimpleAnimation>().enabled = true;
+            GetComponent<NetworkSyncAnimation>().enabled = false;
+            GetComponent<NetworkInterpolatedTransform>().enabled = false;
+        }
         this.username = u;
     }
 

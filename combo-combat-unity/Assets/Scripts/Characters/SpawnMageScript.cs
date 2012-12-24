@@ -10,7 +10,7 @@ public class SpawnMageScript : MonoBehaviour {
         Network.isMessageQueueRunning = true;
         Network.SetSendingEnabled(0, true);
         if (Network.isClient) {
-            string username = GameObject.Find("UsernameHolder").GetComponent<UsernameHolder>().GetUsername();
+            string username = UsernameHolder.MyUsername();
             SpawnMage(username);
         }
     }
@@ -45,7 +45,7 @@ public class SpawnMageScript : MonoBehaviour {
 
     [RPC]
     void PlaySound() {
-        networkView.Others("PlaySound");
+        networkView.Clients("PlaySound");
         audio.Play();
     }
 }

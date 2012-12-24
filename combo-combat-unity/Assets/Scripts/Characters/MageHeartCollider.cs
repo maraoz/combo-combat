@@ -11,7 +11,7 @@ public class MageHeartCollider : MonoBehaviour {
                 GameObject instance = GameObject.Instantiate(effect, transform.position, Quaternion.identity) as GameObject;
                 instance.transform.parent = transform;
             }
-            if (networkView.isMine) {
+            if (Network.isServer) {
                 HeartController heart = hit.collider.gameObject.GetComponent<HeartController>();
                 heart.Destroy();
                 GetComponent<MageLifeController>().DoDamage(-heart.healing, null);

@@ -34,6 +34,8 @@ public class PingProbe : MonoBehaviour {
         float height = 25;
         GUI.Label(new Rect(Screen.width - width, Screen.height - height, width, height), "Latency: " + ((int) latency) + " ms");
         if (Network.isServer) {
+            GUILayout.BeginVertical();
+            GUILayout.Space(100);
             GUILayout.Label("Player ping values");
             int i = 0;
             while (i < Network.connections.Length) {

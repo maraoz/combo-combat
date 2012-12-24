@@ -32,7 +32,7 @@ public class FireballCaster : SpellCaster {
 
     [RPC]
     void PlanCastFireball() {
-        networkView.Others("PlanCastFireball");
+        networkView.Clients("PlanCastFireball");
         PlanCast();
     }
 

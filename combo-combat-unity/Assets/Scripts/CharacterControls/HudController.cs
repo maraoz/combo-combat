@@ -21,7 +21,7 @@ public class HudController : MonoBehaviour {
 
     private List<SpellCaster> spells;
     private MageLifeController life;
-    private ClickPlayerMovementScript controls;
+    private UserInputController controls;
 
     private GUIStyle hotkeyStyle;
     private GUIStyle spellIconStyle;
@@ -112,7 +112,7 @@ public class HudController : MonoBehaviour {
     public void SetMageOwner(GameObject mage) {
         life = mage.GetComponent<MageLifeController>();
         spells = mage.GetComponent<Mage>().GetSpellCasters();
-        controls = mage.GetComponent<ClickPlayerMovementScript>();
+        controls = mage.GetComponent<UserInputController>();
         enabled = true;
     }
 
