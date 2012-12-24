@@ -26,7 +26,7 @@ public class MessageSystem : MonoBehaviour {
     }
 
     void Awake() {
-        chatUsername = GameObject.Find("PlayerConnectionHandler").GetComponent<PlayerConnectionHandler>().GetUsername();
+        chatUsername = GameObject.Find("UsernameHolder").GetComponent<UsernameHolder>().GetUsername();
     }
 
 

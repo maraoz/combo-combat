@@ -12,7 +12,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
     public GUISkin customSkin;
     public int maxUsernameLength = 20;
     public string DEFAULT_USERNAME = "Player";
-    public PlayerConnectionHandler playerConnectionHandler;
+    public UsernameHolder usernameHolder;
 
     public double serverListRefreshTime = 3.0;
     private double lastHostListRequest = -1000.0;
@@ -234,7 +234,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 GUILayout.Width(100);
                 if (GUILayout.Button("Connect", "ShortButton")) {
                     PlayerPrefs.SetString(GameConstants.PREFS_USERNAME, usernameField);
-                    playerConnectionHandler.SetUsername(usernameField);
+                    usernameHolder.SetUsername(usernameField);
                     Network.Connect(element);
                     this.enabled = false;
                 }
