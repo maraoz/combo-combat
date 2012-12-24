@@ -25,7 +25,6 @@ public class FireballController : MonoBehaviour {
         return caster;
     }
 
-    // Update is called once per frame
     void Update() {
         transform.position += transform.TransformDirection(Vector3.forward) * speed * Time.deltaTime;
         secondsPast += Time.deltaTime;
@@ -35,27 +34,26 @@ public class FireballController : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-        if (other.tag == GameConstants.MAGE_TAG) {
-            Mage mage = other.gameObject.GetComponent<Mage>();
-            if (mage.networkView.isMine) {
+        if (other.tag == GameConstants.HEART_TAG) {
+            return;
+        }
+        if (Network.isServer) {
+            // this runs on the server only
+            if (other.tag == GameConstants.MAGE_TAG) {
+                Mage mage = other.gameObject.GetComponent<Mage>();
                 MageLifeController mageLife = other.gameObject.GetComponent<MageLifeController>();
                 mageLife.DoDamage(damage, caster);
                 Vector3 forward = transform.TransformDirection(Vector3.forward);
                 mage.ApplyKnockback(mage.transform.position, forward * knockbackMagnitude);
             }
-        }
-        if (other.tag != GameConstants.HEART_TAG) {
-            if (Network.isServer) {
-                CollideDestroy(transform.position);
-            }
+            CollideDestroy(transform.position);
         }
     }
 
     [RPC]
     void CollideDestroy(Vector3 currentPosition) {
         networkView.Others("CollideDestroy", currentPosition);
-        transform.position = currentPosition;
-        GameObject.Instantiate(explosion, transform.position, Quaternion.identity);
+        GameObject.Instantiate(explosion, currentPosition, Quaternion.identity);
         Destroy(gameObject);
     }
 

@@ -32,10 +32,6 @@ public class MageLifeController : MonoBehaviour {
         RestartLife();
         mage = GetComponent<Mage>();
         messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
-        if (networkView.isMine) {
-            string u = (GameObject.Find("PlayerConnectionHandler") as GameObject).GetComponent<PlayerConnectionHandler>().GetUsername();
-            networkView.RPC("SetUsername", RPCMode.AllBuffered, u);
-        }
     }
 
     void Update() {
@@ -133,7 +129,8 @@ public class MageLifeController : MonoBehaviour {
     }
 
     [RPC]
-    void SetUsername(string u) {
+    public void SetUsername(string u) {
+        networkView.Others("SetUsername", u);
         this.username = u;
     }
 

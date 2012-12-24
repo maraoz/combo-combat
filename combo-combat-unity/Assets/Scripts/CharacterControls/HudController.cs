@@ -30,9 +30,7 @@ public class HudController : MonoBehaviour {
     private Rect spellRect;
 
     void Awake() {
-        if (Network.isServer) {
-            enabled = false;
-        }
+        enabled = false;
     }
 
     void OnGUI() {
@@ -115,6 +113,7 @@ public class HudController : MonoBehaviour {
         life = mage.GetComponent<MageLifeController>();
         spells = mage.GetComponent<Mage>().GetSpellCasters();
         controls = mage.GetComponent<ClickPlayerMovementScript>();
+        enabled = true;
     }
 
 }

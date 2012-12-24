@@ -7,12 +7,17 @@ public class NetworkLevelLoad : MonoBehaviour {
     void OnConnectedToServer() {
         Network.SetSendingEnabled(0, false);
         Network.isMessageQueueRunning = false;
-        Application.LoadLevel("ComboGame");
+        LoadArenaLevel();
     }
 
     void OnServerInitialized() {
-        Application.LoadLevel("ComboGame");
+        LoadArenaLevel();
         Debug.Log("Server initialized and ready");
+    }
+
+    void LoadArenaLevel() {
+        Network.SetLevelPrefix(1);
+        Application.LoadLevel("ComboGame");
     }
 
 }

@@ -32,7 +32,15 @@ public class PingProbe : MonoBehaviour {
     void OnGUI() {
         float width = 130;
         float height = 25;
-        GUI.Label(new Rect(Screen.width - width, Screen.height - height, width, height), "Latency: " + ((int)latency) + " ms");
+        GUI.Label(new Rect(Screen.width - width, Screen.height - height, width, height), "Latency: " + ((int) latency) + " ms");
+        if (Network.isServer) {
+            GUILayout.Label("Player ping values");
+            int i = 0;
+            while (i < Network.connections.Length) {
+                GUILayout.Label("Player " + Network.connections[i] + " - " + Network.GetAveragePing(Network.connections[i]) + " ms");
+                i++;
+            }
+        }
     }
 
     [RPC]

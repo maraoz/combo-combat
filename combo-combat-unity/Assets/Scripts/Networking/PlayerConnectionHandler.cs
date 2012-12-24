@@ -19,22 +19,26 @@ public class PlayerConnectionHandler : MonoBehaviour {
         username = "";
     }
 
+    void LoadMessages() {
+        if (messages == null) messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
+    }
+
     // called on client
     void OnDisconnectedFromServer() {
-        if (messages == null) messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
+        LoadMessages();
         messages.AddSystemMessage("Connection to server lost :(", false);
     }
 
     // called on server
     void OnPlayerConnected(NetworkPlayer player) {
-        if (messages == null) messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
+        LoadMessages();
         messages.AddSystemMessage("Player connected from " + player.ipAddress + ":" + player.port, true);
-        networkView.RPC("PlaySound", RPCMode.Others);
+        PlaySound();
     }
 
     // called on server
     void OnPlayerDisconnected(NetworkPlayer player) {
-        if (messages == null) messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
+        LoadMessages();
         messages.AddSystemMessage("Player disconnected: " + player, true);
         Network.RemoveRPCs(player);
         Network.DestroyPlayerObjects(player);
@@ -42,6 +46,7 @@ public class PlayerConnectionHandler : MonoBehaviour {
 
     [RPC]
     void PlaySound() {
+        networkView.Others("PlaySound");
         audio.Play();
     }
 
