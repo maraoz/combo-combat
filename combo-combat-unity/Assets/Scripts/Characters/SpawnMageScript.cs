@@ -11,18 +11,20 @@ public class SpawnMageScript : MonoBehaviour {
         Network.SetSendingEnabled(0, true);
         if (Network.isClient) {
             string username = UsernameHolder.MyUsername();
-            SpawnMage(username);
+            networkView.RPC("SpawnMage", RPCMode.Server, username); // need NetworkMessageInfo
         }
     }
 
     [RPC]
-    void SpawnMage(string username) {
+    void SpawnMage(string username, NetworkMessageInfo info) {
         if (networkView.Server("SpawnMage", username)) {
             messages.AddSystemMessage(username + " connected.", true);
             GameObject mageObject = Network.Instantiate(playerPrefab, transform.position, Quaternion.identity, GameConstants.MAGE_GROUP) as GameObject;
-            MageLifeController mage = mageObject.GetComponent<MageLifeController>();
-            mage.SetUsername(username);
-            mage.SetSpawnPosition(transform);
+            MageLifeController life = mageObject.GetComponent<MageLifeController>();
+            Mage mage = mageObject.GetComponent<Mage>();
+            life.SetUsername(username);
+            mage.SetPlayer(info.sender);
+            life.SetSpawnPosition(transform);
         }
     }
 
