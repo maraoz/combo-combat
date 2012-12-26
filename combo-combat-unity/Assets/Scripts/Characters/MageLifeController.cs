@@ -34,6 +34,10 @@ public class MageLifeController : MonoBehaviour {
         messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
     }
 
+    public string GetUsername() {
+        return username;
+    }
+
     void Update() {
         if (isDying) {
             if (dieStart == 0f) {

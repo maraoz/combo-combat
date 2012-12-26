@@ -12,6 +12,9 @@ public class Mage : MonoBehaviour {
     // network
     private NetworkPlayer owner; // set only in server
 
+    // messages
+    MessageSystem messages;
+
     // life and death
     private MageLifeController life;
 
@@ -34,6 +37,7 @@ public class Mage : MonoBehaviour {
     private WallCaster wallCaster;
 
     void Awake() {
+        messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
         life = GetComponent<MageLifeController>();
         controller = GetComponent<CharacterController>();
         currentSpellBeingCasted = null;
@@ -158,8 +162,10 @@ public class Mage : MonoBehaviour {
 
     // called on server
     void OnPlayerDisconnected(NetworkPlayer player) {
+        messages.AddSystemMessage(life.GetUsername()+" dissconnected.", true);
         if (player == owner) {
             Network.Destroy(gameObject);
+            Network.RemoveRPCs(networkView.viewID);
         }
     }
 

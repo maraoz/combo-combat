@@ -40,7 +40,6 @@ public class SpawnMageScript : MonoBehaviour {
 
     // called on server
     void OnPlayerDisconnected(NetworkPlayer player) {
-        messages.AddSystemMessage("Player disconnected: " + player, true);
         Network.RemoveRPCs(player);
         Network.DestroyPlayerObjects(player);
     }
