@@ -22,6 +22,8 @@ public class SpawnMageScript : MonoBehaviour {
             GameObject mageObject = Network.Instantiate(playerPrefab, transform.position, Quaternion.identity, GameConstants.MAGE_GROUP) as GameObject;
             MageLifeController life = mageObject.GetComponent<MageLifeController>();
             Mage mage = mageObject.GetComponent<Mage>();
+            UserInputController input = mageObject.GetComponent<UserInputController>();
+            input.setMage(mage);
             life.SetUsername(username);
             mage.SetPlayer(info.sender);
             life.SetSpawnPosition(transform);

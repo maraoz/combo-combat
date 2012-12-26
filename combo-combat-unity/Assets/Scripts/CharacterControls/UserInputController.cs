@@ -28,6 +28,9 @@ public class UserInputController : MonoBehaviour {
         oldState = ControlState.moving;
     }
 
+    internal void setMage(Mage mage) {
+        player = mage;
+    }
 
     private bool CanIssueCommands() {
         return !GuiUtils.IsGUIFocused() && !player.IsDying();
@@ -67,7 +70,7 @@ public class UserInputController : MonoBehaviour {
             }
         }
         if (Input.GetKeyDown(Hotkeys.STOP_HOTKEY)) {
-            player.PlanStop(transform.position);
+            RequestPlanStop();
         }
 
 
@@ -163,10 +166,14 @@ public class UserInputController : MonoBehaviour {
     [RPC]
     void RequestPlanMove(Vector3 target) {
         if (networkView.Server("RequestPlanMove", target)) {
-            if (player == null) {
-                player = GetComponent<Mage>();
-            }
             player.PlanMove(transform.position, target);
+        }
+    }
+
+    [RPC]
+    void RequestPlanStop() {
+        if (networkView.Server("RequestPlanStop")) {
+            player.PlanStop(transform.position);
         }
     }
 
