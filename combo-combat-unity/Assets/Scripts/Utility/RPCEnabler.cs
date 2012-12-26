@@ -9,12 +9,10 @@ public static class RPCEnabler {
      * Invokes the RPC in other clients if object is mine. Returns true if invoked in other clients.
      */
     public static bool Clients(this NetworkView networkView, string routineName, params object[] parameters) {
-
         if (Network.isServer) {
-            networkView.RPC(routineName, RPCMode.Others, parameters);
+            networkView.RPC(routineName, RPCMode.OthersBuffered, parameters);
         }
         return !Network.isServer;
-
     }
 
     /**
