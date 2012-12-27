@@ -136,16 +136,28 @@ public class MageLifeController : MonoBehaviour {
     public void SetUsername(string u) {
         networkView.Clients("SetUsername", u);
         if (u == UsernameHolder.MyUsername()) {
-            Camera.main.SendMessage("SetTarget", transform);
-            GameObject.Find("Hud").GetComponent<HudController>().SetMageOwner(gameObject);
+            GetComponent<NetworkSyncAnimation>().enabled = true;
+            GetComponent<NetworkInterpolatedTransform>().enabled = false;
+            GetComponent<UserInputController>().enabled = true;
+            GetComponent<Mage>().enabled = true;
+            GetComponent<CharacterSimpleAnimation>().enabled = false;
+            GetComponent<MageLifeController>().enabled = true;
+            InitializeMyMage();
         } else {
-            name += "Remote";
-            GetComponent<UserInputController>().enabled = false;
-            GetComponent<CharacterSimpleAnimation>().enabled = true;
+            name += " Remote";
             GetComponent<NetworkSyncAnimation>().enabled = false;
             GetComponent<NetworkInterpolatedTransform>().enabled = false;
+            GetComponent<UserInputController>().enabled = false;
+            GetComponent<Mage>().enabled = true;
+            GetComponent<CharacterSimpleAnimation>().enabled = true;
+            GetComponent<MageLifeController>().enabled = true;
         }
         this.username = u;
+    }
+
+    private void InitializeMyMage() {
+        Camera.main.SendMessage("SetTarget", transform);
+        GameObject.Find("Hud").GetComponent<HudController>().SetMageOwner(gameObject);
     }
 
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
