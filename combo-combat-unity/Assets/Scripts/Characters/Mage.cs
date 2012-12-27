@@ -11,6 +11,7 @@ public class Mage : MonoBehaviour {
 
     // network
     private NetworkPlayer owner; // set only in server
+    private bool isMine;
 
     // messages
     MessageSystem messages;
@@ -51,6 +52,14 @@ public class Mage : MonoBehaviour {
 
     internal NetworkPlayer GetPlayer() {
         return owner;
+    }
+
+    internal bool IsMine() {
+        return isMine;
+    }
+
+    internal void TakeOwnership() {
+        isMine = true;
     }
 
     void ApplyGravity() {

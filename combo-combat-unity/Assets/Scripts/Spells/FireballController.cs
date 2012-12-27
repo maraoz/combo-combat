@@ -51,7 +51,7 @@ public class FireballController : MonoBehaviour {
 
     [RPC]
     void CollideDestroy(Vector3 currentPosition) {
-        networkView.Clients("CollideDestroy", currentPosition);
+        networkView.ClientsUnbuffered("CollideDestroy", currentPosition);
         GameObject.Instantiate(explosion, currentPosition, Quaternion.identity);
         Destroy(gameObject);
     }

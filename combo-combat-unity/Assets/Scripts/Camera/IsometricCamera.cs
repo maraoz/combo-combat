@@ -36,7 +36,7 @@ public class IsometricCamera : MonoBehaviour {
         transform.position -= transform.rotation * Vector3.forward * distance;
     }
 
-    void SetTarget(Transform t) {
+    public void SetTarget(Transform t) {
         target = t;
     }
 

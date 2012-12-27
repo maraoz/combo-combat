@@ -234,6 +234,10 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 GUILayout.Width(100);
                 if (GUILayout.Button("Connect", "ShortButton")) {
                     PlayerPrefs.SetString(GameConstants.PREFS_USERNAME, usernameField);
+                    // TESTINGWISE>
+                    if (usernameField == "Manu") {
+                        usernameField = "T["+Time.time+"]";
+                    }
                     usernameHolder.SetUsername(usernameField);
                     Network.Connect(element);
                     this.enabled = false;

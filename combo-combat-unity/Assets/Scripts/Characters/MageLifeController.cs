@@ -20,7 +20,7 @@ public class MageLifeController : MonoBehaviour {
     // death
     private bool isDying = false;
     private MessageSystem messages;
-    private Transform spawnPosition;
+    private Vector3 spawnPosition;
     public float deathTime = 15.0f;
     private float deathTimeSpent = 0f;
 
@@ -36,6 +36,20 @@ public class MageLifeController : MonoBehaviour {
 
     public string GetUsername() {
         return username;
+    }
+
+    public bool IsDying() {
+        return isDying;
+    }
+
+    [RPC]
+    public void SetSpawnPosition(Vector3 position) {
+        networkView.Clients("SetSpawnPosition", position);
+        spawnPosition = position;
+    }
+
+    public float GetLifePercentage() {
+        return (life / maxLife);
     }
 
     void Update() {
@@ -58,6 +72,17 @@ public class MageLifeController : MonoBehaviour {
             }
         }
 
+    }
+
+    void Respawn() {
+        RestartLife();
+        deathTimeSpent = 0f;
+        transform.position = spawnPosition;
+        transform.rotation = Quaternion.identity;
+        mage.OnRespawn();
+        if (mage.IsMine()) {
+            Camera.main.GetComponent<IsometricCamera>().SetGrayscale(false);
+        }
     }
 
 
@@ -87,32 +112,19 @@ public class MageLifeController : MonoBehaviour {
         }
     }
 
-    void Respawn() {
-        deathTimeSpent = 0f;
-        transform.position = spawnPosition.position;
-        transform.rotation = Quaternion.identity;
-        Camera.main.GetComponent<IsometricCamera>().SetGrayscale(false);
-        mage.OnRespawn();
-        RestartLife();
-    }
-
-    public void DoDie() {
+    [RPC]
+    void DoDie() {
+        if (!networkView.Clients("DoDie")) {
+            // server
+            messages.AddSystemMessageTo(mage.GetPlayer(), "You died. Please wait " + deathTime + " seconds to respawn.");
+        }
+        // all
         mage.OnDied();
-        messages.AddSystemMessageTo(mage.GetPlayer(), "You died. Please wait " + deathTime + " seconds to respawn.");
-        Camera.main.GetComponent<IsometricCamera>().SetGrayscale(true);
         isDying = true;
-    }
-
-    public bool IsDying() {
-        return isDying;
-    }
-
-    public void SetSpawnPosition(Transform spawner) {
-        spawnPosition = spawner;
-    }
-
-    public float GetLifePercentage() {
-        return (life / maxLife);
+        if (mage.IsMine()) {
+            // owner player
+            Camera.main.GetComponent<IsometricCamera>().SetGrayscale(true);
+        }
     }
 
     void OnGUI() {
@@ -126,10 +138,6 @@ public class MageLifeController : MonoBehaviour {
         centeredStyle.alignment = TextAnchor.UpperCenter;
         centeredStyle.normal.textColor = Color.black;
         GUI.Label(new Rect(pos.x - healthBarLength * 2, Screen.height - pos.y - 20, healthBarLength * 4, 50), username + " (" + level + ")", centeredStyle);
-    }
-    private void InitializeMyMage() {
-        Camera.main.SendMessage("SetTarget", transform);
-        GameObject.Find("Hud").GetComponent<HudController>().SetMageOwner(gameObject);
     }
 
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
@@ -152,25 +160,30 @@ public class MageLifeController : MonoBehaviour {
     [RPC]
     public void SetUsername(string u) {
         networkView.Clients("SetUsername", u);
-        if (u == UsernameHolder.MyUsername()) { // client's own mage
-            GetComponent<CharacterSimpleAnimation>().enabled = false;
-            GetComponent<NetworkSyncAnimation>().enabled = true;
+        if (u == UsernameHolder.MyUsername()) {
+            mage.TakeOwnership();
+        }
+        if (mage.IsMine()) { // client's own mage
+            GetComponent<CharacterSimpleAnimation>().enabled = true;
             GetComponent<UserInputController>().enabled = true;
             InitializeMyMage();
         } else if (Network.isServer) { // server's version of all mages
             name += " Serverside";
             GetComponent<CharacterSimpleAnimation>().enabled = true;
-            GetComponent<NetworkSyncAnimation>().enabled = false;
             GetComponent<UserInputController>().enabled = false;
         } else { // client's remote copies of server.
             name += " Remote";
-            GetComponent<CharacterSimpleAnimation>().enabled = false;
-            GetComponent<NetworkSyncAnimation>().enabled = true;
+            GetComponent<CharacterSimpleAnimation>().enabled = true;
             GetComponent<UserInputController>().enabled = false;
         }
         GetComponent<Mage>().enabled = true;
         GetComponent<MageLifeController>().enabled = true;
         this.username = u;
+    }
+
+    private void InitializeMyMage() {
+        Camera.main.GetComponent<IsometricCamera>().SetTarget(transform);
+        GameObject.Find("Hud").GetComponent<HudController>().SetMageOwner(gameObject);
     }
 
 

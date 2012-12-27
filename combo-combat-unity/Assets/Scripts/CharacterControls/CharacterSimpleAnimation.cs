@@ -60,8 +60,8 @@ public class CharacterSimpleAnimation : MonoBehaviour {
         }
         if (player.IsDying()) {
             animation.wrapMode = WrapMode.ClampForever;
-            animation.CrossFade("hurt");
-            SendMessage("SyncAnimation", "hurt");
+            animation.CrossFade("deathfall");
+            SendMessage("SyncAnimation", "deathfall");
         }
 
     }

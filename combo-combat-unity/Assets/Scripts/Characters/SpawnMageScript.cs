@@ -26,7 +26,7 @@ public class SpawnMageScript : MonoBehaviour {
             input.ServerInit();
             life.SetUsername(username);
             mage.SetPlayer(info.sender);
-            life.SetSpawnPosition(transform);
+            life.SetSpawnPosition(transform.position);
         }
     }
 
