@@ -18,6 +18,7 @@ public class MessageSystem : MonoBehaviour {
     private List<ChatEntry> entries = new List<ChatEntry>();
     private string chatUsername;
 
+    private NetworkPlayer NO_PLAYER = new NetworkPlayer();
 
     class ChatEntry {
         public string sender = "";
@@ -37,7 +38,7 @@ public class MessageSystem : MonoBehaviour {
         if (Event.current.type == EventType.keyDown && Event.current.character == '\n') {
             if (showChatInput) {
                 if (inputField.Length > 0) {
-                    AddMessage(chatUsername, inputField, Color.white, true);
+                    AddMessage(chatUsername, inputField, Color.white, NO_PLAYER, true);
                     inputField = "";
                 }
                 showChatInput = false;
@@ -74,20 +75,36 @@ public class MessageSystem : MonoBehaviour {
         }
     }
 
-    public void AddSystemMessage(string text, bool broadcast) {
-        AddMessage("System", text, Color.cyan, broadcast);
+    // ACCESSIBLE API
+    public void AddSystemMessageTo(NetworkPlayer player, string text) {
+        AddSystemMessage(text, player, false);
     }
 
-    public void AddMessage(string sender, string text, Color color, bool broadcast) {
+    public void AddSystemMessageSelf(string text) {
+        AddSystemMessage(text, NO_PLAYER, false);
+    }
+
+    public void AddSystemMessageBroadcast(string text) {
+        AddSystemMessage(text, NO_PLAYER, true);
+    }
+
+    // INTERNAL 
+    private void AddSystemMessage(string text, NetworkPlayer player, bool broadcast) {
+        AddMessage("System", text, Color.cyan, player, broadcast);
+    }
+
+    private void AddMessage(string sender, string text, Color color, NetworkPlayer player, bool broadcast) {
         Vector3 colorVec = new Vector3(color.r, color.g, color.b);
-        if (broadcast) {
-            networkView.RPC("DoAddMessage", RPCMode.All, sender, text, colorVec);
+        if (player.Equals(NO_PLAYER)) {
+            if (broadcast) {
+                networkView.RPC("DoAddMessage", RPCMode.All, sender, text, colorVec);
+            } else {
+                DoAddMessage(sender, text, colorVec);
+            }
         } else {
-            DoAddMessage(sender, text, colorVec);
+            networkView.RPC("DoAddMessage", player, sender, text, colorVec);
         }
     }
-
-
 
     [RPC]
     void DoAddMessage(string sender, string text, Vector3 color) {

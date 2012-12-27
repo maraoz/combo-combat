@@ -73,18 +73,16 @@ public class MageLifeController : MonoBehaviour {
 
     public void DoDamage(float damage, MageLifeController source) {
         if (life > 0) {
-            if (Network.isServer) {
-                life -= damage;
-                if (life <= 0) {
-                    life = 0;
-                    DoDie();
+            life -= damage;
+            if (life <= 0) {
+                life = 0;
+                if (source != null) {
+                    source.LevelUp();
                 }
-                if (life > maxLife) {
-                    life = maxLife;
-                }
+                DoDie();
             }
-            if (life <= damage && source != null) {
-                source.LevelUp();
+            if (life > maxLife) {
+                life = maxLife;
             }
         }
     }
@@ -99,12 +97,10 @@ public class MageLifeController : MonoBehaviour {
     }
 
     public void DoDie() {
-        if (!isDying) {
-            mage.OnDied();
-            messages.AddSystemMessage("You died. Please wait " + deathTime + " seconds to respawn.", false);
-            Camera.main.GetComponent<IsometricCamera>().SetGrayscale(true);
-            isDying = true;
-        }
+        mage.OnDied();
+        messages.AddSystemMessageTo(mage.GetPlayer(), "You died. Please wait " + deathTime + " seconds to respawn.");
+        Camera.main.GetComponent<IsometricCamera>().SetGrayscale(true);
+        isDying = true;
     }
 
     public bool IsDying() {
@@ -131,6 +127,27 @@ public class MageLifeController : MonoBehaviour {
         centeredStyle.normal.textColor = Color.black;
         GUI.Label(new Rect(pos.x - healthBarLength * 2, Screen.height - pos.y - 20, healthBarLength * 4, 50), username + " (" + level + ")", centeredStyle);
     }
+    private void InitializeMyMage() {
+        Camera.main.SendMessage("SetTarget", transform);
+        GameObject.Find("Hud").GetComponent<HudController>().SetMageOwner(gameObject);
+    }
+
+    void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
+        if (stream.isWriting) {
+            float sendLife = life;
+            int sendLevel = level;
+            stream.Serialize(ref sendLife);
+            stream.Serialize(ref sendLevel);
+        } else {
+            float rcvLife = 0;
+            int rcvLevel = 0;
+            stream.Serialize(ref rcvLife);
+            stream.Serialize(ref rcvLevel);
+            life = rcvLife;
+            level = rcvLevel;
+        }
+
+    }
 
     [RPC]
     public void SetUsername(string u) {
@@ -156,25 +173,6 @@ public class MageLifeController : MonoBehaviour {
         this.username = u;
     }
 
-    private void InitializeMyMage() {
-        Camera.main.SendMessage("SetTarget", transform);
-        GameObject.Find("Hud").GetComponent<HudController>().SetMageOwner(gameObject);
-    }
 
-    void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
-        if (stream.isWriting) {
-            float sendLife = life;
-            int sendLevel = level;
-            stream.Serialize(ref sendLife);
-            stream.Serialize(ref sendLevel);
-        } else {
-            float rcvLife = 0;
-            int rcvLevel = 0;
-            stream.Serialize(ref rcvLife);
-            stream.Serialize(ref rcvLevel);
-            life = rcvLife;
-            level = rcvLevel;
-        }
 
-    }
 }

@@ -49,6 +49,10 @@ public class Mage : MonoBehaviour {
         owner = networkPlayer;
     }
 
+    internal NetworkPlayer GetPlayer() {
+        return owner;
+    }
+
     void ApplyGravity() {
         if (IsGrounded())
             verticalSpeed = -gravityMagnitude * 0.2f;
@@ -162,7 +166,7 @@ public class Mage : MonoBehaviour {
 
     // called on server
     void OnPlayerDisconnected(NetworkPlayer player) {
-        messages.AddSystemMessage(life.GetUsername()+" dissconnected.", true);
+        messages.AddSystemMessageBroadcast(life.GetUsername()+" dissconnected.");
         if (player == owner) {
             Network.Destroy(gameObject);
             Network.RemoveRPCs(networkView.viewID);

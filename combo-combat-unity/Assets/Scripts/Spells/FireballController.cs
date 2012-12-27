@@ -38,7 +38,6 @@ public class FireballController : MonoBehaviour {
             return;
         }
         if (Network.isServer) {
-            // this runs on the server only
             if (other.tag == GameConstants.MAGE_TAG) {
                 Mage mage = other.gameObject.GetComponent<Mage>();
                 MageLifeController mageLife = other.gameObject.GetComponent<MageLifeController>();

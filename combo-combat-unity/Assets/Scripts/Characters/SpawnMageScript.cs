@@ -18,7 +18,7 @@ public class SpawnMageScript : MonoBehaviour {
     [RPC]
     void SpawnMage(string username, NetworkMessageInfo info) {
         if (networkView.Server("SpawnMage", username)) {
-            messages.AddSystemMessage(username + " connected.", true);
+            messages.AddSystemMessageBroadcast(username + " connected.");
             GameObject mageObject = Network.Instantiate(playerPrefab, transform.position, Quaternion.identity, GameConstants.MAGE_GROUP) as GameObject;
             MageLifeController life = mageObject.GetComponent<MageLifeController>();
             Mage mage = mageObject.GetComponent<Mage>();
@@ -32,7 +32,7 @@ public class SpawnMageScript : MonoBehaviour {
 
     // called on client
     void OnDisconnectedFromServer() {
-        messages.AddSystemMessage("Connection to server lost :( Please refresh page.", false);
+        messages.AddSystemMessageSelf("Connection to server lost :( Please refresh page.");
     }
 
     // called on server
