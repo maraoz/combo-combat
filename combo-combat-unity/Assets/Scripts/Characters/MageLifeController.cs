@@ -135,23 +135,24 @@ public class MageLifeController : MonoBehaviour {
     [RPC]
     public void SetUsername(string u) {
         networkView.Clients("SetUsername", u);
-        if (u == UsernameHolder.MyUsername()) {
-            GetComponent<NetworkSyncAnimation>().enabled = true;
-            GetComponent<NetworkInterpolatedTransform>().enabled = false;
-            GetComponent<UserInputController>().enabled = true;
-            GetComponent<Mage>().enabled = true;
+        if (u == UsernameHolder.MyUsername()) { // client's own mage
             GetComponent<CharacterSimpleAnimation>().enabled = false;
-            GetComponent<MageLifeController>().enabled = true;
+            GetComponent<NetworkSyncAnimation>().enabled = true;
+            GetComponent<UserInputController>().enabled = true;
             InitializeMyMage();
-        } else {
-            name += " Remote";
-            GetComponent<NetworkSyncAnimation>().enabled = false;
-            GetComponent<NetworkInterpolatedTransform>().enabled = false;
-            GetComponent<UserInputController>().enabled = false;
-            GetComponent<Mage>().enabled = true;
+        } else if (Network.isServer) { // server's version of all mages
+            name += " Serverside";
             GetComponent<CharacterSimpleAnimation>().enabled = true;
-            GetComponent<MageLifeController>().enabled = true;
+            GetComponent<NetworkSyncAnimation>().enabled = false;
+            GetComponent<UserInputController>().enabled = false;
+        } else { // client's remote copies of server.
+            name += " Remote";
+            GetComponent<CharacterSimpleAnimation>().enabled = false;
+            GetComponent<NetworkSyncAnimation>().enabled = true;
+            GetComponent<UserInputController>().enabled = false;
         }
+        GetComponent<Mage>().enabled = true;
+        GetComponent<MageLifeController>().enabled = true;
         this.username = u;
     }
 
