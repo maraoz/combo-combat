@@ -108,7 +108,7 @@ public class UserInputController : MonoBehaviour {
                         OnSpellClickDragged(planePosition);
                     }
                     if (leftUp && currentSpell != null) {
-                        currentSpell.OnClickUp(planePosition);
+                        OnSpellClickUp(planePosition);
                     }
 
                 }
@@ -193,7 +193,7 @@ public class UserInputController : MonoBehaviour {
     [RPC]
     void OnSpellClickUp(Vector3 planePosition) {
         if (networkView.Server("OnSpellClickUp", planePosition)) {
-            currentSpell.OnClickDragged(planePosition);
+            currentSpell.OnClickUp(planePosition);
         }
     }
 
