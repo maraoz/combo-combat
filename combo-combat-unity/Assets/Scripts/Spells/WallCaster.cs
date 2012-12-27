@@ -57,7 +57,7 @@ public class WallCaster : SpellCaster {
 
     [RPC]
     public void SpawnBrick(Vector3 middleBrick, Vector3 next, float adaptedBrickLenght) {
-        networkView.Clients("SpawnBrick", middleBrick, next, adaptedBrickLenght);
+        networkView.ClientsUnbuffered("SpawnBrick", middleBrick, next, adaptedBrickLenght);
         GameObject piece = GameObject.Instantiate(brick, middleBrick, Quaternion.identity) as GameObject;
         piece.transform.LookAt(next);
         Vector3 euler = piece.transform.eulerAngles;

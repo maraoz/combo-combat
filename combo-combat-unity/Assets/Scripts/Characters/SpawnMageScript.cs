@@ -48,7 +48,7 @@ public class SpawnMageScript : MonoBehaviour {
 
     [RPC]
     void PlaySound() {
-        networkView.Clients("PlaySound");
+        networkView.ClientsUnbuffered("PlaySound");
         audio.Play();
     }
 }

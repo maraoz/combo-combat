@@ -33,7 +33,7 @@ public class FireballCaster : SpellCaster {
 
     [RPC]
     void PlanCastFireball() {
-        networkView.Clients("PlanCastFireball");
+        networkView.ClientsUnbuffered("PlanCastFireball");
         PlanCast();
     }
 
