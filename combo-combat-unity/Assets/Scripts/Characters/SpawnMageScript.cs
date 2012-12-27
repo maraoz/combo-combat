@@ -23,7 +23,7 @@ public class SpawnMageScript : MonoBehaviour {
             MageLifeController life = mageObject.GetComponent<MageLifeController>();
             Mage mage = mageObject.GetComponent<Mage>();
             UserInputController input = mageObject.GetComponent<UserInputController>();
-            input.setMage(mage);
+            input.ServerInit();
             life.SetUsername(username);
             mage.SetPlayer(info.sender);
             life.SetSpawnPosition(transform);

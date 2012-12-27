@@ -28,8 +28,8 @@ public class UserInputController : MonoBehaviour {
         oldState = ControlState.moving;
     }
 
-    internal void setMage(Mage mage) {
-        player = mage;
+    internal void ServerInit() {
+        Start();
     }
 
     private bool CanIssueCommands() {
@@ -37,26 +37,13 @@ public class UserInputController : MonoBehaviour {
     }
 
 
-    public bool OnSpellHotkeyPressed(SpellCaster spell) {
-        float now = Time.time;
-        if (spell.IsCooldownActive(now) || spell.IsCasting()) {
-            return false;
-        }
-        if (currentSpell != null) {
-            currentSpell.OnFinishPerforming();
-        }
-        currentSpell = spell;
-        state = spell.GetInputControlState();
-        return true;
-    }
-
     void Update() {
         UpdateMouseCursor();
 
         if (!CanIssueCommands()) {
             if (!player.IsDying() && currentSpell != null) {
                 // if focus was lost to GUI/HUD, let spell know
-                currentSpell.OnInputFocusLost();
+                OnInputFocusLostNotify();
             }
             return;
         }
@@ -115,10 +102,10 @@ public class UserInputController : MonoBehaviour {
                 if (currentSpell != null && !currentSpell.IsCasting()) {
                     if (leftDown && currentSpell != null) {
                         giveFeedback = true;
-                        currentSpell.OnClickDown(planePosition);
+                        OnSpellClickDown(planePosition);
                     }
                     if (leftPressed && currentSpell != null) {
-                        currentSpell.OnClickDragged(planePosition);
+                        OnSpellClickDragged(planePosition);
                     }
                     if (leftUp && currentSpell != null) {
                         currentSpell.OnClickUp(planePosition);
@@ -135,6 +122,18 @@ public class UserInputController : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public bool OnSpellHotkeyPressed(SpellCaster spell) {
+        float now = Time.time;
+        if (spell.IsCooldownActive(now) || spell.IsCasting()) {
+            return false;
+        }
+        if (currentSpell != null) {
+            OnFinishPerforming();
+        }
+        OnStartSpellPerform(spell.GetId());
+        return true;
     }
 
     internal void FinishedCasting() {
@@ -174,6 +173,53 @@ public class UserInputController : MonoBehaviour {
     void RequestPlanStop() {
         if (networkView.Server("RequestPlanStop")) {
             player.PlanStop(transform.position);
+        }
+    }
+
+    [RPC]
+    void OnSpellClickDown(Vector3 planePosition) {
+        if (networkView.Server("OnSpellClickDown", planePosition)) {
+            currentSpell.OnClickDown(planePosition);
+        }
+    }
+
+    [RPC]
+    void OnSpellClickDragged(Vector3 planePosition) {
+        if (networkView.Server("OnSpellClickDragged", planePosition)) {
+            currentSpell.OnClickDragged(planePosition);
+        }
+    }
+
+    [RPC]
+    void OnSpellClickUp(Vector3 planePosition) {
+        if (networkView.Server("OnSpellClickUp", planePosition)) {
+            currentSpell.OnClickDragged(planePosition);
+        }
+    }
+
+    [RPC]
+    void OnInputFocusLostNotify() {
+        if (networkView.Server("OnInputFocusLostNotify")) {
+            currentSpell.OnInputFocusLost();
+        }
+    }
+
+    [RPC]
+    void OnFinishPerforming() {
+        if (networkView.Server("OnFinishPerforming")) {
+            currentSpell.OnFinishPerforming();
+        }
+    }
+
+    [RPC]
+    void OnStartSpellPerform(int spellId) {
+        networkView.Server("OnStartSpellPerform", spellId);
+        foreach (SpellCaster spell in spells) {
+            if (spell.GetId() == spellId) {
+                currentSpell = spell;
+                state = spell.GetInputControlState();
+                break;
+            }
         }
     }
 

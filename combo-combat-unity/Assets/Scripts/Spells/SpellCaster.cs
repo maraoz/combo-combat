@@ -3,6 +3,7 @@ using System.Collections;
 
 public abstract class SpellCaster : MonoBehaviour {
 
+    public int id;
     public float fullCastingTime = 2;
     public float preCastingTime = 1;
     public string animationName = "punch";
@@ -82,6 +83,10 @@ public abstract class SpellCaster : MonoBehaviour {
         return mage;
     }
 
+    internal int GetId() {
+        return id;
+    }
+
     public float GetFullCastingTime() {
         return fullCastingTime;
     }
@@ -126,4 +131,5 @@ public abstract class SpellCaster : MonoBehaviour {
 
     // called when input focus is lost to GUI/HUD when casting spell
     public abstract void OnInputFocusLost();
+
 }
