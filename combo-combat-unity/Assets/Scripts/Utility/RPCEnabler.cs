@@ -5,14 +5,28 @@ using System.Collections.Generic;
 // NetworkView extensions for type-safe RPCs
 public static class RPCEnabler {
 
+
+    // internal
+    private static bool InternalClients(this NetworkView networkView, string routineName, bool buffered, params object[] parameters) {
+        if (Network.isServer) {
+            networkView.RPC(routineName, buffered ? RPCMode.OthersBuffered : RPCMode.Others, parameters);
+        }
+        return !Network.isServer;
+    }
+
+
     /**
      * Invokes the RPC in other clients if object is mine. Returns true if invoked in other clients.
      */
     public static bool Clients(this NetworkView networkView, string routineName, params object[] parameters) {
-        if (Network.isServer) {
-            networkView.RPC(routineName, RPCMode.OthersBuffered, parameters);
-        }
-        return !Network.isServer;
+        return InternalClients(networkView, routineName, true, parameters);
+    }
+
+    /**
+     * Same as above but unbuffered
+     */
+    public static bool ClientsUnbuffered(this NetworkView networkView, string routineName, params object[] parameters) {
+        return InternalClients(networkView, routineName, false, parameters);
     }
 
     /**

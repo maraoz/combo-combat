@@ -72,6 +72,7 @@ public class UserInputController : MonoBehaviour {
             if (state != ControlState.moving && rightPressed) {
                 if (!currentSpell.IsCasting()) {
                     state = ControlState.moving;
+                    currentSpell = null;
                 }
             }
             Vector2 screenPosition = Input.mousePosition;
@@ -130,7 +131,7 @@ public class UserInputController : MonoBehaviour {
             return false;
         }
         if (currentSpell != null) {
-            OnFinishPerforming();
+            OnFinishPerformingRequest();
         }
         OnStartSpellPerform(spell.GetId());
         return true;
@@ -178,23 +179,20 @@ public class UserInputController : MonoBehaviour {
 
     [RPC]
     void OnSpellClickDown(Vector3 planePosition) {
-        if (networkView.Server("OnSpellClickDown", planePosition)) {
-            currentSpell.OnClickDown(planePosition);
-        }
+        networkView.Server("OnSpellClickDown", planePosition);
+        currentSpell.OnClickDown(planePosition);
     }
 
     [RPC]
     void OnSpellClickDragged(Vector3 planePosition) {
-        if (networkView.Server("OnSpellClickDragged", planePosition)) {
-            currentSpell.OnClickDragged(planePosition);
-        }
+        networkView.Server("OnSpellClickDragged", planePosition);
+        currentSpell.OnClickDragged(planePosition);
     }
 
     [RPC]
     void OnSpellClickUp(Vector3 planePosition) {
-        if (networkView.Server("OnSpellClickUp", planePosition)) {
-            currentSpell.OnClickUp(planePosition);
-        }
+        networkView.Server("OnSpellClickUp", planePosition);
+        currentSpell.OnClickUp(planePosition);
     }
 
     [RPC]
@@ -205,10 +203,9 @@ public class UserInputController : MonoBehaviour {
     }
 
     [RPC]
-    void OnFinishPerforming() {
-        if (networkView.Server("OnFinishPerforming")) {
-            currentSpell.OnFinishPerforming();
-        }
+    void OnFinishPerformingRequest() {
+        networkView.Server("OnFinishPerformingRequest");
+        currentSpell.OnFinishPerforming();
     }
 
     [RPC]

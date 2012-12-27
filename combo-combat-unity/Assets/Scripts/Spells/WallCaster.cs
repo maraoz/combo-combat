@@ -80,16 +80,24 @@ public class WallCaster : SpellCaster {
     }
 
     public override void OnFinishPerforming() {
-        lineRenderer.SetVertexCount(0);
-        if (points.Count > 1) {
+        if (points.Count > 1 && Network.isServer) {
             PlanCastWall();
+        } else {
+            points.Clear(); // TODO: use this points to cast wall with single RPC :)
         }
+        WallPerformCleanup();
+    }
+
+    [RPC]
+    void WallPerformCleanup() {
+        networkView.ClientsUnbuffered("WallPerformCleanup");
+        lineRenderer.SetVertexCount(0);
         wallLength = 0;
     }
 
     [RPC]
     void PlanCastWall() {
-        networkView.Clients("PlanCastWall");
+        networkView.ClientsUnbuffered("PlanCastWall");
         PlanCast();
     }
 
@@ -99,6 +107,9 @@ public class WallCaster : SpellCaster {
 
     public override void OnClickDragged(Vector3 position) {
         if (transform.position.y > wallCastMaxHeight) {
+            return;
+        }
+        if (this.IsCasting()) {
             return;
         }
         int count = points.Count;

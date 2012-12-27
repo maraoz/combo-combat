@@ -20,10 +20,11 @@ public class FireballCaster : SpellCaster {
     }
 
     public override void OnFinishCasting() {
+        target = Vector3.zero;
     }
 
     public override void OnFinishPerforming() {
-        if (target != Vector3.zero) {
+        if (target != Vector3.zero && Network.isServer) {
             Mage mage = GetMage();
             mage.LookAt(mage.transform.position, target);
             PlanCastFireball();
