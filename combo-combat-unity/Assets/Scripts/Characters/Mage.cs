@@ -175,8 +175,8 @@ public class Mage : MonoBehaviour {
 
     // called on server
     void OnPlayerDisconnected(NetworkPlayer player) {
-        messages.AddSystemMessageBroadcast(life.GetUsername()+" dissconnected.");
         if (player == owner) {
+            messages.AddSystemMessageBroadcast(life.GetUsername()+" disconnected.");
             Network.Destroy(gameObject);
             Network.RemoveRPCs(networkView.viewID);
         }
