@@ -56,8 +56,4 @@ public class FireballController : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    void OnNetworkInstantiate(NetworkMessageInfo info) {
-        Network.RemoveRPCs(info.sender, GameConstants.FIREBALL_GROUP);
-    }
-
 }

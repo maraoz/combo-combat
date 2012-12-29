@@ -36,6 +36,7 @@ public class Mage : MonoBehaviour {
     private SpellCaster currentSpellBeingCasted;
     private FireballCaster fireballCaster;
     private WallCaster wallCaster;
+    private DeathrayCaster deathrayCaster;
 
     void Awake() {
         messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
@@ -44,6 +45,7 @@ public class Mage : MonoBehaviour {
         currentSpellBeingCasted = null;
         fireballCaster = GetComponent<FireballCaster>();
         wallCaster = GetComponent<WallCaster>();
+        deathrayCaster = GetComponent<DeathrayCaster>();
     }
 
     internal void SetPlayer(NetworkPlayer networkPlayer) {
@@ -164,9 +166,11 @@ public class Mage : MonoBehaviour {
     }
 
     internal List<SpellCaster> GetSpellCasters() {
+        // TODO: take this to static editor list
         List<SpellCaster> ret = new List<SpellCaster>();
         ret.Add(fireballCaster);
         ret.Add(wallCaster);
+        ret.Add(deathrayCaster);
         return ret;
     }
 

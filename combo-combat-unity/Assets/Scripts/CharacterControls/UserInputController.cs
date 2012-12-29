@@ -16,7 +16,8 @@ public class UserInputController : MonoBehaviour {
     public enum ControlState {
         moving = 0,
         targetingFireball,
-        drawingWall
+        drawingWall,
+        targetingDeathray
     }
 
     void Start() {
@@ -152,6 +153,7 @@ public class UserInputController : MonoBehaviour {
                 MouseCursor.SetMoveCursor();
                 break;
             case ControlState.drawingWall:
+            case ControlState.targetingDeathray:
             case ControlState.targetingFireball:
                 MouseCursor.SetAttackCursor();
                 break;
