@@ -5,25 +5,32 @@ public class DeathrayController : MonoBehaviour {
 
     public float secondsUntilExhaust = 3.0f;
     public float damage = 50;
-    public float rayWidth = 0.2f;
     public float rayLength = 100;
-    public Color rayColor = Color.red;
+    public float rayDamageWidth = 0.5f;
+    public Color rayDamageColor = Color.white;
+    public float rayWarningWidth = 0.2f;
+    public Color rayWarningColor = Color.red;
 
     private float secondsPast;
     private LineRenderer lineRenderer;
+    private Vector3 origin;
+    private Vector3 end;
 
     private MageLifeController caster;
 
     void Awake() {
+        this.enabled = false;
         secondsPast = 0.0f;
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
-        lineRenderer.SetColors(rayColor, rayColor);
-        lineRenderer.SetWidth(rayWidth, rayWidth);
+        lineRenderer.SetColors(rayWarningColor, rayWarningColor);
+        lineRenderer.SetWidth(rayWarningWidth, rayDamageWidth);
         lineRenderer.SetVertexCount(2);
+        origin = transform.position;
         Vector3 forward = transform.TransformDirection(Vector3.forward);
-        lineRenderer.SetPosition(0, transform.position);
-        lineRenderer.SetPosition(1, transform.position + forward * rayLength);
+        end = transform.position + forward * rayLength;
+        lineRenderer.SetPosition(0, origin);
+        lineRenderer.SetPosition(1, end);
     }
 
     public void SetCaster(MageLifeController mage) {
@@ -41,14 +48,21 @@ public class DeathrayController : MonoBehaviour {
         }
     }
 
-    void OnTriggerEnter(Collider other) {
+    internal void ActivateDamage() {
+        this.enabled = true;
+        lineRenderer.SetColors(rayDamageColor, rayDamageColor);
+        lineRenderer.SetWidth(rayDamageWidth, rayDamageWidth);
         if (Network.isServer) {
-            if (other.tag == GameConstants.MAGE_TAG) {
-                MageLifeController mageLife = other.gameObject.GetComponent<MageLifeController>();
-                mageLife.DoDamage(damage, caster);
+            RaycastHit hit;
+            if (Physics.SphereCast(origin, rayDamageWidth, transform.forward, out hit, rayLength)) {
+                float distanceToObstacle = hit.distance;
+                Collider other = hit.collider;
+                if (other.tag == GameConstants.MAGE_TAG) {
+                    MageLifeController mageLife = other.gameObject.GetComponent<MageLifeController>();
+                    mageLife.DoDamage(damage, caster);
+                }
             }
         }
     }
-
 
 }
