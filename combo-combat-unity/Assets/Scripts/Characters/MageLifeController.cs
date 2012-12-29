@@ -114,7 +114,7 @@ public class MageLifeController : MonoBehaviour {
 
     [RPC]
     void DoDie() {
-        if (!networkView.Clients("DoDie")) {
+        if (!networkView.ClientsUnbuffered("DoDie")) {
             // server
             messages.AddSystemMessageTo(mage.GetPlayer(), "You died. Please wait " + deathTime + " seconds to respawn.");
         }
