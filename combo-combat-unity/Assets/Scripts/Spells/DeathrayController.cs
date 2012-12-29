@@ -53,9 +53,9 @@ public class DeathrayController : MonoBehaviour {
         lineRenderer.SetColors(rayDamageColor, rayDamageColor);
         lineRenderer.SetWidth(rayDamageWidth, rayDamageWidth);
         if (Network.isServer) {
-            RaycastHit hit;
-            if (Physics.SphereCast(origin, rayDamageWidth, transform.forward, out hit, rayLength)) {
-                float distanceToObstacle = hit.distance;
+            RaycastHit[] hits = Physics.SphereCastAll(origin, rayDamageWidth, transform.forward, rayLength);
+            foreach (RaycastHit hit in hits) {
+                Debug.Log(hit.collider.gameObject.name);
                 Collider other = hit.collider;
                 if (other.tag == GameConstants.MAGE_TAG) {
                     MageLifeController mageLife = other.gameObject.GetComponent<MageLifeController>();
