@@ -50,10 +50,12 @@ public class UserInputController : MonoBehaviour {
         }
 
         // KEYBOARD
-        foreach (SpellCaster spell in spells) {
-            if (Input.GetKeyDown(spell.GetHotkey())) {
-                if (OnSpellHotkeyPressed(spell)) {
-                    break;
+        if (currentSpell == null) {
+            foreach (SpellCaster spell in spells) {
+                if (Input.GetKeyDown(spell.GetHotkey())) {
+                    if (OnSpellHotkeyPressed(spell)) {
+                        break;
+                    }
                 }
             }
         }
@@ -128,7 +130,7 @@ public class UserInputController : MonoBehaviour {
 
     public bool OnSpellHotkeyPressed(SpellCaster spell) {
         float now = Time.time;
-        if (spell.IsCooldownActive(now) || spell.IsCasting()) {
+        if (spell.IsCooldownActive(now)) {
             return false;
         }
         if (currentSpell != null) {
