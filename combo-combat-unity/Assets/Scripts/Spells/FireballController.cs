@@ -33,7 +33,8 @@ public class FireballController : MonoBehaviour {
         }
     }
 
-    void OnTriggerEnter(Collider other) {
+    void OnCollisionEnter(Collision collision) {
+        Collider other = collision.collider;
         if (other.tag == GameConstants.HEART_TAG) {
             return;
         }
