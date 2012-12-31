@@ -6,9 +6,6 @@ using System.Collections.Generic;
 public class Mage : MonoBehaviour {
 
 
-    public float walkingSpeed = 6f;
-    public float gravityMagnitude = 20.0f;
-
     // network
     private NetworkPlayer owner; // set only in server
     private bool isMine;
@@ -20,6 +17,8 @@ public class Mage : MonoBehaviour {
     private MageLifeController life;
 
     // movement
+    public float walkingSpeed = 6f;
+    public float gravityMagnitude = 20.0f;
     private CharacterController controller;
     private CollisionFlags collisionFlags;
     private Vector3 target = Vector3.zero; // Where the player is heading
@@ -31,6 +30,13 @@ public class Mage : MonoBehaviour {
     public float amortiguationCoefficient = 0.8f; // damping coefficient for external forces
     public float epsilonMagnitude = 0.1f; // min considerable external force magnitude
     private Vector3 externalVelocity = Vector3.zero; // external velocity
+
+    // stun effect
+    public float stunMinSpeed = 1.5f;
+    public float stunDuration = 2f;
+    private bool isStunned = false;
+    private float stunTimer = 0f;
+
 
     // spells
     private SpellCaster currentSpellBeingCasted;
@@ -64,20 +70,32 @@ public class Mage : MonoBehaviour {
         isMine = true;
     }
 
-    void ApplyGravity() {
+    internal bool IsStunned() {
+        return isStunned;
+    }
+
+
+
+
+    void UpdateEffects() {
+        if (isStunned) {
+            stunTimer += Time.deltaTime;
+            if (stunTimer >= stunDuration) {
+                isStunned = false;
+            }
+        }
+    }
+
+    void UpdateGravity() {
         if (IsGrounded())
             verticalSpeed = -gravityMagnitude * 0.2f;
         else
             verticalSpeed -= gravityMagnitude * Time.deltaTime;
     }
 
-    private bool CheckArrivedTarget() {
-        return Vector3.Distance(transform.position, target) < 0.05;
-    }
-
-    void ApplyTargetHunt() {
+    void UpdateTargetHunt() {
         groundSpeed = 0f;
-        if (target != Vector3.zero && currentSpellBeingCasted == null) {
+        if (!isStunned && target != Vector3.zero && currentSpellBeingCasted == null) {
             target.y = transform.position.y;
             if (CheckArrivedTarget()) {
                 transform.position = target;
@@ -89,7 +107,11 @@ public class Mage : MonoBehaviour {
         }
     }
 
-    void ApplyExternalForces() {
+    private bool CheckArrivedTarget() {
+        return Vector3.Distance(transform.position, target) < 0.05;
+    }
+
+    void UpdateExternalForces() {
         // external force instant application
         externalVelocity += externalForce;
         // amortiguation
@@ -97,7 +119,6 @@ public class Mage : MonoBehaviour {
         if (externalForce.magnitude > 0) {
             externalForce = Vector3.zero;
         }
-
         // update external velocity
         if (externalVelocity.magnitude < epsilonMagnitude) {
             externalVelocity = Vector3.zero;
@@ -107,13 +128,16 @@ public class Mage : MonoBehaviour {
 
 
     void Update() {
+        // calculate effects
+        UpdateEffects();
+
         // vertical movement
-        ApplyGravity();
+        UpdateGravity();
         Vector3 verticalVelocity = new Vector3(0, verticalSpeed, 0);
 
         // ground movement
-        ApplyTargetHunt();
-        ApplyExternalForces();
+        UpdateTargetHunt();
+        UpdateExternalForces();
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 groundVelocity = groundSpeed * forward;
 
@@ -174,13 +198,25 @@ public class Mage : MonoBehaviour {
         return ret;
     }
 
+    void OnControllerColliderHit(ControllerColliderHit hit) {
+        Collider other = hit.collider;
+        if (Network.isServer) {
+            if (other.tag == GameConstants.WALL_TAG) {
+                WallController wall = other.gameObject.GetComponent<WallController>();
+                if (!IsStunned() && GetSpeed() >= stunMinSpeed) {
+                    ApplyStun(transform.position);
+                }
+            }
+        }
+    }
+
 
     // Network
 
     // called on server
     void OnPlayerDisconnected(NetworkPlayer player) {
         if (player == owner) {
-            messages.AddSystemMessageBroadcast(life.GetUsername()+" disconnected.");
+            messages.AddSystemMessageBroadcast(life.GetUsername() + " disconnected.");
             Network.Destroy(gameObject);
             Network.RemoveRPCs(networkView.viewID);
         }
@@ -213,6 +249,17 @@ public class Mage : MonoBehaviour {
     [RPC]
     internal void LookAt(Vector3 currentPosition, Vector3 target) {
         networkView.Clients("LookAt", currentPosition, target);
+        transform.position = currentPosition;
         transform.LookAt(target);
     }
+
+    [RPC]
+    internal void ApplyStun(Vector3 currentPosition) {
+        networkView.Clients("ApplyStun", currentPosition);
+        transform.position = currentPosition;
+        target = Vector3.zero;
+        isStunned = true;
+        stunTimer = 0;
+    }
+
 }

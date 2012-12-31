@@ -4,7 +4,7 @@ using System.Collections;
 public class WallController : MonoBehaviour {
 
 
-    public float duration = 3;
+    public float duration = 3f;
     private float timePassed;
 
     void Start() {
@@ -21,4 +21,5 @@ public class WallController : MonoBehaviour {
             Destroy(gameObject);
         }
     }
+
 }

@@ -63,6 +63,11 @@ public class CharacterSimpleAnimation : MonoBehaviour {
             animation.CrossFade("deathfall");
             SendMessage("SyncAnimation", "deathfall");
         }
+        if (player.IsStunned()) {
+            animation.wrapMode = WrapMode.ClampForever;
+            animation.CrossFade("gothit");
+            SendMessage("SyncAnimation", "gothit");
+        }
 
     }
 }

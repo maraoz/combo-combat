@@ -14,6 +14,7 @@ public class GameConstants {
     //tags
     public static string MAGE_TAG = "Mage";
     public static string HEART_TAG = "Heart";
+    public static string WALL_TAG = "Wall";
 
     // layers
 
