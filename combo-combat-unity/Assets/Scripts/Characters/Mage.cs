@@ -255,7 +255,7 @@ public class Mage : MonoBehaviour {
 
     [RPC]
     internal void ApplyStun(Vector3 currentPosition) {
-        networkView.Clients("ApplyStun", currentPosition);
+        networkView.ClientsUnbuffered("ApplyStun", currentPosition);
         transform.position = currentPosition;
         target = Vector3.zero;
         isStunned = true;
