@@ -43,8 +43,8 @@ public class FireballController : MonoBehaviour {
                 Mage mage = other.gameObject.GetComponent<Mage>();
                 MageLifeController mageLife = other.gameObject.GetComponent<MageLifeController>();
                 mageLife.DoDamage(damage, caster);
-                Vector3 forward = transform.TransformDirection(Vector3.forward);
-                mage.ApplyKnockback(mage.transform.position, forward * knockbackMagnitude);
+                Vector3 normal = collision.contacts[0].normal;
+                mage.ApplyKnockback(mage.transform.position, normal * -knockbackMagnitude);
             }
             CollideDestroy(transform.position);
         }
