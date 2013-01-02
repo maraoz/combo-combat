@@ -34,7 +34,7 @@ public class UserInputController : MonoBehaviour {
     }
 
     private bool CanIssueCommands() {
-        return !GuiUtils.IsGUIFocused() && !player.IsDying();
+        return !GuiUtils.IsGUIFocused() && !player.IsDying() && !player.IsStunned();
     }
 
 
@@ -42,7 +42,7 @@ public class UserInputController : MonoBehaviour {
         UpdateMouseCursor();
 
         if (!CanIssueCommands()) {
-            if (!player.IsDying() && currentSpell != null) {
+            if (!player.IsDying() && !player.IsStunned() && currentSpell != null) {
                 // if focus was lost to GUI/HUD, let spell know
                 OnInputFocusLostNotify();
             }
