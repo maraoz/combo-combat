@@ -17,10 +17,12 @@ public class HudController : MonoBehaviour {
     public Texture2D cooldownBack;
     public Texture2D empty;
 
+    // tooltip
     public float tooltipWidth = 100;
     public float tooltipHeight = 180;
     private string currentTooltip;
     private bool showTooltip = false;
+    private Rect tooltipRect;
 
     public int spellsShown = 4;
 
@@ -107,26 +109,35 @@ public class HudController : MonoBehaviour {
                 showTooltip = false;
             }
         }
-        Vector3 mousePos = Input.mousePosition;
-        Rect tooltipRect = new Rect(mousePos.x, Screen.height - mousePos.y - tooltipHeight, tooltipWidth, tooltipHeight);
-        GUILayout.Window(GameConstants.TOOLTIP_WIN_ID, tooltipRect, MakeTooltipWindow, "", new GUIStyle());
+        if (showTooltip) {
+            Vector3 mousePos = Input.mousePosition;
+            tooltipRect = new Rect(mousePos.x, Screen.height - mousePos.y - tooltipHeight, tooltipWidth, tooltipHeight);
+            GUILayout.Window(GameConstants.TOOLTIP_WIN_ID, tooltipRect, MakeTooltipWindow, "", GUI.skin.GetStyle("Box"));
+        }
+        if (currentTooltip != "" && !showTooltip) {
+            showTooltip = true;
+        }
 
         CheckGUIFocused();
     }
 
     void MakeTooltipWindow(int id) {
-        if (currentTooltip != "" && !showTooltip) {
-            showTooltip = true;
-            return;
-        }
-        GUILayout.BeginHorizontal();
         foreach (SpellCaster spell in spells) {
             if (currentTooltip == spell.GetTooltip().id) {
-                Tooltip tooltip = spell.GetTooltip();
-                GUILayout.Label(tooltip.spellName);
+                InnerMakeTooltipWindow(spell);
                 break;
             }
         }
+    }
+
+    void InnerMakeTooltipWindow(SpellCaster spell) {
+        Tooltip tooltip = spell.GetTooltip();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        GUILayout.Label(tooltip.spellName);
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
     }
 
     void CheckGUIFocused() {
