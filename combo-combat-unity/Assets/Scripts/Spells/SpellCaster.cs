@@ -9,7 +9,7 @@ public abstract class SpellCaster : MonoBehaviour {
     public string animationName = "punch";
     public float cooldown = 5.0f;
     public Texture2D icon;
-    public string tooltip = "no tooltip";
+    public Tooltip tooltip;
     public UserInputController.ControlState inputControlState;
 
     private float lastCastTimestamp;
@@ -95,7 +95,7 @@ public abstract class SpellCaster : MonoBehaviour {
         return animationName;
     }
 
-    internal string GetTooltip() {
+    internal Tooltip GetTooltip() {
         return tooltip;
     }
 

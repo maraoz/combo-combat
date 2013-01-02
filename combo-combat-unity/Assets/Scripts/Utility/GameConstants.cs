@@ -17,12 +17,16 @@ public class GameConstants {
     public static string WALL_TAG = "Wall";
 
     // layers
-
     public static int LAYER_CLICKABLE = 8;
     public static int LAYER_MASK_CLICKABLE = 1 << LAYER_CLICKABLE;
 
     public static int Invert(int mask) {
         return ~(mask);
     }
+
+    // GUI
+    public static int SERVER_WIN_ID = 0;
+    public static int CLIENT_WIN_ID = 1;
+    public static int TOOLTIP_WIN_ID = 2;
 
 }

@@ -49,10 +49,10 @@ public class ConnectMasterServerScript : MonoBehaviour {
         }
         serverListRect = new Rect(Screen.width / 2 - Screen.width * 0.45f, serverListY, Screen.width * 0.9f, serverListHeight);
         if (Network.peerType == NetworkPeerType.Disconnected || Network.isServer) {
-            windowRect = GUILayout.Window(0, windowRect, MakeWindow, "");
+            windowRect = GUILayout.Window(GameConstants.SERVER_WIN_ID, windowRect, MakeWindow, "");
         }
         if (Network.peerType == NetworkPeerType.Disconnected)
-            serverListRect = GUILayout.Window(1, serverListRect, MakeClientWindow, "");
+            serverListRect = GUILayout.Window(GameConstants.CLIENT_WIN_ID, serverListRect, MakeClientWindow, "");
     }
 
     void Awake() {

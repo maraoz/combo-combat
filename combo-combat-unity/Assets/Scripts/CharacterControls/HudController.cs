@@ -17,6 +17,11 @@ public class HudController : MonoBehaviour {
     public Texture2D cooldownBack;
     public Texture2D empty;
 
+    public float tooltipWidth = 100;
+    public float tooltipHeight = 180;
+    private string currentTooltip;
+    private bool showTooltip = false;
+
     public int spellsShown = 4;
 
     private List<SpellCaster> spells;
@@ -31,6 +36,7 @@ public class HudController : MonoBehaviour {
 
     void Awake() {
         enabled = false;
+        currentTooltip = "";
     }
 
     void OnGUI() {
@@ -56,7 +62,7 @@ public class HudController : MonoBehaviour {
 
             // button
             spellRect = new Rect(spellRect.x + spellMargin, spellRect.y, fSize, fSize);
-            if (GUI.Button(spellRect, new GUIContent(spell.GetIcon(), spell.GetTooltip()), spellIconStyle)) {
+            if (GUI.Button(spellRect, new GUIContent(spell.GetIcon(), spell.GetTooltip().id), spellIconStyle)) {
                 controls.OnSpellHotkeyPressed(spell);
             }
 
@@ -74,6 +80,7 @@ public class HudController : MonoBehaviour {
             Rect hotkeyRect = new Rect(spellRect);
             hotkeyRect.y += hotkeyVPad;
             GUI.Label(hotkeyRect, hotkey, hotkeyStyle);
+
         }
 
         // non assigned spells
@@ -93,10 +100,33 @@ public class HudController : MonoBehaviour {
         GUI.DrawTexture(lifeBarFrontRect, lifeBarFront);
         GUI.DrawTexture(lifeBarRect, lifeBarFrame);
 
-        //Debug.Log(GUI.tooltip);
-
+        // tooltip
+        if (Event.current.type == EventType.Repaint) {
+            currentTooltip = GUI.tooltip;
+            if (currentTooltip == "") {
+                showTooltip = false;
+            }
+        }
+        Vector3 mousePos = Input.mousePosition;
+        Rect tooltipRect = new Rect(mousePos.x, Screen.height - mousePos.y - tooltipHeight, tooltipWidth, tooltipHeight);
+        GUILayout.Window(GameConstants.TOOLTIP_WIN_ID, tooltipRect, MakeTooltipWindow, "", new GUIStyle());
 
         CheckGUIFocused();
+    }
+
+    void MakeTooltipWindow(int id) {
+        if (currentTooltip != "" && !showTooltip) {
+            showTooltip = true;
+            return;
+        }
+        GUILayout.BeginHorizontal();
+        foreach (SpellCaster spell in spells) {
+            if (currentTooltip == spell.GetTooltip().id) {
+                Tooltip tooltip = spell.GetTooltip();
+                GUILayout.Label(tooltip.spellName);
+                break;
+            }
+        }
     }
 
     void CheckGUIFocused() {
