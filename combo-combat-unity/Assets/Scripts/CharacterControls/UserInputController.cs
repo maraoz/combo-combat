@@ -41,14 +41,6 @@ public class UserInputController : MonoBehaviour {
     void Update() {
         UpdateMouseCursor();
 
-        if (!CanIssueCommands()) {
-            if (!player.IsDying() && !player.IsStunned() && currentSpell != null) {
-                // if focus was lost to GUI/HUD, let spell know
-                OnInputFocusLostNotify();
-            }
-            return;
-        }
-
         // KEYBOARD
         if (currentSpell == null) {
             foreach (SpellCaster spell in spells) {
@@ -61,6 +53,14 @@ public class UserInputController : MonoBehaviour {
         }
         if (Input.GetKeyDown(Hotkeys.STOP_HOTKEY)) {
             RequestPlanStop();
+        }
+
+        if (!CanIssueCommands()) {
+            if (!player.IsDying() && !player.IsStunned() && currentSpell != null) {
+                // if focus was lost to GUI/HUD, let spell know
+                OnInputFocusLostNotify();
+            }
+            return;
         }
 
 
