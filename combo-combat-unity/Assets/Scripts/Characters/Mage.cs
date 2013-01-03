@@ -108,7 +108,7 @@ public class Mage : MonoBehaviour {
     }
 
     private bool CheckArrivedTarget() {
-        return Vector3.Distance(transform.position, target) < 0.05;
+        return Vector3.Distance(transform.position, target) < 0.06;
     }
 
     void UpdateExternalForces() {
