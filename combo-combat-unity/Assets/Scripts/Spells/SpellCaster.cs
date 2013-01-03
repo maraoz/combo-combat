@@ -99,6 +99,10 @@ public abstract class SpellCaster : MonoBehaviour {
         return tooltip;
     }
 
+    internal string GetHotkeyString() {
+        return ("" + System.Convert.ToChar(GetHotkey())).ToUpper();
+    }
+
     internal Texture GetIcon() {
         return icon;
     }

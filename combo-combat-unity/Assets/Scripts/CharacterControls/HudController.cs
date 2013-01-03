@@ -78,7 +78,7 @@ public class HudController : MonoBehaviour {
             }
 
             // hotkey
-            string hotkey = ("" + System.Convert.ToChar(spell.GetHotkey())).ToUpper();
+            string hotkey = spell.GetHotkeyString();
             Rect hotkeyRect = new Rect(spellRect);
             hotkeyRect.y += hotkeyVPad;
             GUI.Label(hotkeyRect, hotkey, hotkeyStyle);
@@ -132,12 +132,9 @@ public class HudController : MonoBehaviour {
 
     void InnerMakeTooltipWindow(SpellCaster spell) {
         Tooltip tooltip = spell.GetTooltip();
+        tooltip.SetSpell(spell);
+        tooltip.Render();
 
-        GUILayout.BeginHorizontal();
-        GUILayout.FlexibleSpace();
-        GUILayout.Label(tooltip.spellName);
-        GUILayout.FlexibleSpace();
-        GUILayout.EndHorizontal();
     }
 
     void CheckGUIFocused() {

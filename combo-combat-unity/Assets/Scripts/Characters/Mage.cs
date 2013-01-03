@@ -202,7 +202,6 @@ public class Mage : MonoBehaviour {
         Collider other = hit.collider;
         if (Network.isServer) {
             if (other.tag == GameConstants.WALL_TAG) {
-                WallController wall = other.gameObject.GetComponent<WallController>();
                 if (!IsStunned() && GetSpeed() >= stunMinSpeed) {
                     ApplyStun(transform.position);
                 }
