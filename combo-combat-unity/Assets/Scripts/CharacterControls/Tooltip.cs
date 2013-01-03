@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor;
 
 public class Tooltip : MonoBehaviour {
 
@@ -28,7 +27,6 @@ public class Tooltip : MonoBehaviour {
         descrTextStyle.fontSize = 16;
         descrTextStyle.normal.textColor = Color.black;
         descrTextStyle.wordWrap = true;
-        EditorStyles.textField.wordWrap = true;
         
         GUILayout.BeginVertical();
         GUILayout.BeginHorizontal();
