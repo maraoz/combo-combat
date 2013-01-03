@@ -173,7 +173,7 @@ public class Mage : MonoBehaviour {
     }
 
     public bool IsGrounded() {
-        return (collisionFlags & CollisionFlags.CollidedBelow) != 0;
+        return controller.isGrounded;
     }
 
 
