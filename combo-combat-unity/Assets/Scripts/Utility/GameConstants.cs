@@ -28,5 +28,6 @@ public class GameConstants {
     public static int SERVER_WIN_ID = 0;
     public static int CLIENT_WIN_ID = 1;
     public static int TOOLTIP_WIN_ID = 2;
+    public static int CHAT_WIN_ID = 3;
 
 }

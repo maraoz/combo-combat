@@ -20,7 +20,6 @@ public class Mage : MonoBehaviour {
     public float walkingSpeed = 6f;
     public float gravityMagnitude = 20.0f;
     private CharacterController controller;
-    private CollisionFlags collisionFlags;
     private Vector3 target = Vector3.zero; // Where the player is heading
     private float groundSpeed = 0f; // ground x-z axis speed in the direction the mage is looking at
     private float verticalSpeed = 0f; // y axis speed
@@ -145,7 +144,7 @@ public class Mage : MonoBehaviour {
         Vector3 totalVelocity = verticalVelocity + groundVelocity + externalVelocity;
 
         // apply movement for this period of time
-        collisionFlags = controller.Move(totalVelocity * Time.deltaTime);
+        controller.Move(totalVelocity * Time.deltaTime);
     }
 
     public void OnSpellStartedCasting(SpellCaster spell) {
