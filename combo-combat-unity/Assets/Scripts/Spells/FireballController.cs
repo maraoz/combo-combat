@@ -12,7 +12,6 @@ public class FireballController : MonoBehaviour {
     private float secondsPast;
     private MageLifeController caster;
 
-    // Use this for initialization
     void Start() {
         secondsPast = 0.0f;
     }
