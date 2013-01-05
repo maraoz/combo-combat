@@ -5,35 +5,30 @@ public class IsometricCamera : MonoBehaviour {
 
     Transform target;
 
-    public float distance = 100.0f;
-
-    public int maxScale = 12;
-    public int minScale = 5;
+    public float maxDistance = 100.0f;
+    public float minDistance = 50;
+    public float stepDistance = 10;
+    private float currentDistance;
 
     void Start() {
-        camera.orthographicSize = maxScale;
+        currentDistance = maxDistance;
     }
 
     void LateUpdate() {
         if (!target)
             return;
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0 && camera.orthographicSize > minScale) {
-            camera.orthographicSize -= 1;
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && currentDistance > minDistance) {
+            currentDistance -= stepDistance;
         }
 
         //
-        if (Input.GetAxis("Mouse ScrollWheel") < 0 && camera.orthographicSize < maxScale) {
-            camera.orthographicSize += 1;
-        }
-
-        //default zoom
-        if (Input.GetKeyDown(KeyCode.Mouse2)) {
-            camera.orthographicSize = maxScale;
+        if (Input.GetAxis("Mouse ScrollWheel") < 0 && currentDistance < maxDistance) {
+            currentDistance += stepDistance;
         }
 
         transform.position = target.position + Vector3.up * 1;
-        transform.position -= transform.rotation * Vector3.forward * distance;
+        transform.position -= transform.rotation * Vector3.forward * currentDistance;
     }
 
     public void SetTarget(Transform t) {
