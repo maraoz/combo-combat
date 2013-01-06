@@ -16,36 +16,23 @@ public class CharacterSimpleAnimation : MonoBehaviour {
 
         // We are in full control here - don't let any other animations play when we start
         animation.Stop();
-        animation.Play("idle");
+        animation.Play("Idle");
     }
     void Update() {
-        
+
         float currentSpeed = player.GetSpeed();
         animation.wrapMode = WrapMode.Loop;
 
-        // Fade in run
         if (currentSpeed > player.walkingSpeed) {
-            animation.CrossFade("run");
-            // We fade out jumpland quick otherwise we get sliding feet
-            animation.Blend("jumpland", 0);
-            SendMessage("SyncAnimation", "run");
-        }
-            // Fade in walk
-        else if (currentSpeed > 0.1) {
-            // changed from walk to run to try
-            animation.CrossFade("run");
-            // We fade out jumpland realy quick otherwise we get sliding feet
-            animation.Blend("jumpland", 0);
-            SendMessage("SyncAnimation", "run");
-        }
-            // Fade out walk and run
-        else {
-            animation.CrossFade("idle");
-            SendMessage("SyncAnimation", "idle");
+            animation.CrossFade("Sprint");
+        } else if (currentSpeed > 0.1) {
+            animation.CrossFade("Walk");
+        } else {
+            animation.CrossFade("Idle");
         }
 
-        animation["run"].normalizedSpeed = runSpeedScale;
-        animation["walk"].normalizedSpeed = walkSpeedScale;
+        animation["Run"].normalizedSpeed = runSpeedScale;
+        animation["Walk"].normalizedSpeed = walkSpeedScale;
 
         if (player.IsCasting()) {
             SpellCaster spell = player.GetCurrentSpellCaster();
@@ -55,18 +42,15 @@ public class CharacterSimpleAnimation : MonoBehaviour {
                 AnimationState state = animation[aniName];
                 state.speed = state.length / fullCastingTime;
                 animation.CrossFade(aniName);
-                SendMessage("SyncAnimation", aniName);
             }
         }
         if (player.IsDying()) {
             animation.wrapMode = WrapMode.ClampForever;
-            animation.CrossFade("deathfall");
-            SendMessage("SyncAnimation", "deathfall");
+            animation.CrossFade("Deathfall");
         }
         if (player.IsStunned()) {
             animation.wrapMode = WrapMode.ClampForever;
-            animation.CrossFade("gothit");
-            SendMessage("SyncAnimation", "gothit");
+            animation.CrossFade("Gothit");
         }
 
     }
