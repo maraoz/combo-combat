@@ -14,7 +14,7 @@ public class FireballCaster : SpellCaster {
     public override void DoCastSpell() {
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
-        Vector3 spawnPosition = transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.5f * right);
+        Vector3 spawnPosition = transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.0f * right);
         GameObject casted = Instantiate(fireball, spawnPosition, transform.rotation) as GameObject;
         casted.GetComponent<FireballController>().SetCaster(GetComponent<MageLifeController>());
     }

@@ -14,7 +14,7 @@ public class GrenadeCaster : SpellCaster {
     public override void DoCastSpell() {
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
-        Vector3 spawnPosition = transform.position + (2f * forward) + (1f * Vector3.up) + (0.5f * right);
+        Vector3 spawnPosition = transform.position + (1f * forward) + (1f * Vector3.up) + (0.5f * right);
         GameObject casted = Instantiate(grenade, spawnPosition, transform.rotation) as GameObject;
         casted.GetComponent<GrenadeController>().SetCaster(GetComponent<MageLifeController>());
         casted.GetComponent<GrenadeController>().AddForce(forward);

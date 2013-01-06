@@ -7,6 +7,7 @@ public class CharacterSimpleAnimation : MonoBehaviour {
     public float walkSpeedScale = 1.0f;
 
     private Mage player;
+    private int dieMode;
 
     void Awake() {
         player = GetComponent<Mage>();
@@ -24,11 +25,11 @@ public class CharacterSimpleAnimation : MonoBehaviour {
         animation.wrapMode = WrapMode.Loop;
 
         if (currentSpeed > player.walkingSpeed) {
-            animation.CrossFade("Sprint");
+            animation.CrossFade("Run");
         } else if (currentSpeed > 0.1) {
-            animation.CrossFade("Walk");
+            animation.CrossFade("Run");
         } else {
-            animation.CrossFade("Idle");
+            animation.CrossFade("Staff Stance");
         }
 
         animation["Run"].normalizedSpeed = runSpeedScale;
@@ -45,12 +46,16 @@ public class CharacterSimpleAnimation : MonoBehaviour {
             }
         }
         if (player.IsDying()) {
+            if (dieMode == 0) {
+                dieMode = (Random.value > 0.5 ? 1 : 2);
+            }
             animation.wrapMode = WrapMode.ClampForever;
-            animation.CrossFade("Deathfall");
+            animation.CrossFade("Die " + dieMode);
+        } else {
+            dieMode = 0;
         }
         if (player.IsStunned()) {
-            animation.wrapMode = WrapMode.ClampForever;
-            animation.CrossFade("Gothit");
+            animation.CrossFade("Crouch Idle");
         }
 
     }

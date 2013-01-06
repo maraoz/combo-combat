@@ -36,7 +36,7 @@ public class DeathrayCaster : SpellCaster {
         networkView.ClientsUnbuffered("CreateDeathrayObject");
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
-        Vector3 spawnPosition = transform.position + (0.1f * forward) + (0.1f * Vector3.up) + (0.3f * right);
+        Vector3 spawnPosition = transform.position + (0.5f * forward) + (0.1f * Vector3.up) + (0.3f * right);
         casted = Instantiate(ray, spawnPosition, transform.rotation) as GameObject;
         casted.GetComponent<DeathrayController>().SetCaster(GetComponent<MageLifeController>());
     }

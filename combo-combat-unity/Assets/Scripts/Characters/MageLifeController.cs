@@ -24,9 +24,6 @@ public class MageLifeController : MonoBehaviour {
     public float deathTime = 15.0f;
     private float deathTimeSpent = 0f;
 
-    public float dieDuration = 1f;
-    private float dieStart;
-
 
     void Awake() {
         RestartLife();
@@ -54,18 +51,6 @@ public class MageLifeController : MonoBehaviour {
 
     void Update() {
         if (isDying) {
-            if (dieStart == 0f) {
-                dieStart = Time.time;
-            } else {
-                if (Time.time - dieStart < dieDuration) {
-                    Vector3 euler = transform.rotation.eulerAngles;
-                    euler.x -= 90.0f * (Time.deltaTime / dieDuration);
-                    transform.rotation = Quaternion.Euler(euler);
-                } else {
-                    dieStart = 0f;
-                }
-            }
-
             deathTimeSpent += Time.deltaTime;
             if (deathTimeSpent >= deathTime) {
                 Respawn();
