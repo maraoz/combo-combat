@@ -195,8 +195,8 @@ public class Mage : MonoBehaviour {
         List<SpellCaster> ret = new List<SpellCaster>();
         ret.Add(fireballCaster);
         ret.Add(wallCaster);
-        ret.Add(deathrayCaster);
         ret.Add(grenadeCaster);
+        ret.Add(deathrayCaster);
         return ret;
     }
 
