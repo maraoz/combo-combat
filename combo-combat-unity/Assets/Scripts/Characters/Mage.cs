@@ -207,6 +207,11 @@ public class Mage : MonoBehaviour {
                 if (!IsStunned() && GetSpeed() >= stunMinSpeed) {
                     ApplyStun(transform.position);
                 }
+            } else if (other.tag == GameConstants.GRENADE_TAG) {
+                other.gameObject.GetComponent<GrenadeController>()
+                    .AddForce(other.gameObject.transform.position,
+                    other.gameObject.transform.rotation,
+                    transform.forward);
             }
         }
     }

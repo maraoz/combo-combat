@@ -14,6 +14,7 @@ public class FireballController : MonoBehaviour {
 
     void Start() {
         secondsPast = 0.0f;
+        Debug.Log(networkView.viewID);
     }
 
     public void SetCaster(MageLifeController mage) {

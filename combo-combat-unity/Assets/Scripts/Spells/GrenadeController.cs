@@ -56,8 +56,12 @@ public class GrenadeController : MonoBehaviour {
     }
 
 
-    internal void AddForce(Vector3 forward) {
-        rigidbody.AddForce(forward * 200 + Vector3.up * 250);
+    [RPC]
+    internal void AddForce(Vector3 position, Quaternion rotation, Vector3 direction) {
+        networkView.ClientsUnbuffered("AddForce", position, rotation, direction);
+        transform.position = position;
+        transform.rotation = rotation;
+        rigidbody.AddForce(direction * 200 + Vector3.up * 50);
         rigidbody.AddTorque(new Vector3(10f, 50f, 0f));
     }
 }
