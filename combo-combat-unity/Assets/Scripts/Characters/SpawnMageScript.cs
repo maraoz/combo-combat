@@ -143,7 +143,9 @@ public class SpawnMageScript : MonoBehaviour {
         for (int i = 0; i < players.Length; i++) {
             if (players[i] != GameConstants.NO_PLAYER && players[i].Equals(player)) {
                 players[i] = GameConstants.NO_PLAYER;
-                SetPlayerCurrentCount(playerCount - 1);
+                if (!isFreeMode) {
+                    SetPlayerCurrentCount(playerCount - 1);
+                }
                 break;
             }
         }
