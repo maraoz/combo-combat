@@ -5,11 +5,12 @@ public class SpawnMageScript : MonoBehaviour {
 
     public GameObject playerPrefab;
     private MessageSystem messages;
-    private int playerCount;
+    private int playerCount = -1;
     private NetworkPlayer[] players;
     private float countdownStart = 0;
     public int secondsOfCountdown = 5;
     private int secondsRemaining;
+    private bool isFreeMode;
 
     private AudioSource beepSound;
     private AudioSource drumSound;
@@ -20,7 +21,6 @@ public class SpawnMageScript : MonoBehaviour {
         beepSound = aSources[0];
         drumSound = aSources[1];
         gongSound = aSources[2];
-        playerCount = 0;
         ResetGameTimer();
 
         messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
@@ -29,6 +29,8 @@ public class SpawnMageScript : MonoBehaviour {
         Network.SetSendingEnabled(0, true);
 
         if (Network.isServer) {
+            playerCount = 0;
+            isFreeMode = CommandLineParser.IsFreeMode();
             SetPlayerMaxCount(Network.maxConnections);
         }
         if (Network.isClient) {
@@ -69,7 +71,7 @@ public class SpawnMageScript : MonoBehaviour {
     }
 
     void OnGUI() {
-        if (countdownStart == 0 && playerCount < players.Length) {
+        if (!isFreeMode && playerCount != -1 && countdownStart == 0 && playerCount < players.Length) {
             GUIStyle signStyle = new GUIStyle();
             signStyle.fontSize = 40;
             signStyle.alignment = TextAnchor.MiddleCenter;
@@ -95,7 +97,9 @@ public class SpawnMageScript : MonoBehaviour {
                     messages.AddSystemMessageBroadcast(username + " connected.");
                     players[i] = info.sender;
                     DoSpawnMage(i, username, info);
-                    SetPlayerCurrentCount(playerCount + 1);
+                    if (!isFreeMode) {
+                        SetPlayerCurrentCount(playerCount + 1);
+                    }
                     break;
                 }
             }
@@ -116,6 +120,9 @@ public class SpawnMageScript : MonoBehaviour {
         life.SetUsername(username);
         mage.SetPlayer(info.sender);
         life.SetSpawnPosition(pos);
+        if (isFreeMode) {
+            mage.StartRound();
+        }
     }
 
     // called on client
@@ -152,7 +159,7 @@ public class SpawnMageScript : MonoBehaviour {
     void SetPlayerCurrentCount(int newPlayerCount) {
         networkView.ClientsUnbuffered("SetPlayerCurrentCount", newPlayerCount);
         playerCount = newPlayerCount;
-        if (playerCount == players.Length) {
+        if (playerCount == players.Length && !isFreeMode) {
             countdownStart = Time.time;
         }
     }

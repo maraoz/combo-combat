@@ -30,7 +30,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
     private string testMessage = "Undetermined NAT capabilities";
     private string USERNAME_INPUT_NAME = "Username text field";
     private string usernameField = "";
-    private int maxPlayersAllowed = 2;
+    private int maxPlayersAllowed;
 
 
     void OnFailedToConnectToMasterServer(NetworkConnectionError info) {
@@ -66,14 +66,8 @@ public class ConnectMasterServerScript : MonoBehaviour {
         if (usernameField == "") {
             usernameField = DEFAULT_USERNAME;
         }
-        string[] args = System.Environment.GetCommandLineArgs();
-        for (int i = 0; i < args.Length; i++) {
-            if (args[i].Equals("-n")) {
-                maxPlayersAllowed = Int32.Parse(args[i + 1]);
-                break;
-            }
-        }
-        if (allowsDedicatedServer && IsBatchMode()) {
+        maxPlayersAllowed = CommandLineParser.GetMaxPlayersAllowed();
+        if (allowsDedicatedServer && CommandLineParser.IsBatchMode()) {
             DoStartServer();
         }
     }
@@ -196,11 +190,6 @@ public class ConnectMasterServerScript : MonoBehaviour {
             }
             GUILayout.FlexibleSpace();
         }
-    }
-
-    bool IsBatchMode() {
-        var cla = System.Environment.GetCommandLineArgs();
-        return cla.Length > 1 && cla[1] == "-batchmode";
     }
 
     void MakeClientWindow(int id) {
