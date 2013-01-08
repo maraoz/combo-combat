@@ -150,16 +150,13 @@ public class MageLifeController : MonoBehaviour {
         }
         if (mage.IsMine()) { // client's own mage
             GetComponent<CharacterSimpleAnimation>().enabled = true;
-            GetComponent<UserInputController>().enabled = true;
             InitializeMyMage();
         } else if (Network.isServer) { // server's version of all mages
             name += " Serverside";
             GetComponent<CharacterSimpleAnimation>().enabled = true;
-            GetComponent<UserInputController>().enabled = false;
         } else { // client's remote copies of server.
             name += " Remote";
             GetComponent<CharacterSimpleAnimation>().enabled = true;
-            GetComponent<UserInputController>().enabled = false;
         }
         GetComponent<Mage>().enabled = true;
         GetComponent<MageLifeController>().enabled = true;

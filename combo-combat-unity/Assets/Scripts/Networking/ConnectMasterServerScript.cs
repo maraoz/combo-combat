@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class ConnectMasterServerScript : MonoBehaviour {
 
@@ -29,6 +30,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
     private string testMessage = "Undetermined NAT capabilities";
     private string USERNAME_INPUT_NAME = "Username text field";
     private string usernameField = "";
+    private int maxPlayersAllowed = 2;
 
 
     void OnFailedToConnectToMasterServer(NetworkConnectionError info) {
@@ -60,7 +62,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
     }
 
     void DoStartServer() {
-        Network.InitializeServer(32, serverPort, useNat);
+        Network.InitializeServer(maxPlayersAllowed, serverPort, useNat);
         MasterServer.RegisterHost(gameName, serverName, serverComment);
     }
 
@@ -69,9 +71,15 @@ public class ConnectMasterServerScript : MonoBehaviour {
         if (usernameField == "") {
             usernameField = DEFAULT_USERNAME;
         }
-        //MasterServer.dedicatedServer = true;
         if (allowsDedicatedServer && IsBatchMode()) {
             DoStartServer();
+        }
+        string[] args = System.Environment.GetCommandLineArgs();
+        for (int i = 0; i < args.Length; i++ ) {
+            if (args[i] == "-n") {
+                maxPlayersAllowed = Int32.Parse(args[i + 1]);
+                break;
+            }
         }
     }
 
@@ -200,7 +208,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
 
         HostData[] data = MasterServer.PollHostList();
         foreach (HostData element in data) {
-            GUILayout.Space(50);
+            GUILayout.Space(20);
             GUILayout.BeginHorizontal();
 
 
@@ -232,15 +240,19 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 GUILayout.Space(5);
                 GUILayout.FlexibleSpace();
                 GUILayout.Width(100);
-                if (GUILayout.Button("Connect", "ShortButton")) {
-                    PlayerPrefs.SetString(GameConstants.PREFS_USERNAME, usernameField);
-                    // TESTINGWISE>
-                    if (usernameField == "Manu") {
-                        usernameField = "T["+Time.time+"]";
+                if (element.connectedPlayers < element.playerLimit) {
+                    if (GUILayout.Button("Join Game", "ShortButton")) {
+                        PlayerPrefs.SetString(GameConstants.PREFS_USERNAME, usernameField);
+                        // TESTINGWISE>
+                        if (usernameField == "Manu") {
+                            usernameField = "T[" + Time.time + "]";
+                        }
+                        usernameHolder.SetUsername(usernameField);
+                        Network.Connect(element);
+                        this.enabled = false;
                     }
-                    usernameHolder.SetUsername(usernameField);
-                    Network.Connect(element);
-                    this.enabled = false;
+                } else {
+                    GUILayout.Label("Game has already started");
                 }
             }
             GUILayout.EndHorizontal();

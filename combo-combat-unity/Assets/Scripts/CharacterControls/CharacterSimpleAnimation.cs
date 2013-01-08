@@ -28,6 +28,8 @@ public class CharacterSimpleAnimation : MonoBehaviour {
             animation.CrossFade("Run");
         } else if (currentSpeed > 0.1) {
             animation.CrossFade("Run");
+        } else if (player.IsResting()) {
+            animation.CrossFade("Idle");
         } else {
             animation.CrossFade("Staff Stance");
         }

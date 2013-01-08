@@ -3,7 +3,10 @@ using System.Collections;
 
 public class GameConstants {
 
+    // game version
     public static string gameVersion = "alpha-1.7.5";
+
+    // groups
     public static int MAGE_GROUP = 0;
     public static int FIREBALL_GROUP = 1;
     public static int HEART_GROUP = 2;
@@ -31,5 +34,9 @@ public class GameConstants {
     public static int CLIENT_WIN_ID = 1;
     public static int TOOLTIP_WIN_ID = 2;
     public static int CHAT_WIN_ID = 3;
+
+
+    // network 
+    public static NetworkPlayer NO_PLAYER = new NetworkPlayer();
 
 }

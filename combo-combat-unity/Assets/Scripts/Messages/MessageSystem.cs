@@ -24,7 +24,6 @@ public class MessageSystem : MonoBehaviour {
     private List<ChatEntry> entries = new List<ChatEntry>();
     private string chatUsername;
 
-    private NetworkPlayer NO_PLAYER = new NetworkPlayer();
     private string lastFocusedGUI;
 
     class ChatEntry {
@@ -63,7 +62,7 @@ public class MessageSystem : MonoBehaviour {
 
             if (GUI.GetNameOfFocusedControl() == CHAT_INPUT_NAME) {
                 if (inputField.Length > 0) {
-                    AddMessage(chatUsername, inputField, Color.white, NO_PLAYER, true);
+                    AddMessage(chatUsername, inputField, Color.white, GameConstants.NO_PLAYER, true);
                     inputField = "";
                 }
                 GUI.FocusControl("");
@@ -125,11 +124,11 @@ public class MessageSystem : MonoBehaviour {
     }
 
     public void AddSystemMessageSelf(string text) {
-        AddSystemMessage(text, NO_PLAYER, false);
+        AddSystemMessage(text, GameConstants.NO_PLAYER, false);
     }
 
     public void AddSystemMessageBroadcast(string text) {
-        AddSystemMessage(text, NO_PLAYER, true);
+        AddSystemMessage(text, GameConstants.NO_PLAYER, true);
     }
 
     // INTERNAL 
@@ -139,7 +138,7 @@ public class MessageSystem : MonoBehaviour {
 
     private void AddMessage(string sender, string text, Color color, NetworkPlayer player, bool broadcast) {
         Vector3 colorVec = new Vector3(color.r, color.g, color.b);
-        if (player.Equals(NO_PLAYER)) {
+        if (player.Equals(GameConstants.NO_PLAYER)) {
             if (broadcast) {
                 networkView.RPC("DoAddMessage", RPCMode.All, sender, text, colorVec);
             } else {
@@ -162,6 +161,7 @@ public class MessageSystem : MonoBehaviour {
         entry.text = text;
         entry.color = new Color(color.x, color.y, color.z);
         entries.Add(entry);
+        audio.Play();
 
         if (entries.Count > maxEntriesShown)
             entries.RemoveAt(0);

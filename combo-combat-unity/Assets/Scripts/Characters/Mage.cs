@@ -17,6 +17,9 @@ public class Mage : MonoBehaviour {
     private MageLifeController life;
 
     // movement
+    private bool isResting = true;
+    public float idleTimeUntilRest = 5f;
+    private float timeToRest = 0;
     public float walkingSpeed = 6f;
     public float gravityMagnitude = 20.0f;
     private CharacterController controller;
@@ -67,6 +70,10 @@ public class Mage : MonoBehaviour {
         return isMine;
     }
 
+    internal bool IsResting() {
+        return isResting;
+    }
+
     internal void TakeOwnership() {
         isMine = true;
     }
@@ -105,6 +112,15 @@ public class Mage : MonoBehaviour {
             }
             transform.LookAt(target);
             groundSpeed = walkingSpeed;
+        }
+        if (groundSpeed == 0) {
+            timeToRest += Time.deltaTime;
+            if (timeToRest >= idleTimeUntilRest) {
+                isResting = true;
+            }
+        } else {
+            timeToRest = 0;
+            isResting = false;
         }
     }
 
@@ -266,6 +282,14 @@ public class Mage : MonoBehaviour {
         target = Vector3.zero;
         isStunned = true;
         stunTimer = 0;
+    }
+
+    [RPC]
+    internal void StartRound() {
+        networkView.ClientsUnbuffered("StartRound");
+        if (IsMine()) {
+            GetComponent<UserInputController>().enabled = true;
+        }
     }
 
 }
