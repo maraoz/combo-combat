@@ -61,26 +61,26 @@ public class ConnectMasterServerScript : MonoBehaviour {
         connectionTestResult = Network.TestConnection();
     }
 
-    void DoStartServer() {
-        Network.InitializeServer(maxPlayersAllowed, serverPort, useNat);
-        MasterServer.RegisterHost(gameName, serverName, serverComment);
-    }
-
     void Start() {
         usernameField = PlayerPrefs.GetString(GameConstants.PREFS_USERNAME);
         if (usernameField == "") {
             usernameField = DEFAULT_USERNAME;
         }
-        if (allowsDedicatedServer && IsBatchMode()) {
-            DoStartServer();
-        }
         string[] args = System.Environment.GetCommandLineArgs();
-        for (int i = 0; i < args.Length; i++ ) {
-            if (args[i] == "-n") {
+        for (int i = 0; i < args.Length; i++) {
+            if (args[i].Equals("-n")) {
                 maxPlayersAllowed = Int32.Parse(args[i + 1]);
                 break;
             }
         }
+        if (allowsDedicatedServer && IsBatchMode()) {
+            DoStartServer();
+        }
+    }
+
+    void DoStartServer() {
+        Network.InitializeServer(maxPlayersAllowed, serverPort, useNat);
+        MasterServer.RegisterHost(gameName, serverName, serverComment);
     }
 
     void Update() {
