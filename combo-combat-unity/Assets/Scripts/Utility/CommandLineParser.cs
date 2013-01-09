@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class CommandLineParser : MonoBehaviour {
+public class CommandLineParser : PersistentSingleton {
 
     public int defaultMaxPlayersAllowedFree = 32;
     public int defaultMaxPlayersAllowedMatch = 4;
@@ -18,7 +18,8 @@ public class CommandLineParser : MonoBehaviour {
     private static string serverComment;
     private static int serverPort = -1;
 
-    void Awake() {
+    override internal void Awake() {
+        base.Awake();
 
         isBatchMode = false;
         isFreeMode = defaultIsFreeMode;

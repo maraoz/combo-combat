@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class GuiUtilsFocusUpdater : MonoBehaviour {
+public class GuiUtilsFocusUpdater : PersistentSingleton {
 
-    void Awake() {
-        DontDestroyOnLoad(gameObject);
+    override internal void Awake() {
+        base.Awake();
     }
 
     void OnGUI() {

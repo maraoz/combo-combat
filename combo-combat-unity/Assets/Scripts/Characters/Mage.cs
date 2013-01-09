@@ -249,7 +249,7 @@ public class Mage : MonoBehaviour {
     // RPCS
     [RPC]
     internal void PlanMove(Vector3 currentPosition, Vector3 targetPosition) {
-        networkView.Clients("PlanMove", currentPosition, targetPosition);
+        networkView.ClientsUnbuffered("PlanMove", currentPosition, targetPosition);
         transform.position = currentPosition; // TODO: A interpolate between current and updated?
         // TODO: B interpolate towards target with time elapsed??
         target = targetPosition;
@@ -257,14 +257,14 @@ public class Mage : MonoBehaviour {
 
     [RPC]
     internal void PlanStop(Vector3 currentPosition) {
-        networkView.Clients("PlanStop", currentPosition);
+        networkView.ClientsUnbuffered("PlanStop", currentPosition);
         transform.position = currentPosition; // TODO: A interpolate between current and updated?
         target = Vector3.zero;
     }
 
     [RPC]
     internal void ApplyKnockback(Vector3 currentPosition, Vector3 force) {
-        networkView.Clients("ApplyKnockback", currentPosition, force);
+        networkView.ClientsUnbuffered("ApplyKnockback", currentPosition, force);
         transform.position = currentPosition; // TODO: A interpolate between current and updated?
         // TODO: C interpolate applying force with time elapsed??
         externalForce += force;
@@ -272,7 +272,7 @@ public class Mage : MonoBehaviour {
 
     [RPC]
     internal void LookAt(Vector3 currentPosition, Vector3 target) {
-        networkView.Clients("LookAt", currentPosition, target);
+        networkView.ClientsUnbuffered("LookAt", currentPosition, target);
         transform.position = currentPosition;
         transform.LookAt(target);
     }

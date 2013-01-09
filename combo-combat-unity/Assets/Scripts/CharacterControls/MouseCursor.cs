@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class MouseCursor : MonoBehaviour {
+public class MouseCursor : PersistentSingleton {
 
     public static Texture2D defaultCursor;
     public static Texture2D attackCursor;
@@ -13,8 +13,8 @@ public class MouseCursor : MonoBehaviour {
     public float timeToStart = 1.0f;
     private float timePast;
 
-    void Awake() {
-        DontDestroyOnLoad(gameObject);
+    override internal void Awake() {
+        base.Awake();
         defaultCursor = _defaultCursor;
         attackCursor = _attackCursor;
         timePast = 0f;

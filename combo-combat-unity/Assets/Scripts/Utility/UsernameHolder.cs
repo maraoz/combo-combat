@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class UsernameHolder : MonoBehaviour {
+public class UsernameHolder : PersistentSingleton {
 
     private string username = "Server";
 
-    void Awake() {
-        DontDestroyOnLoad(gameObject);
+    override internal void Awake() {
+        base.Awake();
     }
 
     public void SetUsername(string username) {

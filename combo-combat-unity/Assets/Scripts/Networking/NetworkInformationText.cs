@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class NetworkInformationText : MonoBehaviour {
+public class NetworkInformationText : PersistentSingleton {
 
     private Rect textPosition;
 
-    void Start() {
-        DontDestroyOnLoad(this);
+    override internal void Awake() {
+        base.Awake();
     }
 
     void OnGUI() {

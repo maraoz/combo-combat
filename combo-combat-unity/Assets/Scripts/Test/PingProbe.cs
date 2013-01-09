@@ -1,15 +1,16 @@
 using UnityEngine;
 using System.Collections;
 
-public class PingProbe : MonoBehaviour {
+public class PingProbe : PersistentSingleton {
 
     public float timeBetweenPings = 1;
 
     private bool pingSent;
     private float pingSentTimestamp;
     private float latency;
-    void Start() {
-        DontDestroyOnLoad(gameObject);
+
+    override internal void Awake() {
+        base.Awake();
         pingSent = false;
         pingSentTimestamp = 0;
         latency = 1;

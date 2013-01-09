@@ -1,14 +1,14 @@
 using UnityEngine;
 using System.Collections;
 
-public class GUISkinProvider : MonoBehaviour {
+public class GUISkinProvider : PersistentSingleton {
 
     public GUISkin guiSkin;
 
     private static GUISkinProvider instance;
 
-    void Awake() {
-        DontDestroyOnLoad(gameObject);
+    override internal void Awake() {
+        base.Awake();
         instance = this;
     }
 

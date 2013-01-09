@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class FullscreenHandler : MonoBehaviour {
+public class FullscreenHandler : PersistentSingleton {
 
     public Texture2D fullscreenOnTexture;
     public Texture2D fullscreenOffTexture;
@@ -9,8 +9,8 @@ public class FullscreenHandler : MonoBehaviour {
     private float width, height;
     private Resolution minimizedResolution;
 
-    void Awake() {
-        DontDestroyOnLoad(gameObject);
+    override internal void Awake() {
+        base.Awake();
         width = fullscreenOnTexture.width / 2;
         height = fullscreenOnTexture.height / 2;
         minimizedResolution = new Resolution();
