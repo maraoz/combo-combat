@@ -35,6 +35,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
 
     void OnFailedToConnect(NetworkConnectionError info) {
         Debug.Log(info);
+        this.enabled = true;
     }
 
     void OnGUI() {
@@ -209,6 +210,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 GUILayout.Width(100);
                 if (element.connectedPlayers < element.playerLimit) {
                     if (GUILayout.Button("Join Match", "ShortButton")) {
+                        RefreshServers();
                         PlayerPrefs.SetString(GameConstants.PREFS_USERNAME, usernameField);
                         // TESTINGWISE>
                         if (usernameField == "Manu") {
