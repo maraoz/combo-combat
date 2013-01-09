@@ -34,11 +34,11 @@ public class FireballController : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
         Collider other = collision.collider;
-        if (other.tag == GameConstants.HEART_TAG) {
+        if (other.tag == GameConstants.TAG_HEART) {
             return;
         }
         if (Network.isServer) {
-            if (other.tag == GameConstants.MAGE_TAG) {
+            if (other.tag == GameConstants.TAG_MAGE) {
                 Mage mage = other.gameObject.GetComponent<Mage>();
                 MageLifeController mageLife = other.gameObject.GetComponent<MageLifeController>();
                 mageLife.DoDamage(damage, caster);

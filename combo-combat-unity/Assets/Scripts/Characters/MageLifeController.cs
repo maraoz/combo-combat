@@ -3,6 +3,13 @@ using System.Collections;
 
 public class MageLifeController : MonoBehaviour {
 
+
+    // match
+    private MatchDirector matchDirector;
+    public int lifeCount = 3;
+    private int livesLeft;
+    private bool isFreeMode;
+
     // lifebar
     public Texture backgroundTexture;
     public Texture foregroundTexture;
@@ -15,7 +22,7 @@ public class MageLifeController : MonoBehaviour {
     private Mage mage;
     private string username;
     private float life;
-    private int level;
+    private int kills;
 
     // death
     private bool isDying = false;
@@ -27,8 +34,15 @@ public class MageLifeController : MonoBehaviour {
 
     void Awake() {
         RestartLife();
+        livesLeft = lifeCount;
         mage = GetComponent<Mage>();
         messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
+    }
+
+    [RPC]
+    public void SetFreeMode(bool freeMode) {
+        networkView.Clients("SetFreeMode", freeMode);
+        isFreeMode = freeMode;
     }
 
     public string GetUsername() {
@@ -37,6 +51,10 @@ public class MageLifeController : MonoBehaviour {
 
     public bool IsDying() {
         return isDying;
+    }
+
+    public void SetMatchDirector(MatchDirector director) {
+        this.matchDirector = director;
     }
 
     [RPC]
@@ -50,7 +68,7 @@ public class MageLifeController : MonoBehaviour {
     }
 
     void Update() {
-        if (isDying) {
+        if (isDying && livesLeft > 0) {
             deathTimeSpent += Time.deltaTime;
             if (deathTimeSpent >= deathTime) {
                 Respawn();
@@ -74,11 +92,13 @@ public class MageLifeController : MonoBehaviour {
     public void RestartLife() {
         isDying = false;
         life = maxLife;
-        level = 0;
+        if (isFreeMode) {
+            kills = 0;
+        }
     }
 
-    void LevelUp() {
-        level += 1;
+    void AddKill() {
+        kills += 1;
     }
 
     public void DoDamage(float damage, MageLifeController source) {
@@ -87,7 +107,7 @@ public class MageLifeController : MonoBehaviour {
             if (life <= 0) {
                 life = 0;
                 if (source != null) {
-                    source.LevelUp();
+                    source.AddKill();
                 }
                 DoDie();
             }
@@ -99,9 +119,8 @@ public class MageLifeController : MonoBehaviour {
 
     [RPC]
     void DoDie() {
-        if (!networkView.ClientsUnbuffered("DoDie")) {
-            // server
-            messages.AddSystemMessageTo(mage.GetPlayer(), "You died. Please wait " + deathTime + " seconds to respawn.");
+        if (!isFreeMode) {
+            livesLeft -= 1;
         }
         // all
         mage.OnDied();
@@ -109,6 +128,21 @@ public class MageLifeController : MonoBehaviour {
         if (mage.IsMine()) {
             // owner player
             Camera.main.GetComponent<IsometricCamera>().SetGrayscale(true);
+        }
+        if (!networkView.ClientsUnbuffered("DoDie")) {
+            // server
+            if (livesLeft == 0) {
+                matchDirector.OnPlayerLost();
+            }
+            if (livesLeft > 0) {
+                messages.AddSystemMessageTo(mage.GetPlayer(), "You died. Please wait " + deathTime + " seconds to respawn.");
+            } else {
+                messages.AddSystemMessageTo(mage.GetPlayer(), "You have no more lives left.");
+            }
+            if (!isFreeMode) {
+                messages.AddSystemMessageTo(mage.GetPlayer(), livesLeft + " " + (livesLeft == 1 ? "life" : "lives") + " left.");
+            }
+
         }
     }
 
@@ -122,22 +156,23 @@ public class MageLifeController : MonoBehaviour {
         GUIStyle centeredStyle = new GUIStyle(GUI.skin.label);
         centeredStyle.alignment = TextAnchor.UpperCenter;
         centeredStyle.normal.textColor = Color.black;
-        GUI.Label(new Rect(pos.x - healthBarLength * 2, Screen.height - pos.y - 20, healthBarLength * 4, 50), username + " (" + level + ")", centeredStyle);
+        GUI.Label(new Rect(pos.x - healthBarLength * 2, Screen.height - pos.y - 20, healthBarLength * 4, 50), username + " (" + kills + ")", centeredStyle);
+
     }
 
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
         if (stream.isWriting) {
             float sendLife = life;
-            int sendLevel = level;
+            int sendKills = kills;
             stream.Serialize(ref sendLife);
-            stream.Serialize(ref sendLevel);
+            stream.Serialize(ref sendKills);
         } else {
             float rcvLife = 0;
-            int rcvLevel = 0;
+            int rcvKills = 0;
             stream.Serialize(ref rcvLife);
-            stream.Serialize(ref rcvLevel);
+            stream.Serialize(ref rcvKills);
             life = rcvLife;
-            level = rcvLevel;
+            kills = rcvKills;
         }
 
     }

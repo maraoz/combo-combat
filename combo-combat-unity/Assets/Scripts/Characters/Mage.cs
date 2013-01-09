@@ -174,10 +174,12 @@ public class Mage : MonoBehaviour {
     }
 
     public void OnDied() {
+        controller.enabled = false;
         enabled = false;
     }
 
     public void OnRespawn() {
+        controller.enabled = true;
         enabled = true;
         externalForce = Vector3.zero;
         externalVelocity = Vector3.zero;
@@ -219,11 +221,11 @@ public class Mage : MonoBehaviour {
     void OnControllerColliderHit(ControllerColliderHit hit) {
         Collider other = hit.collider;
         if (Network.isServer) {
-            if (other.tag == GameConstants.WALL_TAG) {
+            if (other.tag == GameConstants.TAG_WALL) {
                 if (!IsStunned() && GetSpeed() >= stunMinSpeed) {
                     ApplyStun(transform.position);
                 }
-            } else if (other.tag == GameConstants.GRENADE_TAG) {
+            } else if (other.tag == GameConstants.TAG_GRENADE) {
                 other.gameObject.GetComponent<GrenadeController>()
                     .AddForce(other.gameObject.transform.position,
                     other.gameObject.transform.rotation,

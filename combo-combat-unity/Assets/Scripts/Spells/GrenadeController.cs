@@ -28,7 +28,7 @@ public class GrenadeController : MonoBehaviour {
         secondsPast += Time.deltaTime;
         if (secondsPast >= secondsUntilExhaust) {
             if (Network.isServer) {
-                GameObject[] mages = GameObject.FindGameObjectsWithTag(GameConstants.MAGE_TAG);
+                GameObject[] mages = GameObject.FindGameObjectsWithTag(GameConstants.TAG_MAGE);
                 foreach (GameObject mageObject in mages) {
                     float dist = Vector3.Distance(mageObject.transform.position, transform.position);
                     if (dist < explosionRadius) {

@@ -16,8 +16,8 @@ public class NetworkLevelLoad : MonoBehaviour {
     }
 
     void LoadArenaLevel() {
-        Network.SetLevelPrefix(1);
-        Application.LoadLevel("ComboGame");
+        Network.SetLevelPrefix(GameConstants.LEVEL_PREFIX_MATCH);
+        Application.LoadLevel(GameConstants.LEVEL_MATCH);
     }
 
 }

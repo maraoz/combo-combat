@@ -73,7 +73,7 @@ public class MessageSystem : MonoBehaviour {
 
         if (showChat) {
             chatRect = new Rect(chatHPad, Screen.height - (chatVPad + chatWindowHeight), chatWidth, chatWindowHeight);
-            GUILayout.Window(GameConstants.CHAT_WIN_ID, chatRect, MakeChatWindow, "", new GUIStyle());
+            GUILayout.Window(GameConstants.WIN_ID_CHAT, chatRect, MakeChatWindow, "", new GUIStyle());
         }
 
         // GUI Focused update

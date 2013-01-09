@@ -56,7 +56,7 @@ public class DeathrayController : MonoBehaviour {
             RaycastHit[] hits = Physics.SphereCastAll(origin, rayDamageWidth, transform.forward, rayLength);
             foreach (RaycastHit hit in hits) {
                 Collider other = hit.collider;
-                if (other.tag == GameConstants.MAGE_TAG) {
+                if (other.tag == GameConstants.TAG_MAGE) {
                     MageLifeController mageLife = other.gameObject.GetComponent<MageLifeController>();
                     mageLife.DoDamage(damage, caster);
                 }

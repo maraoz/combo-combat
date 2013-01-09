@@ -16,8 +16,8 @@ public class FireballCaster : SpellCaster {
             Vector3 forward = transform.TransformDirection(Vector3.forward);
             Vector3 right = transform.TransformDirection(Vector3.right);
             Vector3 spawnPosition = transform.position + (1.5f * forward) + (1f * Vector3.up) + (0.0f * right);
-            GameObject casted = Network.Instantiate(fireball, spawnPosition, transform.rotation, GameConstants.FIREBALL_GROUP) as GameObject;
-            Network.RemoveRPCsInGroup(GameConstants.FIREBALL_GROUP);
+            GameObject casted = Network.Instantiate(fireball, spawnPosition, transform.rotation, GameConstants.GROUP_FIREBALL) as GameObject;
+            Network.RemoveRPCsInGroup(GameConstants.GROUP_FIREBALL);
             casted.GetComponent<FireballController>().SetCaster(GetComponent<MageLifeController>());
         }
     }

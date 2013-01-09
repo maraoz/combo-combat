@@ -6,7 +6,7 @@ public class MageHeartCollider : MonoBehaviour {
     public GameObject effect;
 
     void OnControllerColliderHit(ControllerColliderHit hit) {
-        if (hit.collider.tag == GameConstants.HEART_TAG) {
+        if (hit.collider.tag == GameConstants.TAG_HEART) {
             if (effect != null) {
                 GameObject instance = GameObject.Instantiate(effect, transform.position, Quaternion.identity) as GameObject;
                 instance.transform.parent = transform;

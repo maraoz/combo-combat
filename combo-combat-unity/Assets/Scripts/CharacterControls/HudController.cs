@@ -112,7 +112,7 @@ public class HudController : MonoBehaviour {
         if (showTooltip) {
             Vector3 mousePos = Input.mousePosition;
             tooltipRect = new Rect(mousePos.x, Screen.height - mousePos.y - tooltipHeight, tooltipWidth, tooltipHeight);
-            GUILayout.Window(GameConstants.TOOLTIP_WIN_ID, tooltipRect, MakeTooltipWindow, "", GUI.skin.GetStyle("Box"));
+            GUILayout.Window(GameConstants.WIN_ID_TOOLTIP, tooltipRect, MakeTooltipWindow, "", GUI.skin.GetStyle("Box"));
         }
         if (currentTooltip != "" && !showTooltip) {
             showTooltip = true;

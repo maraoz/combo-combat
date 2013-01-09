@@ -6,10 +6,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
 
 
     public string gameName = "You must change this";
-    public int serverPort = 25002;
     public bool allowsDedicatedServer = false;
-    public string serverName = "Server Name";
-    public string serverComment = "Server Comment";
     public GUISkin customSkin;
     public int maxUsernameLength = 20;
     public string DEFAULT_USERNAME = "Player";
@@ -30,7 +27,6 @@ public class ConnectMasterServerScript : MonoBehaviour {
     private string testMessage = "Undetermined NAT capabilities";
     private string USERNAME_INPUT_NAME = "Username text field";
     private string usernameField = "";
-    private int maxPlayersAllowed;
 
 
     void OnFailedToConnectToMasterServer(NetworkConnectionError info) {
@@ -51,10 +47,10 @@ public class ConnectMasterServerScript : MonoBehaviour {
         }
         serverListRect = new Rect(Screen.width / 2 - Screen.width * 0.45f, serverListY, Screen.width * 0.9f, serverListHeight);
         if (Network.peerType == NetworkPeerType.Disconnected || Network.isServer) {
-            windowRect = GUILayout.Window(GameConstants.SERVER_WIN_ID, windowRect, MakeWindow, "");
+            windowRect = GUILayout.Window(GameConstants.WIN_ID_SERVER, windowRect, MakeWindow, "");
         }
         if (Network.peerType == NetworkPeerType.Disconnected)
-            serverListRect = GUILayout.Window(GameConstants.CLIENT_WIN_ID, serverListRect, MakeClientWindow, "");
+            serverListRect = GUILayout.Window(GameConstants.WIN_ID_CLIENT, serverListRect, MakeClientWindow, "");
     }
 
     void Awake() {
@@ -66,15 +62,14 @@ public class ConnectMasterServerScript : MonoBehaviour {
         if (usernameField == "") {
             usernameField = DEFAULT_USERNAME;
         }
-        maxPlayersAllowed = CommandLineParser.GetMaxPlayersAllowed();
         if (allowsDedicatedServer && CommandLineParser.IsBatchMode()) {
             DoStartServer();
         }
     }
 
     void DoStartServer() {
-        Network.InitializeServer(maxPlayersAllowed, serverPort, useNat);
-        MasterServer.RegisterHost(gameName, serverName, serverComment);
+        Network.InitializeServer(CommandLineParser.GetMaxPlayersAllowed(), CommandLineParser.GetServerPort(), useNat);
+        MasterServer.RegisterHost(gameName, CommandLineParser.GetServerName(), CommandLineParser.GetServerComment());
     }
 
     void Update() {
@@ -109,7 +104,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
             // This case is a bit special as we now need to check if we can 
             // circumvent the blocking by using NAT punchthrough
             case ConnectionTesterStatus.PublicIPPortBlocked:
-                testMessage = "Non-connectble public IP address (port " + serverPort + " blocked), running a server is impossible.";
+                testMessage = "Non-connectble public IP address (port " + CommandLineParser.GetServerPort() + " blocked), running a server is impossible.";
                 useNat = false;
                 // If no NAT punchthrough test has been performed on this public IP, force a test
                 if (!probingPublicIP) {
@@ -193,11 +188,11 @@ public class ConnectMasterServerScript : MonoBehaviour {
     }
 
     void MakeClientWindow(int id) {
-        GUILayout.Space(5);
+        GUILayout.Space(25);
 
         HostData[] data = MasterServer.PollHostList();
         foreach (HostData element in data) {
-            GUILayout.Space(20);
+            GUILayout.Space(10);
             GUILayout.BeginHorizontal();
 
 
@@ -208,29 +203,12 @@ public class ConnectMasterServerScript : MonoBehaviour {
                 GUILayout.Space(5);
                 GUILayout.Label(connections);
                 GUILayout.Space(5);
-                var hostInfo = "";
-
-                // Indicate if NAT punchthrough will be performed
-                if (element.useNat) {
-                    GUILayout.Label("NAT");
-                    GUILayout.Space(5);
-                }
-                // Here we display all IP addresses, there can be multiple in cases where
-                // internal LAN connections are being attempted. In the GUI we could just display
-                // the first one in order not confuse the end user, but internally Unity will
-                // do a connection check on all IP addresses in the element.ip list, and connect to the
-                // first valid one.
-                foreach (string host in element.ip)
-                    hostInfo = hostInfo + host + ":" + element.port + " ";
-
-                GUILayout.Label(hostInfo);
-                GUILayout.Space(5);
                 GUILayout.Label(element.comment);
                 GUILayout.Space(5);
                 GUILayout.FlexibleSpace();
                 GUILayout.Width(100);
                 if (element.connectedPlayers < element.playerLimit) {
-                    if (GUILayout.Button("Join Game", "ShortButton")) {
+                    if (GUILayout.Button("Join Match", "ShortButton")) {
                         PlayerPrefs.SetString(GameConstants.PREFS_USERNAME, usernameField);
                         // TESTINGWISE>
                         if (usernameField == "Manu") {
@@ -241,7 +219,7 @@ public class ConnectMasterServerScript : MonoBehaviour {
                         this.enabled = false;
                     }
                 } else {
-                    GUILayout.Label("Game has already started");
+                    GUILayout.Label("Match has already started");
                 }
             }
             GUILayout.EndHorizontal();

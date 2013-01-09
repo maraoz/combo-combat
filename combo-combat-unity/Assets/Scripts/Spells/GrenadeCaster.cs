@@ -15,8 +15,8 @@ public class GrenadeCaster : SpellCaster {
         if (Network.isServer) {
             Vector3 forward = transform.TransformDirection(Vector3.forward);
             Vector3 spawnPosition = transform.position + (1f * forward) + (1f * Vector3.up);
-            GameObject casted = Network.Instantiate(grenade, spawnPosition, transform.rotation, GameConstants.GRENADE_GROUP) as GameObject;
-            Network.RemoveRPCsInGroup(GameConstants.GRENADE_GROUP);
+            GameObject casted = Network.Instantiate(grenade, spawnPosition, transform.rotation, GameConstants.GROUP_GRENADE) as GameObject;
+            Network.RemoveRPCsInGroup(GameConstants.GROUP_GRENADE);
             casted.GetComponent<GrenadeController>().SetCaster(GetComponent<MageLifeController>());
         }
     }

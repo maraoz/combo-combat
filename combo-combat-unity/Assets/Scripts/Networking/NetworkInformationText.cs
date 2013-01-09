@@ -14,7 +14,7 @@ public class NetworkInformationText : MonoBehaviour {
         if (Network.isServer)
             GUI.Label(textPosition, "Running as a dedicated server");
         if (Network.isClient) {
-            GUI.Label(textPosition, "Combo Combat version " + GameConstants.gameVersion);
+            GUI.Label(textPosition, "Combo Combat version " + GameConstants.GAME_VERSION);
         }
     }
 }

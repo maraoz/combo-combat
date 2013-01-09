@@ -4,14 +4,26 @@ using System;
 
 public class CommandLineParser : MonoBehaviour {
 
+    public int defaultMaxPlayersAllowedFree = 32;
+    public int defaultMaxPlayersAllowedMatch = 4;
+    public string defaultServerName = "Default ";
+    public string defaultServerComment = "Argentina {0} mode game.";
+    public int defaultServerPort = 34200;
+    public bool defaultIsFreeMode = true;
 
-    private static int maxPlayersAllowed = 32;
-    private static bool isFreeMode = true;
-    private static bool isBatchMode = false;
-
-
+    private static int maxPlayersAllowed = -1;
+    private static bool isFreeMode;
+    private static bool isBatchMode;
+    private static string serverName;
+    private static string serverComment;
+    private static int serverPort = -1;
 
     void Awake() {
+
+        isBatchMode = false;
+        isFreeMode = defaultIsFreeMode;
+        serverPort = defaultServerPort;
+
 
         DontDestroyOnLoad(gameObject);
         string[] args = System.Environment.GetCommandLineArgs();
@@ -22,11 +34,36 @@ public class CommandLineParser : MonoBehaviour {
             }
             if (args[i].Equals("-batchmode")) {
                 isBatchMode = true;
+                break;
             }
             if (args[i].Equals("-matchmode")) {
                 isFreeMode = false;
+                break;
+            }
+            if (args[i].Equals("-name")) {
+                serverName = args[i + 1];
+                break;
+            }
+            if (args[i].Equals("-comment")) {
+                serverComment = args[i + 1];
+                break;
+            }
+            if (args[i].Equals("-p")) {
+                serverPort = Int32.Parse(args[i + 1]);
+                break;
             }
         }
+
+        if (maxPlayersAllowed == -1) {
+            maxPlayersAllowed = isFreeMode ? defaultMaxPlayersAllowedFree : defaultMaxPlayersAllowedMatch;
+        }
+        if (serverName == null) {
+            serverName = defaultServerName + (isFreeMode ? "Free Mode" : "Match Mode");
+        }
+        if (serverComment == null) {
+            serverComment = String.Format(defaultServerComment, isFreeMode ? "free" : "match");
+        }
+
 
     }
 
@@ -40,5 +77,17 @@ public class CommandLineParser : MonoBehaviour {
 
     internal static bool IsFreeMode() {
         return isFreeMode;
+    }
+
+    internal static string GetServerName() {
+        return serverName;
+    }
+
+    internal static string GetServerComment() {
+        return serverComment;
+    }
+
+    internal static int GetServerPort() {
+        return serverPort;
     }
 }
