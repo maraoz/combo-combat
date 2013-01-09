@@ -31,27 +31,16 @@ public class CommandLineParser : PersistentSingleton {
         for (int i = 0; i < args.Length; i++) {
             if (args[i].Equals("-n")) {
                 maxPlayersAllowed = Int32.Parse(args[i + 1]);
-                break;
-            }
-            if (args[i].Equals("-batchmode")) {
+            } else if (args[i].Equals("-batchmode")) {
                 isBatchMode = true;
-                break;
-            }
-            if (args[i].Equals("-matchmode")) {
+            } else if (args[i].Equals("-matchmode")) {
                 isFreeMode = false;
-                break;
-            }
-            if (args[i].Equals("-name")) {
+            } else if (args[i].Equals("-name")) {
                 serverName = args[i + 1];
-                break;
-            }
-            if (args[i].Equals("-comment")) {
+            } else if (args[i].Equals("-comment")) {
                 serverComment = args[i + 1];
-                break;
-            }
-            if (args[i].Equals("-p")) {
+            } else if (args[i].Equals("-p")) {
                 serverPort = Int32.Parse(args[i + 1]);
-                break;
             }
         }
 
