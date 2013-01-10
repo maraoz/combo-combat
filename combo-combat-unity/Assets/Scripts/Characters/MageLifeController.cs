@@ -34,6 +34,7 @@ public class MageLifeController : MonoBehaviour {
 
     void Awake() {
         RestartLife();
+        matchDirector = FindObjectOfType(typeof(MatchDirector)) as MatchDirector;
         livesLeft = lifeCount;
         mage = GetComponent<Mage>();
         messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
@@ -51,10 +52,6 @@ public class MageLifeController : MonoBehaviour {
 
     public bool IsDying() {
         return isDying;
-    }
-
-    public void SetMatchDirector(MatchDirector director) {
-        this.matchDirector = director;
     }
 
     [RPC]

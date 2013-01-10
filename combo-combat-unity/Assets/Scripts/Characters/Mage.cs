@@ -6,6 +6,9 @@ using System.Collections.Generic;
 public class Mage : MonoBehaviour {
 
 
+    // match
+    private MatchDirector matchDirector;
+
     // network
     private NetworkPlayer owner; // set only in server
     private bool isMine;
@@ -48,6 +51,7 @@ public class Mage : MonoBehaviour {
     private GrenadeCaster grenadeCaster;
 
     void Awake() {
+        matchDirector = FindObjectOfType(typeof(MatchDirector)) as MatchDirector;
         messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
         life = GetComponent<MageLifeController>();
         controller = GetComponent<CharacterController>();
@@ -288,9 +292,9 @@ public class Mage : MonoBehaviour {
 
     [RPC]
     internal void StartRound() {
-        networkView.ClientsUnbuffered("StartRound");
         if (IsMine()) {
             GetComponent<UserInputController>().enabled = true;
+            matchDirector.SetMatchStarted();
         }
     }
 

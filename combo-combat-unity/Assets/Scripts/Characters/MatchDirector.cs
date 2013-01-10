@@ -18,6 +18,7 @@ public class MatchDirector : MonoBehaviour {
     private int showWinMessage = 0;
     public float endMatchWait = 10;
     private float endMatchTime;
+    private bool matchStarted;
 
     private GUIStyle signStyle;
     private AudioSource beepSound;
@@ -44,12 +45,17 @@ public class MatchDirector : MonoBehaviour {
             deadPlayerCount = 0;
             playerCount = 0;
             endMatchTime = 0;
+            matchStarted = false;
             SetMatchMode(Network.maxConnections, CommandLineParser.IsFreeMode());
         }
         if (Network.isClient) {
             string username = UsernameHolder.MyUsername();
             networkView.RPC("SpawnMage", RPCMode.Server, username); // need NetworkMessageInfo
         }
+    }
+
+    internal void SetMatchStarted() {
+        matchStarted = true;
     }
 
     void ResetGameTimer() {
@@ -73,11 +79,12 @@ public class MatchDirector : MonoBehaviour {
             }
             if (secondsRemaining == 0) {
                 ResetGameTimer();
+                matchStarted = true;
                 messages.AddSystemMessageSelf("Round started!");
                 GameObject[] mages = GameObject.FindGameObjectsWithTag(GameConstants.TAG_MAGE);
                 foreach (GameObject mage in mages) {
                     gongSound.Play();
-                    mage.GetComponent<Mage>().StartRound();
+                    mage.networkView.RPC("StartRound", mage.GetComponent<Mage>().GetPlayer());
                 }
             }
         }
@@ -95,9 +102,11 @@ public class MatchDirector : MonoBehaviour {
             GUILayout.BeginVertical();
             GUILayout.Space(200);
             if (showWinMessage == 0) {
-                GUILayout.Label("Waiting for other players to join.", signStyle, GUILayout.Width(Screen.width));
-                int delta = (players.Length - playerCount);
-                GUILayout.Label(delta + " more player" + (delta == 1 ? "" : "s") + " needed", signStyle, GUILayout.Width(Screen.width));
+                if (!matchStarted) {
+                    GUILayout.Label("Waiting for other players to join.", signStyle, GUILayout.Width(Screen.width));
+                    int delta = (players.Length - playerCount);
+                    GUILayout.Label(delta + " more player" + (delta == 1 ? "" : "s") + " needed", signStyle, GUILayout.Width(Screen.width));
+                }
             } else {
                 string message = showWinMessage == WIN_MESSAGE ? "won" : "lost";
                 GUILayout.Label("You have " + message + " the match!", signStyle, GUILayout.Width(Screen.width));
@@ -113,6 +122,9 @@ public class MatchDirector : MonoBehaviour {
             if (playerCount >= players.Length) {
                 return;
             }
+            if (matchStarted) {
+                return;
+            }
             for (int i = 0; i < players.Length; i++) {
                 if (players[i] == GameConstants.NO_PLAYER) {
                     messages.AddSystemMessageBroadcast(username + " connected.");
@@ -122,7 +134,7 @@ public class MatchDirector : MonoBehaviour {
                         SetPlayerCurrentCount(playerCount + 1);
                         messages.AddSystemMessageTo(info.sender, "Welcome to match mode. You have " + 3 + " lives. Last mage standing wins the match.");
                     } else {
-                        messages.AddSystemMessageTo(info.sender, "Welcome to free mode. You have infinite lives. You can't win in this game mode.");
+                        messages.AddSystemMessageTo(info.sender, "Welcome to free mode, where you can try out spells. You have infinite lives.");
                     }
                     break;
                 }
@@ -146,7 +158,6 @@ public class MatchDirector : MonoBehaviour {
         life.SetFreeMode(isFreeMode);
         life.SetUsername(username);
         life.SetSpawnPosition(pos);
-        life.SetMatchDirector(this);
         if (isFreeMode) {
             mage.StartRound();
         }
@@ -232,6 +243,7 @@ public class MatchDirector : MonoBehaviour {
             ResetGameTimer();
             deadPlayerCount = 0;
             endMatchTime = 0;
+            matchStarted = false;
         }
     }
 
