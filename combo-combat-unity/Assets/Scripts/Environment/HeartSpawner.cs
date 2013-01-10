@@ -24,7 +24,7 @@ public class HeartSpawner : MonoBehaviour {
             int players = Network.connections.Length;
             if (GameObject.FindGameObjectsWithTag(GameConstants.TAG_HEART).Length < heartsPerMage * players) {
                 Vector3 pos = new Vector3(transform.position.x + Random.Range(-range, range),
-                    transform.position.y-170,
+                    transform.position.y,
                     transform.position.z + Random.Range(-range, range));
                 Network.Instantiate(heartPrefab, pos, Quaternion.identity, GameConstants.GROUP_HEART);
             }

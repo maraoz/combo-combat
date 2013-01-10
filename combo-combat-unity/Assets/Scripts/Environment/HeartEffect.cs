@@ -20,7 +20,6 @@ public class HeartEffect : MonoBehaviour {
         transform.rotation = initialOrientation;
         currentDuration += Time.deltaTime;
         if (currentDuration >= duration && currentDuration < duration2) {
-            //Destroy(gameObject);
             foreach (Transform t in transform) {
                 ParticleEmitter emitter = t.particleEmitter;
                 if (emitter != null) {

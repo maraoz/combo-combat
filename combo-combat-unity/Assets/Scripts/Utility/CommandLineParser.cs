@@ -10,6 +10,7 @@ public class CommandLineParser : PersistentSingleton {
     public string defaultServerComment = "Argentina {0} mode game.";
     public int defaultServerPort = 34200;
     public bool defaultIsFreeMode = true;
+    public bool defaultIsDynamicPort = true;
 
     private static int maxPlayersAllowed = -1;
     private static bool isFreeMode;
@@ -25,6 +26,7 @@ public class CommandLineParser : PersistentSingleton {
         isBatchMode = false;
         isFreeMode = defaultIsFreeMode;
         serverPort = defaultServerPort;
+        dynamicPort = defaultIsDynamicPort;
 
 
         string[] args = System.Environment.GetCommandLineArgs();

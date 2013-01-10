@@ -119,10 +119,10 @@ public class UserInputController : MonoBehaviour {
                 }
                 // click feedback
                 if (hitInfo.collider != null && (rightDown || leftDown)) {
-                    Vector3 clickFeedbackPosition = hitInfo.point + Vector3.up * 0.1f;
+                    Vector3 clickFeedbackPosition = hitInfo.point + Vector3.up * 0.04f;
                     if (giveFeedback) {
                         GameObject feedback = GameObject.Instantiate(clickFeedback, clickFeedbackPosition, Quaternion.identity) as GameObject;
-                        feedback.GetComponent<ClickFeedback>().SetColor(leftDown ? Color.red : Color.green);
+                        feedback.GetComponent<ClickFeedback>().SetColor(leftDown ? Color.red : Color.white);
                     }
                 }
             }
