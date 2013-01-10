@@ -69,7 +69,22 @@ public class ConnectMasterServerScript : MonoBehaviour {
     }
 
     void DoStartServer() {
-        Network.InitializeServer(CommandLineParser.GetMaxPlayersAllowed(), CommandLineParser.GetServerPort(), useNat);
+
+        NetworkConnectionError error = NetworkConnectionError.CreateSocketOrThreadFailure;
+        int port = CommandLineParser.GetServerPort();
+        while (error != NetworkConnectionError.NoError) {
+            error = Network.InitializeServer(CommandLineParser.GetMaxPlayersAllowed(), port, useNat);
+            if (CommandLineParser.IsDynamicPort()) {
+                port += 1;
+            } else {
+                if (error != NetworkConnectionError.NoError)
+                    Debug.LogError(error);
+                break;
+            }
+            if (port > CommandLineParser.GetServerPort() + 100) {
+                break; // timeout
+            }
+        }
         MasterServer.RegisterHost(gameName, CommandLineParser.GetServerName(), CommandLineParser.GetServerComment());
     }
 

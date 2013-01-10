@@ -17,6 +17,7 @@ public class CommandLineParser : PersistentSingleton {
     private static string serverName;
     private static string serverComment;
     private static int serverPort = -1;
+    private static bool dynamicPort;
 
     override internal void Awake() {
         base.Awake();
@@ -26,7 +27,6 @@ public class CommandLineParser : PersistentSingleton {
         serverPort = defaultServerPort;
 
 
-        DontDestroyOnLoad(gameObject);
         string[] args = System.Environment.GetCommandLineArgs();
         for (int i = 0; i < args.Length; i++) {
             if (args[i].Equals("-n")) {
@@ -41,6 +41,8 @@ public class CommandLineParser : PersistentSingleton {
                 serverComment = args[i + 1];
             } else if (args[i].Equals("-p")) {
                 serverPort = Int32.Parse(args[i + 1]);
+            } else if (args[i].Equals("-dynport")) {
+                dynamicPort = true;
             }
         }
 
@@ -79,5 +81,9 @@ public class CommandLineParser : PersistentSingleton {
 
     internal static int GetServerPort() {
         return serverPort;
+    }
+
+    internal static bool IsDynamicPort() {
+        return dynamicPort;
     }
 }

@@ -92,7 +92,7 @@ public class MatchDirector : MonoBehaviour {
             float delta = Time.time - endMatchTime;
             if (delta > endMatchWait) {
                 // send players back to lobby
-                EndMatch();
+                KickPlayers();
             }
         }
     }
@@ -159,7 +159,7 @@ public class MatchDirector : MonoBehaviour {
         life.SetUsername(username);
         life.SetSpawnPosition(pos);
         if (isFreeMode) {
-            mage.StartRound();
+            mage.networkView.RPC("StartRound", mage.GetPlayer());
         }
     }
 
@@ -191,6 +191,9 @@ public class MatchDirector : MonoBehaviour {
                 break;
             }
         }
+        if (matchStarted && playerCount == 1) {
+            OnMatchEnd();
+        }
     }
 
     [RPC]
@@ -219,14 +222,7 @@ public class MatchDirector : MonoBehaviour {
     internal void OnPlayerLost() {
         deadPlayerCount += 1;
         if (deadPlayerCount == playerCount - 1) {
-            // match ends
-            Mage[] mages = FindObjectsOfType(typeof(Mage)) as Mage[];
-            foreach (Mage mage in mages) {
-                NetworkPlayer player = mage.GetPlayer();
-                networkView.RPC("WinMessage", player, !mage.IsDying());
-            }
-
-            endMatchTime = Time.time;
+            OnMatchEnd();
         }
     }
 
@@ -235,15 +231,25 @@ public class MatchDirector : MonoBehaviour {
         showWinMessage = won ? WIN_MESSAGE : LOSE_MESSAGE;
     }
 
-    void EndMatch() {
+    void OnMatchEnd() {
+        Mage[] mages = FindObjectsOfType(typeof(Mage)) as Mage[];
+        foreach (Mage mage in mages) {
+            NetworkPlayer player = mage.GetPlayer();
+            networkView.RPC("WinMessage", player, !mage.IsDying());
+        }
+
+        endMatchTime = Time.time;
+    }
+
+    void KickPlayers() {
         if (Network.isServer) {
-            foreach (NetworkPlayer connection in Network.connections) {
-                Network.CloseConnection(connection, true);
-            }
             ResetGameTimer();
             deadPlayerCount = 0;
             endMatchTime = 0;
             matchStarted = false;
+            foreach (NetworkPlayer connection in Network.connections) {
+                Network.CloseConnection(connection, true);
+            }
         }
     }
 

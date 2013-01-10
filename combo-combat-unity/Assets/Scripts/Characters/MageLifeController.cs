@@ -89,9 +89,6 @@ public class MageLifeController : MonoBehaviour {
     public void RestartLife() {
         isDying = false;
         life = maxLife;
-        if (isFreeMode) {
-            kills = 0;
-        }
     }
 
     void AddKill() {
