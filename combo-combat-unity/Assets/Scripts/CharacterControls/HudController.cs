@@ -36,6 +36,10 @@ public class HudController : MonoBehaviour {
     private Rect lifeBarRect;
     private Rect spellRect;
 
+    public float quitWidth;
+    public float quitHeight;
+    private Rect quitRect;
+
     void Awake() {
         enabled = false;
         currentTooltip = "";
@@ -116,6 +120,13 @@ public class HudController : MonoBehaviour {
         }
         if (currentTooltip != "" && !showTooltip) {
             showTooltip = true;
+        }
+
+        // quit button
+        quitRect = new Rect(Screen.width - quitWidth, Screen.height - quitHeight, quitWidth, quitHeight);
+        if (GUI.Button(quitRect, "Leave Game")) {
+            // dissconnect from server
+            Network.CloseConnection(Network.connections[0], true);
         }
 
         CheckGUIFocused();

@@ -4,6 +4,7 @@ using System.Collections;
 public class PingProbe : PersistentSingleton {
 
     public float timeBetweenPings = 1;
+    public bool showLatency;
 
     private bool pingSent;
     private float pingSentTimestamp;
@@ -31,18 +32,21 @@ public class PingProbe : PersistentSingleton {
     }
 
     void OnGUI() {
-        float width = 130;
-        float height = 25;
-        GUI.Label(new Rect(Screen.width - width, Screen.height - height, width, height), "Latency: " + ((int) latency) + " ms");
-        if (Network.isServer) {
-            GUILayout.BeginVertical();
-            GUILayout.Space(100);
-            GUILayout.Label("Player ping values");
-            int i = 0;
-            while (i < Network.connections.Length) {
-                GUILayout.Label("Player " + Network.connections[i] + " - " + Network.GetAveragePing(Network.connections[i]) + " ms");
-                i++;
+        if (showLatency) {
+            float width = 130;
+            float height = 25;
+            GUI.Label(new Rect(Screen.width - width, Screen.height - height, width, height), "Latency: " + ((int) latency) + " ms");
+            if (Network.isServer) {
+                GUILayout.BeginVertical();
+                GUILayout.Space(100);
+                GUILayout.Label("Player ping values");
+                int i = 0;
+                while (i < Network.connections.Length) {
+                    GUILayout.Label("Player " + Network.connections[i] + " - " + Network.GetAveragePing(Network.connections[i]) + " ms");
+                    i++;
+                }
             }
+
         }
     }
 
