@@ -189,7 +189,7 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.EndHorizontal();
         GUILayout.Label("Mariano Merchante");
         GUILayout.Label("Pablo Marseillan");
-        GUILayout.Label("JosÈ Diaz");
+        GUILayout.Label("Jos√© Diaz");
         GUILayout.EndVertical();
 
         GUILayout.BeginVertical();
@@ -198,7 +198,7 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.Label("Game Design", GUI.skin.GetStyle("ShortLabel"));
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-        GUILayout.Label("Tom·s Migone");
+        GUILayout.Label("Tom√°s Migone");
         GUILayout.Label("Agustin Marseillan");
         GUILayout.EndVertical();
 
@@ -214,7 +214,7 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.Label("Programming", GUI.skin.GetStyle("ShortLabel"));
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-        GUILayout.Label("Manuel Ar·oz");
+        GUILayout.Label("Manuel Ar√°oz");
         GUILayout.EndVertical();
 
         GUILayout.BeginVertical();
@@ -241,10 +241,10 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.EndHorizontal();
         GUILayout.Label("Vicente Macellari, Miguel De Elias, Juan Pablo Arnaudo, " +
             "Luciano di Lorenzi, Alejandro Park, Patricio Borghi, Ezequiel Boehler, " +
-            "Francisco Tavella, Victoria Nasiff, Pedro Ar·oz, Matias Barba, " +
-            "Kevin Miyashiro, Gee Lee Hyun, Joaquin Carrascosa, Gonzalo Nicol·s, " +
+            "Francisco Tavella, Victoria Nasiff, Pedro Ar√°oz, Matias Barba, " +
+            "Kevin Miyashiro, Gee Lee Hyun, Joaquin Carrascosa, Gonzalo Nicol√°s, " +
             "Francisco \"Kalith\" Marienhoff, Ignacio \"Ragnar\" Llerena, " +
-            "Alberto \"InglÈs\" Iarussi, Juani \"Reicko\" Gallo, Nico \"Waikita\" Galli, " +
+            "Alberto \"Ingl√©s\" Iarussi, Juani \"Reicko\" Gallo, Nico \"Waikita\" Galli, " +
             "Barklight, Ian \"Nosfe\" Flaker");
         GUILayout.EndVertical();
 
