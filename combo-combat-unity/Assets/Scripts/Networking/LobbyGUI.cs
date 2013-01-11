@@ -200,6 +200,7 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.EndHorizontal();
         GUILayout.Label("Tomás Migone");
         GUILayout.Label("Agustin Marseillan");
+        GUILayout.Label("Juan Pablo Arnaudo");
         GUILayout.EndVertical();
 
         GUILayout.EndHorizontal();
@@ -239,11 +240,11 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.Label("Special Thanks", GUI.skin.GetStyle("ShortLabel"));
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-        GUILayout.Label("Vicente Macellari, Miguel De Elias, Juan Pablo Arnaudo, " +
+        GUILayout.Label("Vicente Macellari, Miguel De Elias, " +
             "Luciano di Lorenzi, Alejandro Park, Patricio Borghi, Ezequiel Boehler, " +
             "Francisco Tavella, Victoria Nasiff, Pedro Aráoz, Matias Barba, " +
             "Kevin Miyashiro, Gee Lee Hyun, Joaquin Carrascosa, Gonzalo Nicolás, " +
-            "Francisco \"Kalith\" Marienhoff, Ignacio \"Ragnar\" Llerena, " +
+            "Matias Colotto, Francisco \"Kalith\" Marienhoff, Ignacio \"Ragnar\" Llerena, " +
             "Alberto \"Inglés\" Iarussi, Juani \"Reicko\" Gallo, Nico \"Waikita\" Galli, " +
             "Barklight, Ian \"Nosfe\" Flaker");
         GUILayout.EndVertical();

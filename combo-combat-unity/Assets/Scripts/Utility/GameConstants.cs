@@ -4,7 +4,7 @@ using System.Collections;
 public class GameConstants {
 
     // game version
-    public static string GAME_VERSION = "alpha-1.8";
+    public static string GAME_VERSION = "alpha-1.8.1";
 
     // groups
     public static int GROUP_MAGE = 0;
