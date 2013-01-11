@@ -4,7 +4,7 @@ using System.Collections;
 public class GameConstants {
 
     // game version
-    public static string GAME_VERSION = "alpha-1.7.5";
+    public static string GAME_VERSION = "alpha-1.8";
 
     // groups
     public static int GROUP_MAGE = 0;
@@ -34,6 +34,7 @@ public class GameConstants {
     public static int WIN_ID_CLIENT = 1;
     public static int WIN_ID_TOOLTIP = 2;
     public static int WIN_ID_CHAT = 3;
+    public static int WIN_ID_CREDITS = 4;
 
 
     // network 
