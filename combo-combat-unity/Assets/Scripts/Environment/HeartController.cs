@@ -10,9 +10,9 @@ public class HeartController : MonoBehaviour {
         transform.Rotate(new Vector3(0, rotationAmount, 0));
     }
 
-    internal void Destroy() {
-        Network.RemoveRPCs(networkView.viewID);
+    internal void DoDestroy() {
         Network.Destroy(gameObject);
+        Network.RemoveRPCs(networkView.viewID);
     }
 
 

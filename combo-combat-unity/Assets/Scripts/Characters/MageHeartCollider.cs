@@ -13,7 +13,7 @@ public class MageHeartCollider : MonoBehaviour {
             }
             if (Network.isServer) {
                 HeartController heart = hit.collider.gameObject.GetComponent<HeartController>();
-                heart.Destroy();
+                heart.DoDestroy();
                 GetComponent<MageLifeController>().DoDamage(-heart.healing, null);
             }
         }

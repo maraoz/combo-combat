@@ -9,13 +9,11 @@ public class HeartEffect : MonoBehaviour {
     private float currentDuration;
     private Quaternion initialOrientation;
 
-    // Use this for initialization
     void Start() {
         currentDuration = 0f;
         initialOrientation = transform.rotation;
     }
 
-    // Update is called once per frame
     void Update() {
         transform.rotation = initialOrientation;
         currentDuration += Time.deltaTime;
