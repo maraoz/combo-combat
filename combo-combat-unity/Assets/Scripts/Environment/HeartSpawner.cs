@@ -22,7 +22,7 @@ public class HeartSpawner : MonoBehaviour {
         if (timeSpent >= spawnDeltaTime) {
             timeSpent -= spawnDeltaTime;
             int players = Network.connections.Length;
-            if (GameObject.FindGameObjectsWithTag(GameConstants.TAG_HEART).Length < heartsPerMage * players) {
+            if (GameObject.FindGameObjectsWithTag(GameConstants.TAG_HEART).Length < heartsPerMage * players+2) {
                 Vector3 pos = new Vector3(transform.position.x + Random.Range(-range, range),
                     transform.position.y,
                     transform.position.z + Random.Range(-range, range));
