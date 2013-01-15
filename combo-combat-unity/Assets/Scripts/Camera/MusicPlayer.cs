@@ -3,6 +3,7 @@ using System.Collections;
 
 public class MusicPlayer : MonoBehaviour {
     public AudioClip[] songs;
+    public float musicVolume =  0.3f;
 
     private int index;
 
@@ -15,7 +16,7 @@ public class MusicPlayer : MonoBehaviour {
 
         if (audio == null) {
             gameObject.AddComponent<AudioSource>();
-            audio.volume = 0.5f;
+            audio.volume = musicVolume;
         }
         index = 0;
     }

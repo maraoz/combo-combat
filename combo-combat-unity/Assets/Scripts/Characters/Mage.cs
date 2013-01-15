@@ -51,6 +51,9 @@ public class Mage : MonoBehaviour {
     private GrenadeCaster grenadeCaster;
 
     void Awake() {
+        if (this.audio == null) {
+            gameObject.AddComponent<AudioSource>();
+        }
         matchDirector = FindObjectOfType(typeof(MatchDirector)) as MatchDirector;
         messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
         life = GetComponent<MageLifeController>();

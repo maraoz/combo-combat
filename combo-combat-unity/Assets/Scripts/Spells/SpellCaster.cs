@@ -11,6 +11,7 @@ public abstract class SpellCaster : MonoBehaviour {
     public Texture2D icon;
     public Tooltip tooltip;
     public UserInputController.ControlState inputControlState;
+    public AudioClip castShout;
 
     private float lastCastTimestamp;
     private float castingTime = 0f;
@@ -29,6 +30,8 @@ public abstract class SpellCaster : MonoBehaviour {
         if (isCasting) {
             castingTime += Time.deltaTime;
             if (castingTime >= preCastingTime && !hasCastedSpell) {
+                mage.audio.clip = castShout;
+                mage.audio.Play();
                 DoCastSpell();
                 hasCastedSpell = true;
             }
