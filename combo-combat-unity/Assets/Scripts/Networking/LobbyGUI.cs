@@ -95,7 +95,7 @@ public class LobbyGUI : MonoBehaviour {
         mousePosition.y = Screen.height - mousePosition.y;
 
         if (creditsRect.Contains(mousePosition)) {
-            GUILayout.Window(GameConstants.WIN_ID_CREDITS, new Rect(50, 50, Screen.width - 100, Screen.height - 100), MakeCreditsWindow, "");
+            GUILayout.Window(GameConstants.WIN_ID_CREDITS, new Rect(40, 40, Screen.width - 80, Screen.height - 80), MakeCreditsWindow, "");
             GUI.BringWindowToFront(GameConstants.WIN_ID_CREDITS);
         }
 
@@ -174,9 +174,7 @@ public class LobbyGUI : MonoBehaviour {
     }
 
     void MakeCreditsWindow(int id) {
-
-        GUILayout.Space(25);
-        GUILayout.Label("Credits");
+        GUILayout.Space(35);
         GUILayout.BeginVertical();
 
         GUILayout.BeginHorizontal();
@@ -200,14 +198,9 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.EndHorizontal();
         GUILayout.Label("Tomás Migone");
         GUILayout.Label("Agustin Marseillan");
-        GUILayout.Label("Juan Pablo Arnaudo");
+        GUILayout.Label("Francisco Tavella");
         GUILayout.EndVertical();
 
-        GUILayout.EndHorizontal();
-
-
-
-        GUILayout.BeginHorizontal();
 
         GUILayout.BeginVertical();
         GUILayout.BeginHorizontal();
@@ -216,6 +209,12 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
         GUILayout.Label("Manuel Aráoz");
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        GUILayout.Label("Sound FX", GUI.skin.GetStyle("ShortLabel"));
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        GUILayout.Label("Juan Pablo Arnaudo");
         GUILayout.EndVertical();
 
         GUILayout.BeginVertical();
@@ -225,10 +224,30 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
         GUILayout.Label("Valentin Fezza");
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        GUILayout.Label("Sound Acting", GUI.skin.GetStyle("ShortLabel"));
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        GUILayout.Label("Victoria Nasiff");
         GUILayout.EndVertical();
 
         GUILayout.EndHorizontal();
 
+
+
+        GUILayout.BeginHorizontal();
+
+        GUILayout.BeginVertical();
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        GUILayout.Label("Creative Commons Attribution", GUI.skin.GetStyle("ShortLabel"));
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        GUILayout.Label("Kevin Mac Leod, ZeSoundResearchInc., sandyrb, Goup_1, stijn, Grant Evans, et_, broke for free, jahzzar, ellywu2, Lavoura, Colin Johnco, eleazzaar");
+        GUILayout.EndVertical();
+
+        GUILayout.EndHorizontal();
 
 
 
@@ -242,7 +261,7 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.EndHorizontal();
         GUILayout.Label("Vicente Macellari, Miguel De Elias, " +
             "Luciano di Lorenzi, Alejandro Park, Patricio Borghi, Ezequiel Boehler, " +
-            "Francisco Tavella, Victoria Nasiff, Pedro Aráoz, Matias Barba, " +
+            "Carola Serra, Fernando Aráoz, Pedro Aráoz, Matias Barba, " +
             "Kevin Miyashiro, Gee Lee Hyun, Joaquin Carrascosa, Gonzalo Nicolás, " +
             "Matias Colotto, Francisco \"Kalith\" Marienhoff, Ignacio \"Ragnar\" Llerena, " +
             "Alberto \"Inglés\" Iarussi, Juani \"Reicko\" Gallo, Nico \"Waikita\" Galli, " +
@@ -252,6 +271,9 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();
+
+
+
     }
 
     void RefreshServers() {
