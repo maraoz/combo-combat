@@ -33,6 +33,10 @@ public class GrenadeController : MonoBehaviour {
         return caster;
     }
 
+    private string GetTimerString() {
+        return "" + (int)(secondsUntilExhaust - secondsPast + 1);
+    }
+
     void Update() {
         secondsPast += Time.deltaTime;
         if (secondsPast >= secondsUntilExhaust) {
@@ -63,9 +67,14 @@ public class GrenadeController : MonoBehaviour {
                 i++;
             }
         }
-
-
     }
+
+    void OnGUI() {
+        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
+        Rect timerRect = new Rect(pos.x - 50 / 2, Screen.height - pos.y, 50, 50);
+        GUI.Label(timerRect, GetTimerString());
+    }
+
 
     [RPC]
     void ExplodeDestroy(Vector3 currentPosition) {
