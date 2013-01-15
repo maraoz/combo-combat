@@ -147,7 +147,7 @@ public class WallCaster : SpellCaster {
             lineRenderer.SetPosition(i, point);
             i++;
         }
-        lineRenderer.SetPosition(i, transform.position + Vector3.up * 2);
+        lineRenderer.SetPosition(i, transform.position + Vector3.up * 1.1f + transform.forward * 1.1f);
     }
 
     private void CompleteWall(Vector3 point, float remainingDistance) {
