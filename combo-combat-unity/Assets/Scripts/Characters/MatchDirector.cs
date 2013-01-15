@@ -24,12 +24,17 @@ public class MatchDirector : MonoBehaviour {
     private AudioSource beepSound;
     private AudioSource drumSound;
     private AudioSource gongSound;
+    private AudioSource endVictorySound;
+    private AudioSource endDefeatSound;
 
     void Start() {
         AudioSource[] aSources = GetComponents<AudioSource>();
         beepSound = aSources[0];
         drumSound = aSources[1];
         gongSound = aSources[2];
+        endVictorySound = aSources[3];
+        endDefeatSound = aSources[4];
+
         signStyle = new GUIStyle();
         signStyle.fontSize = 40;
         signStyle.alignment = TextAnchor.MiddleCenter;
@@ -229,6 +234,12 @@ public class MatchDirector : MonoBehaviour {
     [RPC]
     void WinMessage(bool won) {
         showWinMessage = won ? WIN_MESSAGE : LOSE_MESSAGE;
+        Camera.main.GetComponent<MusicPlayer>().PauseMusic();
+        if (won) {
+            endVictorySound.Play();
+        } else {
+            endDefeatSound.Play();
+        }
     }
 
     void OnMatchEnd() {

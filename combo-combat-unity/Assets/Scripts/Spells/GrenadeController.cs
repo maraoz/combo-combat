@@ -58,7 +58,7 @@ public class GrenadeController : MonoBehaviour {
             lineRenderer.SetVertexCount(rangeIndicatorResolution);
             int i = 0;
             while (i < rangeIndicatorResolution) {
-                float angle = 2 * Mathf.PI * i / rangeIndicatorResolution;
+                float angle = 2 * Mathf.PI * i / (rangeIndicatorResolution-1);
                 float x = transform.position.x + Mathf.Cos(angle) * explosionRadius;
                 float z = transform.position.z + Mathf.Sin(angle) * explosionRadius;
                 float y = transform.position.y;
