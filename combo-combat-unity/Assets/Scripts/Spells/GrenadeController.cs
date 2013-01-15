@@ -9,11 +9,20 @@ public class GrenadeController : MonoBehaviour {
     public float knockbackMagnitude = 50f;
     public float explosionRadius = 5f;
 
+    public Color rangeIndicatorColor = Color.white;
+    public int rangeIndicatorResolution = 30;
+
     private float secondsPast;
     private MageLifeController caster;
+    private LineRenderer lineRenderer;
 
-    void Start() {
+    void Awake() {
         secondsPast = 0.0f;
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.SetVertexCount(0);
+        lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+        lineRenderer.SetColors(rangeIndicatorColor, rangeIndicatorColor);
+        lineRenderer.SetWidth(0.1F, 0.1F);
     }
 
     public void SetCaster(MageLifeController mage) {
@@ -40,6 +49,18 @@ public class GrenadeController : MonoBehaviour {
                     }
                 }
                 ExplodeDestroy(transform.position);
+            }
+        } else {
+            lineRenderer.SetVertexCount(rangeIndicatorResolution);
+            int i = 0;
+            while (i < rangeIndicatorResolution) {
+                float angle = 2 * Mathf.PI * i / rangeIndicatorResolution;
+                float x = transform.position.x + Mathf.Cos(angle) * explosionRadius;
+                float z = transform.position.z + Mathf.Sin(angle) * explosionRadius;
+                float y = transform.position.y;
+
+                lineRenderer.SetPosition(i, new Vector3(x, y, z));
+                i++;
             }
         }
 
