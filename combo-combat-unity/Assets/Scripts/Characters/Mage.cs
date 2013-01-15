@@ -73,7 +73,7 @@ public class Mage : MonoBehaviour {
         return owner;
     }
 
-    internal bool IsMine() {
+    internal bool IsMine() { // set on client
         return isMine;
     }
 

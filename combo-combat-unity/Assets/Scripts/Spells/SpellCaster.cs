@@ -11,7 +11,8 @@ public abstract class SpellCaster : MonoBehaviour {
     public Texture2D icon;
     public Tooltip tooltip;
     public UserInputController.ControlState inputControlState;
-    public AudioClip castShout;
+    public AudioClip[] castShouts;
+    public float shoutProbability = 1.0f;
 
     private float lastCastTimestamp;
     private float castingTime = 0f;
@@ -30,8 +31,6 @@ public abstract class SpellCaster : MonoBehaviour {
         if (isCasting) {
             castingTime += Time.deltaTime;
             if (castingTime >= preCastingTime && !hasCastedSpell) {
-                mage.audio.clip = castShout;
-                mage.audio.Play();
                 DoCastSpell();
                 hasCastedSpell = true;
             }
@@ -58,6 +57,13 @@ public abstract class SpellCaster : MonoBehaviour {
         lastCastTimestamp = now;
         if (!isCasting) {
             isCasting = true;
+            if (castShouts.Length > 0 && Random.value < shoutProbability) {
+                mage.audio.clip = castShouts[(int) (Random.value * castShouts.Length)];
+                if (!mage.IsMine()) {
+                    mage.audio.volume = 0.3f;
+                }
+                mage.audio.Play();
+            }
             mage.OnSpellStartedCasting(this);
         }
     }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MusicPlayer : MonoBehaviour {
     public AudioClip[] songs;
-    public float musicVolume =  0.3f;
+    public float musicVolume =  1.0f;
 
     private int index;
 
