@@ -14,6 +14,7 @@ public class GameConstants {
 
     // player prefs
     public static string PREFS_USERNAME = "username";
+    public static string PREFS_VOLUME = "volume";
 
     //tags
     public static string TAG_MAGE = "Mage";
@@ -35,6 +36,7 @@ public class GameConstants {
     public static int WIN_ID_TOOLTIP = 2;
     public static int WIN_ID_CHAT = 3;
     public static int WIN_ID_CREDITS = 4;
+    public static int WIN_ID_CONFIG = 5;
 
 
     // network 
