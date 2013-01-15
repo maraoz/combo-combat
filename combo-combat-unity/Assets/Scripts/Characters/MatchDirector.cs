@@ -246,7 +246,7 @@ public class MatchDirector : MonoBehaviour {
         Mage[] mages = FindObjectsOfType(typeof(Mage)) as Mage[];
         foreach (Mage mage in mages) {
             NetworkPlayer player = mage.GetPlayer();
-            networkView.RPC("WinMessage", player, !mage.IsDying());
+            networkView.RPC("WinMessage", player, mages.Length == 1 || !mage.IsDying());
         }
 
         endMatchTime = Time.time;
