@@ -244,7 +244,9 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.Label("Creative Commons Attribution", GUI.skin.GetStyle("ShortLabel"));
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-        GUILayout.Label("Kevin Mac Leod, ZeSoundResearchInc., sandyrb, Goup_1, stijn, Grant Evans, et_, broke for free, jahzzar, ellywu2, Lavoura, Colin Johnco, eleazzaar");
+        GUILayout.Label("Kevin Mac Leod, ZeSoundResearchInc., sandyrb, Goup_1, stijn, "+
+            "Grant Evans, et_, broke for free, jahzzar, ellywu2, Lavoura, "+
+            "Colin Johnco, eleazzaar, wildweasel");
         GUILayout.EndVertical();
 
         GUILayout.EndHorizontal();

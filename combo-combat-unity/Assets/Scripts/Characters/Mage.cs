@@ -41,6 +41,7 @@ public class Mage : MonoBehaviour {
     public float stunDuration = 2f;
     private bool isStunned = false;
     private float stunTimer = 0f;
+    public AudioClip stunSound;
 
 
     // spells
@@ -293,6 +294,8 @@ public class Mage : MonoBehaviour {
         target = Vector3.zero;
         isStunned = true;
         stunTimer = 0;
+        audio.clip = stunSound;
+        audio.Play();
     }
 
     [RPC]
