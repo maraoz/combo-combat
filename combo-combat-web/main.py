@@ -1,10 +1,26 @@
 #!/usr/bin/env python
 
 
-import webapp2, json, jinja2, os
+import webapp2, json, jinja2, os, urllib, datetime
+
+from google.appengine.ext import db
+from google.appengine.ext import blobstore
+from google.appengine.ext.webapp import blobstore_handlers
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+
+
+
+
+
+class GameClient(db.Model):
+  version = db.StringProperty(required=True)
+  url = db.StringProperty(required=True)
+  stamp = db.DateTimeProperty()
+  
+
+
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -24,7 +40,49 @@ class RegisterHandler(JsonAPIHandler):
         username = self.request.get("u")
         return username
                 
+
+
+
+class LatestClientHandler(blobstore_handlers.BlobstoreDownloadHandler):
+    def get(self):
+        latest = GameClient.all().order('-stamp').get()
+        self.redirect(latest.url)
+
+class ClientUpdateHandler(webapp2.RequestHandler):
+  def get(self):
+    upload_url = blobstore.create_upload_url('/upload')
+    self.response.out.write('<html><body>')
+    self.response.out.write('<form action="%s" method="POST" enctype="multipart/form-data">' % upload_url)
+    self.response.out.write("""Upload File: <input type="file" name="file"><br>
+        <input name="version"></input>
+        <input type="submit" name="submit" value="Submit"> </form></body></html>""")
+
+class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+  def post(self):
+    version = self.request.get('version')
+    upload_files = self.get_uploads('file')  # 'file' is file upload field in the form
+    blob_info = upload_files[0]
+    generated_url = '/serve/%s' % blob_info.key()
+    gc = GameClient(version = version,
+             url = generated_url)
+    gc.stamp = datetime.datetime.now()
+    gc.put()
+    
+    self.redirect('/')
+
+class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
+  def get(self, resource):
+    resource = str(urllib.unquote(resource))
+    blob_info = blobstore.BlobInfo.get(resource)
+    self.send_blob(blob_info, save_as=blob_info.filename)
+
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler), 
-    ('/api/register', RegisterHandler)
+    ('/api/register', RegisterHandler),
+    ('/admin/client', ClientUpdateHandler),
+    ('/upload', UploadHandler),
+    ('/latest', LatestClientHandler),
+    ('/serve/([^/]+)?', ServeHandler)
 ], debug=True)
+

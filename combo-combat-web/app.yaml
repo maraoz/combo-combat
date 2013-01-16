@@ -11,9 +11,6 @@ handlers:
 - url: /images
   static_dir: images
 
-- url: /WebPlayer
-  static_dir: WebPlayer
-
 - url: .*
   script: main.app
 

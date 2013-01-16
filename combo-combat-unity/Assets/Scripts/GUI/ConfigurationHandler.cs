@@ -12,10 +12,11 @@ public class ConfigurationHandler : PersistentSingleton {
     public float volume = 1f;
     public int windowWidth = 150;
     public int windowHeight = 300;
+    public float defaultVolumeLevel = 0.5f;
 
     override internal void Awake() {
         base.Awake();
-        volume = PlayerPrefs.GetFloat(GameConstants.PREFS_VOLUME, 1f);
+        volume = PlayerPrefs.GetFloat(GameConstants.PREFS_VOLUME, defaultVolumeLevel);
         DoSetVolume(volume);
         width = configTexture.width / 2;
         height = configTexture.height / 2;
@@ -59,7 +60,7 @@ public class ConfigurationHandler : PersistentSingleton {
         }
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("Cancel")) {
-            volume = PlayerPrefs.GetFloat(GameConstants.PREFS_VOLUME, 1);
+            volume = PlayerPrefs.GetFloat(GameConstants.PREFS_VOLUME, defaultVolumeLevel);
             DoSetVolume(volume);
             ToggleConfig();
         }
