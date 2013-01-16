@@ -16,7 +16,14 @@ public class GrenadeController : MonoBehaviour {
     private MageLifeController caster;
     private LineRenderer lineRenderer;
 
+    public AudioClip explosionSound;
+    public AudioClip[] kickSounds;
+
     void Awake() {
+        if (audio == null) {
+            gameObject.AddComponent<AudioSource>();
+        }
+        PlayKickSound();
         secondsPast = 0.0f;
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.SetVertexCount(0);
@@ -34,7 +41,7 @@ public class GrenadeController : MonoBehaviour {
     }
 
     private string GetTimerString() {
-        return "" + (int)(secondsUntilExhaust - secondsPast + 1);
+        return "" + (int) (secondsUntilExhaust - secondsPast + 1);
     }
 
     void Update() {
@@ -58,7 +65,7 @@ public class GrenadeController : MonoBehaviour {
             lineRenderer.SetVertexCount(rangeIndicatorResolution);
             int i = 0;
             while (i < rangeIndicatorResolution) {
-                float angle = 2 * Mathf.PI * i / (rangeIndicatorResolution-1);
+                float angle = 2 * Mathf.PI * i / (rangeIndicatorResolution - 1);
                 float x = transform.position.x + Mathf.Cos(angle) * explosionRadius;
                 float z = transform.position.z + Mathf.Sin(angle) * explosionRadius;
                 float y = transform.position.y;
@@ -75,12 +82,20 @@ public class GrenadeController : MonoBehaviour {
         GUI.Label(timerRect, GetTimerString());
     }
 
+    private void PlayKickSound() {
+        audio.clip = kickSounds[(int) (Random.value * kickSounds.Length)];
+        audio.Play();
+    }
+
 
     [RPC]
     void ExplodeDestroy(Vector3 currentPosition) {
         networkView.ClientsUnbuffered("ExplodeDestroy", currentPosition);
         if (explosion != null) {
-            GameObject.Instantiate(explosion, currentPosition, Quaternion.identity);
+            GameObject created = GameObject.Instantiate(explosion, currentPosition, Quaternion.identity) as GameObject;
+            created.AddComponent<AudioSource>();
+            created.audio.clip = explosionSound;
+            created.audio.Play();
         }
         Destroy(gameObject);
     }
@@ -93,5 +108,6 @@ public class GrenadeController : MonoBehaviour {
         transform.rotation = rotation;
         rigidbody.AddForce(direction * 200 + Vector3.up * 50);
         rigidbody.AddTorque(new Vector3(10f, 50f, 0f));
+        PlayKickSound();
     }
 }

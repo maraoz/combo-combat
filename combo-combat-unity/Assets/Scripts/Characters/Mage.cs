@@ -235,8 +235,8 @@ public class Mage : MonoBehaviour {
                     ApplyStun(transform.position);
                 }
             } else if (other.tag == GameConstants.TAG_GRENADE) {
-                other.gameObject.GetComponent<GrenadeController>()
-                    .AddForce(other.gameObject.transform.position,
+                GrenadeController grenade = other.gameObject.GetComponent<GrenadeController>();
+                grenade.AddForce(other.gameObject.transform.position,
                     other.gameObject.transform.rotation,
                     transform.forward);
             }
