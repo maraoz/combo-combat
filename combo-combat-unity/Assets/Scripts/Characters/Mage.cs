@@ -53,6 +53,7 @@ public class Mage : MonoBehaviour {
     void Awake() {
         if (this.audio == null) {
             gameObject.AddComponent<AudioSource>();
+            audio.volume = 0.3f;
         }
         matchDirector = FindObjectOfType(typeof(MatchDirector)) as MatchDirector;
         messages = GameObject.Find("MessageSystem").GetComponent<MessageSystem>();
@@ -83,6 +84,7 @@ public class Mage : MonoBehaviour {
 
     internal void TakeOwnership() {
         isMine = true;
+        audio.volume = 1.0f;
     }
 
     internal bool IsStunned() {

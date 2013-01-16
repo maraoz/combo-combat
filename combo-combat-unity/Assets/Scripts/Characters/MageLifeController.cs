@@ -30,6 +30,9 @@ public class MageLifeController : MonoBehaviour {
     private Vector3 spawnPosition;
     public float deathTime = 15.0f;
     private float deathTimeSpent = 0f;
+    public AudioClip[] deathCries;
+    public AudioClip[] damageSounds;
+    public float damageSoundProbability = 0.5f;
 
 
     void Awake() {
@@ -95,6 +98,7 @@ public class MageLifeController : MonoBehaviour {
         kills += 1;
     }
 
+    // only called on server
     public void DoDamage(float damage, MageLifeController source) {
         if (life > 0) {
             life -= damage;
@@ -113,10 +117,14 @@ public class MageLifeController : MonoBehaviour {
 
     [RPC]
     void DoDie() {
+        // all
         if (!isFreeMode) {
             livesLeft -= 1;
         }
-        // all
+        if (deathCries.Length > 0) {
+            mage.audio.clip = deathCries[(int) (Random.value * deathCries.Length)];
+            mage.audio.Play();
+        }
         mage.OnDied();
         isDying = true;
         if (mage.IsMine()) {
@@ -165,6 +173,10 @@ public class MageLifeController : MonoBehaviour {
             int rcvKills = 0;
             stream.Serialize(ref rcvLife);
             stream.Serialize(ref rcvKills);
+            if (rcvLife > 0 && rcvLife < life && damageSounds.Length > 0 && Random.value < damageSoundProbability) {
+                mage.audio.clip = damageSounds[(int) (Random.value * damageSounds.Length)];
+                mage.audio.Play();
+            }
             life = rcvLife;
             kills = rcvKills;
         }

@@ -59,9 +59,6 @@ public abstract class SpellCaster : MonoBehaviour {
             isCasting = true;
             if (castShouts.Length > 0 && Random.value < shoutProbability) {
                 mage.audio.clip = castShouts[(int) (Random.value * castShouts.Length)];
-                if (!mage.IsMine()) {
-                    mage.audio.volume = 0.3f;
-                }
                 mage.audio.Play();
             }
             mage.OnSpellStartedCasting(this);
