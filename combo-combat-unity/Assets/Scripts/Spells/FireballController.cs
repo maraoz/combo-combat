@@ -12,7 +12,15 @@ public class FireballController : MonoBehaviour {
     private float secondsPast;
     private MageLifeController caster;
 
-    void Start() {
+    public AudioClip[] explosionSounds;
+    public AudioClip[] flyingSounds;
+
+    void Awake() {
+        if (audio == null) {
+            gameObject.AddComponent<AudioSource>();
+        }
+        audio.clip = flyingSounds[(int) (Random.value * flyingSounds.Length)];
+        audio.Play();
         secondsPast = 0.0f;
     }
 
@@ -52,7 +60,10 @@ public class FireballController : MonoBehaviour {
     [RPC]
     void CollideDestroy(Vector3 currentPosition) {
         networkView.ClientsUnbuffered("CollideDestroy", currentPosition);
-        GameObject.Instantiate(explosion, currentPosition, Quaternion.identity);
+        GameObject created = GameObject.Instantiate(explosion, currentPosition, Quaternion.identity) as GameObject;
+        created.AddComponent<AudioSource>();
+        created.audio.clip = explosionSounds[(int) (Random.value * explosionSounds.Length)];
+        created.audio.Play();
         Destroy(gameObject);
     }
 
