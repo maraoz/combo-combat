@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 
 
-import webapp2, json, jinja2, os, urllib, datetime
+import webapp2, json, jinja2, os, urllib, datetime, hashlib
+from datetime import timedelta
+
+import aetycoon
 
 from google.appengine.ext import db
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
+
+HTTP_DATE_FMT = "%a, %d %b %Y %H:%M:%S %Z"
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
@@ -18,6 +23,7 @@ class GameClient(db.Model):
   version = db.StringProperty(required=True)
   blob_key = blobstore.BlobReferenceProperty(required=True)
   stamp = db.DateTimeProperty()
+
   
 
 
@@ -41,18 +47,56 @@ class RegisterHandler(JsonAPIHandler):
         return username
                 
 
+"""
+Accept-Ranges:bytes
+Cache-Control:max-age=300
+Connection:keep-alive
+Content-Length:21565931
+Content-Type:text/plain; charset=UTF-8
+Date:Wed, 16 Jan 2013 17:54:27 GMT
+ETag:"14911eb-4d161ecfed840"
+Expires:Wed, 16 Jan 2013 17:59:27 GMT
+Last-Modified:Fri, 21 Dec 2012 19:33:45 GMT
+Server:Footprint Distributor V4.8
+"""
+
 
 
 class LatestClientHandler(blobstore_handlers.BlobstoreDownloadHandler):
-    def get(self):
-        latest = GameClient.all().order('-stamp').get()
+  def get(self):
+    latest = GameClient.all().order('-stamp').get()
+    serve = True
+    if 'If-Modified-Since' in self.request.headers:
+      last_seen = datetime.datetime.strptime(
+                self.request.headers['If-Modified-Since'],
+                HTTP_DATE_FMT)
+      if last_seen >= latest.stamp.replace(microsecond=0):
+        serve = False
+    if 'If-None-Match' in self.request.headers:
+      etags = [x.strip('" ')
+           for x in self.request.headers['If-None-Match'].split(',')]
+      if latest.version in etags:
+        serve = False
+    self.output_content(latest, serve)
+      
+  def output_content(self, game_client, serve=True):
+    if serve:
+      blob_info = game_client.blob_key
+      self.send_blob(blob_info)
+    else:
+      self.response.set_status(304)
+    self.response.headers['Cache-Control'] = 'public, max-age=2592000'
+    exp = datetime.datetime.now() + timedelta(days=60)
+    self.response.headers['Expires'] = exp.strftime(HTTP_DATE_FMT)
+    self.response.headers['Content-Type'] = "application/vnd.unity"
+    last_modified = (game_client.stamp- timedelta(days=60)).strftime(HTTP_DATE_FMT)
+    self.response.headers['Last-Modified'] = last_modified
+    self.response.headers['ETag'] = '"%s"' % (str(game_client.version),)
+        
 
-        blob_info = latest.blob_key
-    
-        self.send_blob(blob_info, save_as=blob_info.filename)
 
 
-    
+
 
 class ClientUpdateHandler(webapp2.RequestHandler):
   def get(self):
@@ -84,6 +128,7 @@ app = webapp2.WSGIApplication([
     ('/api/register', RegisterHandler),
     ('/admin/client', ClientUpdateHandler),
     ('/upload', UploadHandler),
-    ('/latest', LatestClientHandler)
-], debug=True)
+    ('/latest.unity3d', LatestClientHandler),
+    ('/test', LatestClientHandler)
+], debug=False)
 
