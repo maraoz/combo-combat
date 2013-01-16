@@ -4,6 +4,8 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
+default_expiration: "4d 5h"
+
 handlers:
 - url: /stylesheets
   static_dir: stylesheets
@@ -13,6 +15,11 @@ handlers:
 
 - url: /WebPlayer
   static_dir: WebPlayer
+
+- url: /
+  static_files: index.html
+  upload: index.html
+
 
 - url: .*
   script: main.app

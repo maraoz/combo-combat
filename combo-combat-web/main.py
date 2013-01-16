@@ -25,6 +25,6 @@ class RegisterHandler(JsonAPIHandler):
         return username
                 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler), 
+     
     ('/api/register', RegisterHandler)
 ], debug=True)
