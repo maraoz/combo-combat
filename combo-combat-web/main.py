@@ -16,7 +16,7 @@ jinja_environment = jinja2.Environment(
 
 class GameClient(db.Model):
   version = db.StringProperty(required=True)
-  url = db.StringProperty(required=True)
+  blob_key = blobstore.BlobReferenceProperty(required=True)
   stamp = db.DateTimeProperty()
   
 
@@ -46,7 +46,13 @@ class RegisterHandler(JsonAPIHandler):
 class LatestClientHandler(blobstore_handlers.BlobstoreDownloadHandler):
     def get(self):
         latest = GameClient.all().order('-stamp').get()
-        self.redirect(latest.url)
+
+        blob_info = latest.blob_key
+    
+        self.send_blob(blob_info, save_as=blob_info.filename)
+
+
+    
 
 class ClientUpdateHandler(webapp2.RequestHandler):
   def get(self):
@@ -62,19 +68,15 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     version = self.request.get('version')
     upload_files = self.get_uploads('file')  # 'file' is file upload field in the form
     blob_info = upload_files[0]
-    generated_url = '/serve/%s' % blob_info.key()
+    
     gc = GameClient(version = version,
-             url = generated_url)
+             blob_key = blob_info.key())
     gc.stamp = datetime.datetime.now()
     gc.put()
     
     self.redirect('/')
 
-class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
-  def get(self, resource):
-    resource = str(urllib.unquote(resource))
-    blob_info = blobstore.BlobInfo.get(resource)
-    self.send_blob(blob_info, save_as=blob_info.filename)
+
 
 
 app = webapp2.WSGIApplication([
@@ -82,7 +84,6 @@ app = webapp2.WSGIApplication([
     ('/api/register', RegisterHandler),
     ('/admin/client', ClientUpdateHandler),
     ('/upload', UploadHandler),
-    ('/latest', LatestClientHandler),
-    ('/serve/([^/]+)?', ServeHandler)
+    ('/latest', LatestClientHandler)
 ], debug=True)
 
