@@ -10,6 +10,10 @@ public class DeathrayController : MonoBehaviour {
     public Color rayDamageColor = Color.white;
     public float rayWarningWidth = 0.2f;
     public Color rayWarningColor = Color.red;
+    public AudioClip[] explosionSounds;
+    public AudioClip warningSound;
+    private AudioSource explosionAudio;
+    private AudioSource warningAudio;
 
     private float secondsPast;
     private LineRenderer lineRenderer;
@@ -18,9 +22,21 @@ public class DeathrayController : MonoBehaviour {
 
     private MageLifeController caster;
 
+
     void Awake() {
         this.enabled = false;
         secondsPast = 0.0f;
+
+        // setup audio
+        if (audio == null) {
+            explosionAudio = gameObject.AddComponent<AudioSource>();
+            warningAudio = gameObject.AddComponent<AudioSource>();
+        }
+        warningAudio.clip = warningSound;
+        warningAudio.Play();
+
+
+        // setup line
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
         lineRenderer.SetColors(rayWarningColor, rayWarningColor);
@@ -44,7 +60,10 @@ public class DeathrayController : MonoBehaviour {
     void Update() {
         secondsPast += Time.deltaTime;
         if (secondsPast >= secondsUntilExhaust) {
-            Destroy(gameObject);
+            lineRenderer.SetVertexCount(0);
+            if (!explosionAudio.isPlaying) {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -61,6 +80,10 @@ public class DeathrayController : MonoBehaviour {
                     mageLife.DoDamage(damage, caster);
                 }
             }
+        }
+        if (Network.isClient) {
+            explosionAudio.clip = explosionSounds[(int) (Random.value * explosionSounds.Length)];
+            explosionAudio.Play();
         }
     }
 

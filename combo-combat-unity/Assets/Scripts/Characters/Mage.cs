@@ -84,7 +84,7 @@ public class Mage : MonoBehaviour {
 
     internal void TakeOwnership() {
         isMine = true;
-        audio.volume = 1.0f;
+        audio.volume = 0.7f;
     }
 
     internal bool IsStunned() {
