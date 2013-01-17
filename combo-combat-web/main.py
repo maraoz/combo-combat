@@ -85,7 +85,7 @@ class LatestClientHandler(blobstore_handlers.BlobstoreDownloadHandler):
       self.send_blob(blob_info)
     else:
       self.response.set_status(304)
-    self.response.headers['Cache-Control'] = 'public, max-age=2592000'
+    self.response.headers['Cache-Control'] = 'max-age=60, must-revalidate'
     exp = datetime.datetime.now() + timedelta(days=60)
     self.response.headers['Expires'] = exp.strftime(HTTP_DATE_FMT)
     self.response.headers['Content-Type'] = "application/vnd.unity"

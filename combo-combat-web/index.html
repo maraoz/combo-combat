@@ -6,114 +6,59 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="Combo-combat : " />
     <link rel="shortcut icon" href="images/favicon.ico">
-<script type="text/javascript" src="http://webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/UnityObject.js"></script>
-		<script type="text/javascript">
-		<!--
-		function GetUnity() {
-			if (typeof unityObject != "undefined") {
-				return unityObject.getObjectById("unityPlayer");
-			}
-			return null;
-		}
-		if (typeof unityObject != "undefined") {
-                        var params = {
-				disableContextMenu: true,
-				logoimage : "images/logo.png",
-				progressbarimage: "images/front.png",
-				progressframeimage: "images/back.png"
+    <link href="stylesheets/bootstrap/css/bootstrap.css" rel="stylesheet">
 
-			};
-			unityObject.embedUnity("unityPlayer", "https://s3-sa-east-1.amazonaws.com/combo-combat-release/WebPlayer.unity3d", 960, 600, params);
-			
-		}
-		-->
-		</script>
-<style type="text/css">
-		<!--
-		body {
-			font-family: Helvetica, Verdana, Arial, sans-serif;
-			background-color: white;
-			color: black;
-			text-align: center;
-		}
-		a:link, a:visited {
-			color: #000;
-		}
-		a:active, a:hover {
-			color: #666;
-		}
-		p.header {
-			font-size: small;
-		}
-		p.header span {
-			font-weight: bold;
-		}
-		p.footer {
-			font-size: x-small;
-		}
-		div.content {
-			margin: auto;
-			width: 960px;
-		}
-		div.missing {
-			margin: auto;
-			position: relative;
-			top: 50%;
-			width: 193px;
-		}
-		div.missing a {
-			height: 63px;
-			position: relative;
-			top: -31px;
-		}
-		div.missing img {
-			border-width: 0px;
-		}
-		div#unityPlayer {
-			cursor: none;
-			height: 600px;
-			width: 960px;
-                        margin-top: 100px;
-                        position:absolute;
-                        left:50%;
-                        top:50%;
-                        margin:-300px 0 0 -480px;
-
-		}
-
-		div.footer {
-			display: inline;
-			margin-right: 20px;
-			margin-left: 20px;
-		}
-		div.footer img {
-			width: 32px;
-			height: 32px;
-		}
-		-->
-		</style>
 
     <title>Combo Combat</title>
   </head>
 
   <body>
 
+<div class="container">
 
-<div class="content">
-			<div id="unityPlayer">
-				<div class="missing">
-					<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
-						<img alt="Unity Web Player. Install now!" src="http://webplayer.unity3d.com/installation/getunity.png" width="193" height="63" />
-					</a>
-				</div>
-			</div>
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <h1>Want to try the alpha?</h1>
+        <p>Please bear in mind that this is a really early build. It may contain bugs, glitches and awesome.</p>
+        <p><a class="btn btn-success btn-large" href="https://s3-sa-east-1.amazonaws.com/combo-combat-release/ComboCombatClient.1.8.5.rar"><i class="icon-arrow-down"></i> Download Desktop Client</a></p>
+      </div>
 
-		</div>
-<div class="footer"><a href="https://www.facebook.com/pages/Combo-Combat/287784554676453"><img src="images/facebook.png"></img></a></div> 
-<div class="footer"><a href="http://twitter.com/nuchongames"><img src="images/twitter.png"></img></a></div> 
-<div class="footer"><a href="http://blog.nuchongames.com"><img src="images/tumblr.png"></img></a></div> 
+      <!-- 
+      <div class="row">
+        <div class="span4">
+          <h2>Heading</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+        </div>
+        <div class="span4">
+          <h2>Heading</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+       </div>
+        <div class="span4">
+          <h2>Heading</h2>
+          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+        </div>
+      </div>
+Example row of columns -->
 
+      Or contact us at:
+      <div class="row">
+          <div class="span2"></div>
+          <div class="span3"><a href="https://www.facebook.com/pages/Combo-Combat/287784554676453"><img src="images/facebook.png"></img></a></div>
+          <div class="span3"><a href="http://twitter.com/nuchongames"><img src="images/twitter.png"></img></a></div>
+          <div class="span3"><a href="http://blog.nuchongames.com"><img src="images/tumblr.png"></img></a></div>
+          <div class="span2"></div>
+      </div>
 
+      <hr>
+
+      <footer>
+        <p>&copy; Nuchon Games 2012-2013</p>
+      </footer>
+
+    </div> <!-- /container -->
 
 
 <script type="text/javascript">
