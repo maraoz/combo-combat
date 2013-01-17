@@ -6,7 +6,6 @@ public class WallCaster : SpellCaster {
 
     public GameObject brick;
     public float wallBrickLength = 1.0f;
-    public float wallCastMaxHeight = -4.5f;
     public float wallDrawResolution = 1.5f;
     public float wallMaxLength = 20.0f;
     public Color wallDrawColor = Color.yellow;
@@ -106,9 +105,6 @@ public class WallCaster : SpellCaster {
     }
 
     public override void OnClickDragged(Vector3 position) {
-        if (transform.position.y > wallCastMaxHeight) {
-            return;
-        }
         if (this.IsCasting()) {
             return;
         }
