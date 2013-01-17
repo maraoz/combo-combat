@@ -23,11 +23,23 @@ public class HeartSpawner : MonoBehaviour {
             timeSpent -= spawnDeltaTime;
             int players = Network.connections.Length;
             if (GameObject.FindGameObjectsWithTag(GameConstants.TAG_HEART).Length < heartsPerMage * players) {
-                Vector3 pos = new Vector3(transform.position.x + Random.Range(-range, range),
+                Vector2 randomPos = GetRandomPos();
+                Vector3 pos = new Vector3(transform.position.x + randomPos.x,
                     transform.position.y,
-                    transform.position.z + Random.Range(-range, range));
+                    transform.position.z + randomPos.y);
                 Network.Instantiate(heartPrefab, pos, Quaternion.identity, GameConstants.GROUP_HEART);
             }
         }
+    }
+
+    Vector2 GetRandomPos() {
+        if (range < 2) {
+            Debug.Log("infinite loop ahead");
+        }
+        Vector2 r = Vector2.zero;
+        while (r.magnitude < 2) {
+            r = Random.insideUnitCircle * range;
+        }
+        return r;
     }
 }
