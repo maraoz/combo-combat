@@ -6,7 +6,6 @@ public class ClickFeedback : MonoBehaviour {
     public float duration = 0.5f;
     public float cycleDuration = 0.5f;
     public float speed = 0.2f;
-    public string asd;
 
     private float timeSpent;
     private int cycle;
