@@ -4,15 +4,19 @@ using System.Collections;
 public class FullscreenHandler : PersistentSingleton {
 
     public Texture2D fullscreenOnTexture;
+    public Texture2D fullscreenOnOverTexture;
     public Texture2D fullscreenOffTexture;
+    public Texture2D fullscreenOffOverTexture;
     public float pad;
     private float width, height;
     private Resolution minimizedResolution;
+    private Rect buttonRect;
+    private bool mouseOver;
 
     override internal void Awake() {
         base.Awake();
-        width = fullscreenOnTexture.width / 5;
-        height = fullscreenOnTexture.height / 5;
+        width = fullscreenOnTexture.width / 4;
+        height = fullscreenOnTexture.height / 4;
         minimizedResolution = new Resolution();
         minimizedResolution.width = Screen.width;
         minimizedResolution.height = Screen.height;
@@ -39,11 +43,16 @@ public class FullscreenHandler : PersistentSingleton {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             FullscreenOff();
         }
+        Vector2 mousePos = Input.mousePosition;
+        mousePos.y = Screen.height - mousePos.y;
+        mouseOver = buttonRect.Contains(mousePos);
     }
 
     void OnGUI() {
         GUI.skin = GUISkinProvider.GetSkin();
-        if (GUI.Button(new Rect(Screen.width - pad - width, pad, width, height), Screen.fullScreen ? fullscreenOffTexture : fullscreenOnTexture, "Spell Icon")) {
+        buttonRect = new Rect(Screen.width - pad - width, pad, width, height);
+        Texture2D texture = Screen.fullScreen ? (mouseOver ? fullscreenOffOverTexture : fullscreenOffTexture) : (mouseOver ? fullscreenOnOverTexture : fullscreenOnTexture);
+        if (GUI.Button(buttonRect, texture, "Spell Icon")) {
             if (Screen.fullScreen) {
                 FullscreenOff();
             } else {

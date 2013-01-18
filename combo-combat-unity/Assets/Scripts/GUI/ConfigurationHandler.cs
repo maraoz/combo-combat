@@ -4,6 +4,7 @@ using System.Collections;
 public class ConfigurationHandler : PersistentSingleton {
 
     public Texture2D configTexture;
+    public Texture2D configTextureOver;
     public float pad;
 
     private float width, height;
@@ -13,6 +14,8 @@ public class ConfigurationHandler : PersistentSingleton {
     public int windowWidth = 150;
     public int windowHeight = 300;
     public float defaultVolumeLevel = 0.5f;
+    private Rect buttonRect;
+    private bool mouseOver;
 
     override internal void Awake() {
         base.Awake();
@@ -29,16 +32,20 @@ public class ConfigurationHandler : PersistentSingleton {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             showConfig = false;
         }
+        Vector2 mousePos = Input.mousePosition;
+        mousePos.y = Screen.height - mousePos.y;
+        mouseOver = buttonRect.Contains(mousePos);
     }
 
     void OnGUI() {
         GUI.skin = GUISkinProvider.GetSkin();
-        if (GUI.Button(new Rect(Screen.width - pad - width, 2*pad+height , width, height), configTexture, "Spell Icon")) {
+        buttonRect = new Rect(Screen.width - 10 - width, Screen.height - pad - height, width, height);
+        if (GUI.Button(buttonRect, mouseOver ? configTextureOver : configTexture, "Spell Icon")) {
             ToggleConfig();
         }
 
         if (showConfig) {
-            GUILayout.Window(GameConstants.WIN_ID_CONFIG, new Rect(Screen.width / 2 - windowWidth/2, Screen.height / 2 - windowHeight/2, windowWidth, windowHeight), MakeCreditsWindow, "");
+            GUILayout.Window(GameConstants.WIN_ID_CONFIG, new Rect(Screen.width / 2 - windowWidth / 2, Screen.height / 2 - windowHeight / 2, windowWidth, windowHeight), MakeCreditsWindow, "");
         }
     }
 
