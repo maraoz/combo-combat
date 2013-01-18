@@ -11,8 +11,8 @@ public class FullscreenHandler : PersistentSingleton {
 
     override internal void Awake() {
         base.Awake();
-        width = fullscreenOnTexture.width / 2;
-        height = fullscreenOnTexture.height / 2;
+        width = fullscreenOnTexture.width / 5;
+        height = fullscreenOnTexture.height / 5;
         minimizedResolution = new Resolution();
         minimizedResolution.width = Screen.width;
         minimizedResolution.height = Screen.height;

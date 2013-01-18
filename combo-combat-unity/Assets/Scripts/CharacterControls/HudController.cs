@@ -98,9 +98,9 @@ public class HudController : MonoBehaviour {
             }
 
             // hotkey
-            string hotkey = spell.GetHotkeyString();
-            Rect hotkeyRect = new Rect(spellRect);
-            hotkeyRect.y += hotkeyVPad;
+            //string hotkey = spell.GetHotkeyString();
+            //Rect hotkeyRect = new Rect(spellRect);
+            //hotkeyRect.y += hotkeyVPad;
             //GUI.Label(hotkeyRect, hotkey, hotkeyStyle);
 
         }
