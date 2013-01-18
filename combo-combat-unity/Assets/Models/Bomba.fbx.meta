@@ -1,0 +1,182 @@
+fileFormatVersion: 2
+guid: 451553e83ae53b243b7aa7466d49375d
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Capa 01
+    100004: Capa 02
+    100006: Capa 03
+    100008: Capa 04
+    100010: Capa 05
+    100012: Luz 01
+    100014: Objeto_1
+    100016: Objeto_10
+    100018: Objeto_11
+    100020: Objeto_12
+    100022: Objeto_13
+    100024: Objeto_14
+    100026: Objeto_15
+    100028: Objeto_16
+    100030: Objeto_17
+    100032: Objeto_18
+    100034: Objeto_19
+    100036: Objeto_20
+    100038: Objeto_21
+    100040: Objeto_22
+    100042: Objeto_3
+    100044: Objeto_4
+    100046: Objeto_5
+    100048: Objeto_6
+    100050: Objeto_7
+    100052: Objeto_8
+    100054: Objeto_9
+    100056: Predeterminada
+    100058: Objeto_23
+    400000: //RootNode
+    400002: Capa 01
+    400004: Capa 02
+    400006: Capa 03
+    400008: Capa 04
+    400010: Capa 05
+    400012: Luz 01
+    400014: Objeto_1
+    400016: Objeto_10
+    400018: Objeto_11
+    400020: Objeto_12
+    400022: Objeto_13
+    400024: Objeto_14
+    400026: Objeto_15
+    400028: Objeto_16
+    400030: Objeto_17
+    400032: Objeto_18
+    400034: Objeto_19
+    400036: Objeto_20
+    400038: Objeto_21
+    400040: Objeto_22
+    400042: Objeto_3
+    400044: Objeto_4
+    400046: Objeto_5
+    400048: Objeto_6
+    400050: Objeto_7
+    400052: Objeto_8
+    400054: Objeto_9
+    400056: Predeterminada
+    400058: Objeto_23
+    2300000: Objeto_1
+    2300002: Objeto_10
+    2300004: Objeto_11
+    2300006: Objeto_12
+    2300008: Objeto_13
+    2300010: Objeto_14
+    2300012: Objeto_15
+    2300014: Objeto_16
+    2300016: Objeto_17
+    2300018: Objeto_18
+    2300020: Objeto_19
+    2300022: Objeto_20
+    2300024: Objeto_21
+    2300026: Objeto_22
+    2300028: Objeto_3
+    2300030: Objeto_4
+    2300032: Objeto_5
+    2300034: Objeto_6
+    2300036: Objeto_7
+    2300038: Objeto_8
+    2300040: Objeto_9
+    2300042: Objeto_23
+    3300000: Objeto_1
+    3300002: Objeto_10
+    3300004: Objeto_11
+    3300006: Objeto_12
+    3300008: Objeto_13
+    3300010: Objeto_14
+    3300012: Objeto_15
+    3300014: Objeto_16
+    3300016: Objeto_17
+    3300018: Objeto_18
+    3300020: Objeto_19
+    3300022: Objeto_20
+    3300024: Objeto_21
+    3300026: Objeto_22
+    3300028: Objeto_3
+    3300030: Objeto_4
+    3300032: Objeto_5
+    3300034: Objeto_6
+    3300036: Objeto_7
+    3300038: Objeto_8
+    3300040: Objeto_9
+    3300042: Objeto_23
+    4300000: Objeto_22
+    4300002: Objeto_1
+    4300004: Objeto_3
+    4300006: Objeto_4
+    4300008: Objeto_5
+    4300010: Objeto_6
+    4300012: Objeto_7
+    4300014: Objeto_8
+    4300016: Objeto_9
+    4300018: Objeto_10
+    4300020: Objeto_11
+    4300022: Objeto_12
+    4300024: Objeto_13
+    4300026: Objeto_14
+    4300028: Objeto_15
+    4300030: Objeto_16
+    4300032: Objeto_17
+    4300034: Objeto_18
+    4300036: Objeto_19
+    4300038: Objeto_20
+    4300040: Objeto_21
+    4300042: Objeto_23
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 2
+  userData: 
