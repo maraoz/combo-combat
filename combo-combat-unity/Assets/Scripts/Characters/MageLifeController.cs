@@ -33,6 +33,7 @@ public class MageLifeController : MonoBehaviour {
     public AudioClip[] deathCries;
     public AudioClip[] damageSounds;
     public float damageSoundProbability = 0.5f;
+    public float dieHeight = -50f;
 
 
     void Awake() {
@@ -68,6 +69,9 @@ public class MageLifeController : MonoBehaviour {
     }
 
     void Update() {
+        if (transform.position.y < dieHeight) {
+            DoDamage(100, null);
+        }
         if (isDying && livesLeft > 0) {
             deathTimeSpent += Time.deltaTime;
             if (deathTimeSpent >= deathTime) {
@@ -104,7 +108,7 @@ public class MageLifeController : MonoBehaviour {
             life -= damage;
             if (life <= 0) {
                 life = 0;
-                if (source != null) {
+                if (source != null && source != this) {
                     source.AddKill();
                 }
                 DoDie();

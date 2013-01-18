@@ -56,6 +56,9 @@ public abstract class SpellCaster : MonoBehaviour {
         if (IsCooldownActive(now)) {
             return;
         }
+        if (!mage.IsGrounded()) {
+            return;
+        }
         lastCastTimestamp = now;
         if (!isCasting) {
             isCasting = true;

@@ -59,6 +59,9 @@ public class CharacterSimpleAnimation : MonoBehaviour {
         if (player.IsStunned()) {
             animation.CrossFade("Crouch Idle");
         }
+        if (!player.IsGrounded()) {
+            animation.CrossFade("Falling");
+        }
 
     }
 }
