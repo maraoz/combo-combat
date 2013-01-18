@@ -246,7 +246,7 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.EndHorizontal();
         GUILayout.Label("Kevin Mac Leod, ZeSoundResearchInc., sandyrb, Goup_1, stijn, "+
             "Grant Evans, et_, broke for free, jahzzar, ellywu2, Lavoura, "+
-            "Colin Johnco, eleazzaar, wildweasel ");
+            "Colin Johnco, eleazzaar, wildweasel, Soughtaftersounds");
         GUILayout.EndVertical();
 
         GUILayout.EndHorizontal();
