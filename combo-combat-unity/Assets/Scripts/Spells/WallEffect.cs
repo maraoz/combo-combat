@@ -4,15 +4,17 @@ using System.Collections;
 public class WallEffect : MonoBehaviour {
 
     public float padding = 0f;
+    public AudioClip clip;
 
     public void SetPadding(float p) {
         padding = p;
+        if (padding == 0) {
+            audio.clip = clip;
+            audio.Play();
+        }
     }
 
-
-
     void Update() {
-
         float sc = transform.localScale.x;
         float realPadding = padding;
 
@@ -23,9 +25,8 @@ public class WallEffect : MonoBehaviour {
         renderer.material.mainTextureOffset =
             new Vector2(-3.37f * t + realPadding, 1);
         renderer.material.SetTextureOffset("_NormalMap",
-            new Vector2(v + realPadding/10, w));
+            new Vector2(v + realPadding / 10, w));
         renderer.material.SetTextureScale("_NormalMap",
             new Vector2(sc, 0.5f));
-
     }
 }
