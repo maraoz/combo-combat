@@ -9,6 +9,8 @@ public class HudController : MonoBehaviour {
     public Texture2D lifeBarFront;
     public Texture2D lifeBarBack;
 
+    public float padding = 30;
+
     public float spellHpad;
     public float spellVPad;
     public float spellMargin;
@@ -64,8 +66,8 @@ public class HudController : MonoBehaviour {
         int spellBarHeight = spellBar.height /4;
         float lifeBarWidth = lifeBarBack.width*0.237f;
         float lifeBarHeight = lifeBarBack.height / 4;
-        spellBarRect = new Rect(Screen.width / 2 - spellBarWidth / 2, (int) Screen.height - spellBarHeight * 1.0f, spellBarWidth, spellBarHeight);
-        lifeBarRect = new Rect(Screen.width / 2 - lifeBarWidth / 2, (int) Screen.height - spellBarHeight * 0.95f, lifeBarWidth, lifeBarHeight);
+        spellBarRect = new Rect(Screen.width / 2 - spellBarWidth / 2, padding+(int) Screen.height - spellBarHeight * 1.0f, spellBarWidth, spellBarHeight);
+        lifeBarRect = new Rect(Screen.width / 2 - lifeBarWidth / 2, padding + (int) Screen.height - spellBarHeight * 0.95f, lifeBarWidth, lifeBarHeight);
 
         // spell bar
         GUI.DrawTexture(spellBarRect, spellBar);
