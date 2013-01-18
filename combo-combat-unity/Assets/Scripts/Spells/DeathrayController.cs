@@ -3,6 +3,7 @@ using System.Collections;
 
 public class DeathrayController : MonoBehaviour {
 
+    public GameObject effect;
     public float secondsUntilExhaust = 3.0f;
     public float damage = 50;
     public float rayLength = 100;
@@ -21,6 +22,7 @@ public class DeathrayController : MonoBehaviour {
     private Vector3 end;
 
     private MageLifeController caster;
+    private GameObject spawned;
 
 
     void Awake() {
@@ -61,6 +63,7 @@ public class DeathrayController : MonoBehaviour {
         secondsPast += Time.deltaTime;
         if (secondsPast >= secondsUntilExhaust) {
             lineRenderer.SetVertexCount(0);
+            Destroy(spawned);
             if (!explosionAudio.isPlaying) {
                 Destroy(gameObject);
             }
@@ -71,6 +74,15 @@ public class DeathrayController : MonoBehaviour {
         this.enabled = true;
         lineRenderer.SetColors(rayDamageColor, rayDamageColor);
         lineRenderer.SetWidth(rayDamageWidth, rayDamageWidth);
+        lineRenderer.SetVertexCount(0);
+        
+        spawned = Instantiate(effect, transform.position+transform.forward*0.1f, Quaternion.Euler(new Vector3(0,0,90))) as GameObject;
+        spawned.transform.LookAt(transform);
+        Vector3 euler = spawned.transform.eulerAngles;
+        euler.x += 180;
+        spawned.transform.eulerAngles = euler;
+
+
         if (Network.isServer) {
             RaycastHit[] hits = Physics.SphereCastAll(origin, rayDamageWidth, transform.forward, rayLength);
             foreach (RaycastHit hit in hits) {
