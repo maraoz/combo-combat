@@ -119,7 +119,7 @@ public class UserInputController : MonoBehaviour {
                 }
                 // click feedback
                 if (hitInfo.collider != null && (rightDown || leftDown)) {
-                    Vector3 clickFeedbackPosition = hitInfo.point + Vector3.up * 0.3f;
+                    Vector3 clickFeedbackPosition = hitInfo.point + Vector3.up * 0.1f;
                     if (giveFeedback) {
                         GameObject feedback = GameObject.Instantiate(clickFeedback) as GameObject;
                         feedback.transform.position = clickFeedbackPosition;
