@@ -30,7 +30,8 @@ public class WallCaster : SpellCaster {
             return;
         }
         int count = points.Count;
-        int totalBricks = 0;
+        int index = 0;
+        float distAccum = 0;
         for (int i = 0; i < count - 1; i++) {
             Vector3 current = points[i];
             Vector3 next = points[i + 1];
@@ -48,19 +49,22 @@ public class WallCaster : SpellCaster {
                 Vector3 nextBrick = Vector3.Lerp(current, next, adaptedBrickLenght * (j + 1) / dist);
                 Vector3 middleBrick = (currentBrick + nextBrick) / 2;
 
-                SpawnBrick(middleBrick, next, adaptedBrickLenght);
+                SpawnBrick(middleBrick, next, adaptedBrickLenght, distAccum);
+                distAccum += adaptedBrickLenght;
+                index += 1;
             }
-            totalBricks += bricksNeeded;
         }
     }
 
     [RPC]
-    public void SpawnBrick(Vector3 middleBrick, Vector3 next, float adaptedBrickLenght) {
-        networkView.ClientsUnbuffered("SpawnBrick", middleBrick, next, adaptedBrickLenght);
+    public void SpawnBrick(Vector3 middleBrick, Vector3 next, float adaptedBrickLenght, float padding) {
+        networkView.ClientsUnbuffered("SpawnBrick", middleBrick, next, adaptedBrickLenght, padding);
         GameObject piece = GameObject.Instantiate(brick, middleBrick, Quaternion.identity) as GameObject;
+        piece.GetComponent<WallEffect>().SetPadding(padding);
         piece.transform.LookAt(next);
         Vector3 euler = piece.transform.eulerAngles;
         euler.y += 90;
+        euler.x += 90;
         piece.transform.eulerAngles = euler;
         Vector3 scale = piece.transform.localScale;
         scale.x *= adaptedBrickLenght;
