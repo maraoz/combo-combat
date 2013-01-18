@@ -4,13 +4,13 @@ using System;
 
 public class CommandLineParser : PersistentSingleton {
 
-    public int defaultMaxPlayersAllowedFree = 32;
+    public int defaultMaxPlayersAllowedFree  = 32;
     public int defaultMaxPlayersAllowedMatch = 4;
-    public string defaultServerName = "Default ";
-    public string defaultServerComment = "Argentina {0} mode game.";
-    public int defaultServerPort = 34200;
-    public bool defaultIsFreeMode = true;
-    public bool defaultIsDynamicPort = true;
+    public string defaultServerName          = "Default ";
+    public string defaultServerComment       = "Argentina {0} mode game. version {1}";
+    public int defaultServerPort             = 34200;
+    public bool defaultIsFreeMode            = true;
+    public bool defaultIsDynamicPort         = true;
 
     private static int maxPlayersAllowed = -1;
     private static bool isFreeMode;
@@ -55,7 +55,7 @@ public class CommandLineParser : PersistentSingleton {
             serverName = defaultServerName + (isFreeMode ? "Free Mode" : "Match Mode");
         }
         if (serverComment == null) {
-            serverComment = String.Format(defaultServerComment, isFreeMode ? "free" : "match");
+            serverComment = String.Format(defaultServerComment, isFreeMode ? "free" : "match", GameConstants.GAME_VERSION);
         }
 
 

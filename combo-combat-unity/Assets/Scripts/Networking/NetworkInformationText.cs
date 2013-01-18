@@ -11,9 +11,9 @@ public class NetworkInformationText : PersistentSingleton {
 
     void OnGUI() {
         textPosition = new Rect(10, 5, 500, 20);
-        if (Network.isServer)
+        if (Network.isServer) {
             GUI.Label(textPosition, "Running as a dedicated server");
-        if (Network.isClient) {
+        } else {
             GUI.Label(textPosition, "Combo Combat version " + GameConstants.GAME_VERSION);
         }
     }
