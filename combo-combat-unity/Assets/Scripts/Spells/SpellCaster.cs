@@ -9,6 +9,8 @@ public abstract class SpellCaster : MonoBehaviour {
     public string animationName = "punch";
     public float cooldown = 5.0f;
     public Texture2D icon;
+    public Texture2D frame;
+
     public Tooltip tooltip;
     public UserInputController.ControlState inputControlState;
     public AudioClip[] castShouts;
@@ -111,6 +113,10 @@ public abstract class SpellCaster : MonoBehaviour {
 
     internal Texture GetIcon() {
         return icon;
+    }
+
+    internal Texture2D GetFrame() {
+        return frame;
     }
 
     internal UserInputController.ControlState GetInputControlState() {

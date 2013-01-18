@@ -24,6 +24,12 @@ public class HudController : MonoBehaviour {
     private bool showTooltip = false;
     private Rect tooltipRect;
 
+    // portrait
+    public Texture2D portrait;
+    private Rect portraitRect;
+    public int portraitHeight;
+    public int portraitWidth;
+
     public int spellsShown = 4;
 
     private List<SpellCaster> spells;
@@ -54,20 +60,28 @@ public class HudController : MonoBehaviour {
             spellIconStyle = GUI.skin.GetStyle("Spell Icon");
         }
 
-        int spellBarWidth = spellBar.width / 3;
-        int spellBarHeight = spellBar.height / 3;
-        int lifeBarWidth = lifeBarFrame.width;
-        int lifeBarHeight = (int) (lifeBarFrame.height * 0.8f);
+        int spellBarWidth = spellBar.width /4;
+        int spellBarHeight = spellBar.height /4;
+        float lifeBarWidth = lifeBarBack.width*0.237f;
+        float lifeBarHeight = lifeBarBack.height / 4;
         spellBarRect = new Rect(Screen.width / 2 - spellBarWidth / 2, (int) Screen.height - spellBarHeight * 1.0f, spellBarWidth, spellBarHeight);
-        lifeBarRect = new Rect(Screen.width / 2 - lifeBarWidth / 2, (int) Screen.height - spellBarHeight * 1.74f, lifeBarWidth, lifeBarHeight);
+        lifeBarRect = new Rect(Screen.width / 2 - lifeBarWidth / 2, (int) Screen.height - spellBarHeight * 0.95f, lifeBarWidth, lifeBarHeight);
+
+        // spell bar
+        GUI.DrawTexture(spellBarRect, spellBar);
+
+
         // spell
-        float fSize = spellBarRect.height * 0.74f;
+        float fSize = spellBarRect.height * 0.3f;
         spellRect = new Rect(spellBarRect.x + spellHpad - spellMargin, spellBarRect.y + spellVPad, fSize, fSize);
         for (int i = 0; i < spells.Count; i++) {
             SpellCaster spell = spells[i];
 
             // button
+            float frameSize = fSize * 1.4f;
+            Rect frameRect = new Rect(spellRect.x + spellMargin-5, spellRect.y-5, frameSize, frameSize);
             spellRect = new Rect(spellRect.x + spellMargin, spellRect.y, fSize, fSize);
+            GUI.DrawTexture(frameRect, spell.GetFrame());
             if (GUI.Button(spellRect, new GUIContent(spell.GetIcon(), spell.GetTooltip().id), spellIconStyle)) {
                 controls.OnSpellHotkeyPressed(spell);
             }
@@ -85,7 +99,7 @@ public class HudController : MonoBehaviour {
             string hotkey = spell.GetHotkeyString();
             Rect hotkeyRect = new Rect(spellRect);
             hotkeyRect.y += hotkeyVPad;
-            GUI.Label(hotkeyRect, hotkey, hotkeyStyle);
+            //GUI.Label(hotkeyRect, hotkey, hotkeyStyle);
 
         }
 
@@ -95,16 +109,14 @@ public class HudController : MonoBehaviour {
             GUI.DrawTexture(spellRect, empty);
         }
 
-        // spell bar
-        GUI.DrawTexture(spellBarRect, spellBar);
 
 
         // life bar
         Rect lifeBarFrontRect = new Rect(lifeBarRect);
         lifeBarFrontRect.width *= life.GetLifePercentage();
-        GUI.DrawTexture(lifeBarRect, lifeBarBack);
         GUI.DrawTexture(lifeBarFrontRect, lifeBarFront);
-        GUI.DrawTexture(lifeBarRect, lifeBarFrame);
+        GUI.DrawTexture(lifeBarRect, lifeBarBack);
+        //GUI.DrawTexture(lifeBarRect, lifeBarFrame);
 
         // tooltip
         if (Event.current.type == EventType.Repaint) {
@@ -128,6 +140,11 @@ public class HudController : MonoBehaviour {
             // dissconnect from server
             Network.CloseConnection(Network.connections[0], true);
         }
+
+        // portrait
+        portraitRect = new Rect(0, Screen.height - portraitHeight, portraitWidth, portraitHeight);
+        GUI.DrawTexture(portraitRect, portrait);
+
 
         CheckGUIFocused();
     }

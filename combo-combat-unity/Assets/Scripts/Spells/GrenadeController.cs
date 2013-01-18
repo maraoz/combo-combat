@@ -56,7 +56,7 @@ public class GrenadeController : MonoBehaviour {
                         MageLifeController mageLife = mageObject.GetComponent<MageLifeController>();
                         mageLife.DoDamage(damage, caster);
                         Vector3 away = mage.transform.position - transform.position;
-                        mage.ApplyKnockback(mage.transform.position, away * (knockbackMagnitude * (1 - dist / explosionRadius)));
+                        mage.ApplyKnockback(mage.transform.position, -away * (knockbackMagnitude * (dist / explosionRadius)));
                     }
                 }
                 ExplodeDestroy(transform.position);
