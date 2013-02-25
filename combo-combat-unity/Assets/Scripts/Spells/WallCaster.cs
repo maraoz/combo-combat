@@ -109,7 +109,7 @@ public class WallCaster : SpellCaster {
     }
 
     public override void OnClickDragged(Vector3 position) {
-        if (this.IsCasting()) {
+        if (this.cast.IsCasting()) {
             return;
         }
         int count = points.Count;

@@ -74,7 +74,7 @@ public class UserInputController : MonoBehaviour {
 
         if (rightPressed || leftPressed || leftUp) {
             if (state != ControlState.moving && rightPressed) {
-                if (!currentSpell.IsCasting()) {
+                if (!currentSpell.cast.IsCasting()) {
                     state = ControlState.moving;
                     currentSpell = null;
                 }
@@ -104,7 +104,7 @@ public class UserInputController : MonoBehaviour {
                 }
 
                 // left click handler for spells
-                if (currentSpell != null && !currentSpell.IsCasting()) {
+                if (currentSpell != null && !currentSpell.cast.IsCasting()) {
                     if (leftDown && currentSpell != null) {
                         giveFeedback = true;
                         OnSpellClickDown(planePosition);
@@ -132,7 +132,7 @@ public class UserInputController : MonoBehaviour {
 
     public bool OnSpellHotkeyPressed(SpellCaster spell) {
         float now = Time.time;
-        if (spell.IsCooldownActive(now)) {
+        if (spell.cast.IsCooldownActive(now)) {
             return false;
         }
         if (currentSpell != null) {

@@ -4,10 +4,8 @@ using System.Collections;
 public abstract class SpellCaster : MonoBehaviour {
 
     public int id;
-    public float fullCastingTime = 2;
-    public float preCastingTime = 1;
+    public Cast cast;
     public string animationName = "punch";
-    public float cooldown = 5.0f;
     public Texture2D icon;
     public Texture2D frame;
 
@@ -16,52 +14,31 @@ public abstract class SpellCaster : MonoBehaviour {
     public AudioClip[] castShouts;
     public float shoutProbability = 1.0f;
 
-    private float lastCastTimestamp;
-    private float castingTime = 0f;
-    private bool isCasting = false;
-    private bool hasCastedSpell = false;
     private Mage mage;
     private UserInputController controls;
 
     internal virtual void Awake() {
         mage = GetComponent<Mage>();
         controls = GetComponent<UserInputController>();
-        lastCastTimestamp = 0f;
     }
 
-    void Update() {
-        if (isCasting) {
-            castingTime += Time.deltaTime;
-            if (castingTime >= preCastingTime && !hasCastedSpell) {
-                DoCastSpell();
-                hasCastedSpell = true;
-            }
-            if (castingTime >= fullCastingTime) {
-                ResetCaster();
-                OnFinishCasting();
-            }
-        }
-    }
-
-    private void ResetCaster() {
+    internal void ResetCaster() {
         mage.FinishedCasting();
         controls.FinishedCasting();
-        castingTime = 0f;
-        isCasting = false;
-        hasCastedSpell = false;
     }
 
     protected void PlanCast() {
         float now = Time.time;
-        if (IsCooldownActive(now)) {
+        if (cast.IsCooldownActive(now)) {
             return;
         }
         if (!mage.IsGrounded()) {
             return;
         }
-        lastCastTimestamp = now;
-        if (!isCasting) {
-            isCasting = true;
+        cast.SetLastCastTimestamp(now);
+        
+        if (!cast.IsCasting()) {
+            cast.StartCasting();
             if (castShouts.Length > 0 && Random.value < shoutProbability) {
                 mage.audio.clip = castShouts[(int) (Random.value * castShouts.Length)];
                 mage.audio.Play();
@@ -70,24 +47,8 @@ public abstract class SpellCaster : MonoBehaviour {
         }
     }
 
-    internal bool IsCooldownActive(float now) {
-        return (lastCastTimestamp != 0f && now - lastCastTimestamp < cooldown);
-    }
-
-    internal float GetCooldownPercentage() {
-        float now = Time.time;
-        if (!IsCooldownActive(now)) {
-            return 0f;
-        }
-        return 1 - (now - lastCastTimestamp) / cooldown;
-    }
-
     public void InterruptSpell() {
         ResetCaster();
-    }
-
-    public bool IsCasting() {
-        return isCasting;
     }
 
     protected Mage GetMage() {
@@ -96,10 +57,6 @@ public abstract class SpellCaster : MonoBehaviour {
 
     internal int GetId() {
         return id;
-    }
-
-    public float GetFullCastingTime() {
-        return fullCastingTime;
     }
 
     public string GetAnimationName() {

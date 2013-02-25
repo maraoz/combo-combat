@@ -39,7 +39,7 @@ public class CharacterSimpleAnimation : MonoBehaviour {
 
         if (player.IsCasting()) {
             SpellCaster spell = player.GetCurrentSpellCaster();
-            float fullCastingTime = spell.GetFullCastingTime();
+            float fullCastingTime = spell.cast.GetFullCastingTime();
             if (fullCastingTime > 0) {
                 string aniName = spell.GetAnimationName();
                 AnimationState state = animation[aniName];

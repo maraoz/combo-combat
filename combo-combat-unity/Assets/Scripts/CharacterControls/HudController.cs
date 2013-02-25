@@ -89,7 +89,7 @@ public class HudController : MonoBehaviour {
             }
 
             // cooldown effect
-            float percentage = spell.GetCooldownPercentage();
+            float percentage = spell.cast.GetCooldownPercentage();
             if (percentage > 0) {
                 GUI.DrawTexture(spellRect, cooldownBack);
                 Rect cdRect = new Rect(spellRect);
