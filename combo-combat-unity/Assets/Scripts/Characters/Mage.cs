@@ -92,6 +92,10 @@ public class Mage : MonoBehaviour {
         return isStunned;
     }
 
+    internal int GetLivesLeft() {
+        return life.GetLivesLeft();
+    }
+
 
 
 

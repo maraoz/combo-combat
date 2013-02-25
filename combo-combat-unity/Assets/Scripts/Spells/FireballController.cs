@@ -5,6 +5,7 @@ public class FireballController : MonoBehaviour {
 
     public GameObject explosion;
     public float secondsUntilExhaust = 3.0f;
+    [Range(10,1000)]
     public float damage = 10;
     public float speed = .2f;
     public float knockbackMagnitude = 20f;

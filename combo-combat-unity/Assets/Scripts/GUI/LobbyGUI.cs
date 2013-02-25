@@ -137,6 +137,7 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.Space(25);
 
         HostData[] data = MasterServer.PollHostList();
+        //data = NoInternetVersion();
         foreach (HostData element in data) {
             GUILayout.Space(10);
             GUILayout.BeginHorizontal();
@@ -171,6 +172,21 @@ public class LobbyGUI : MonoBehaviour {
             }
             GUILayout.EndHorizontal();
         }
+    }
+
+    private HostData[] NoInternetVersion() {
+        HostData[] data;
+        data = new HostData[1];
+        data[0] = new HostData();
+        data[0].ip = new string[1];
+        data[0].ip[0] = "localhost";
+        data[0].port = 34200;
+        data[0].connectedPlayers = 0;
+        data[0].playerLimit = 32;
+        data[0].guid = "test";
+        data[0].passwordProtected = false;
+        data[0].useNat = false;
+        return data;
     }
 
     void MakeCreditsWindow(int id) {

@@ -68,9 +68,16 @@ public class MageLifeController : MonoBehaviour {
         return (life / maxLife);
     }
 
+    public int GetLivesLeft() {
+        return livesLeft;
+    }
+
     void Update() {
-        if (transform.position.y < dieHeight) {
-            DoDamage(100, null);
+        if (Network.isServer) {
+            if (transform.position.y < dieHeight && !isDying) {
+                Debug.Log("fallen");
+                DoDamage(100, null);
+            }
         }
         if (isDying && livesLeft > 0) {
             deathTimeSpent += Time.deltaTime;
