@@ -70,7 +70,7 @@ public class DeathrayController : MonoBehaviour {
         }
     }
 
-    internal void ActivateDamage() {
+    internal void ActivateEffects(SpellNature nature) {
         this.enabled = true;
         lineRenderer.SetColors(rayDamageColor, rayDamageColor);
         lineRenderer.SetWidth(rayDamageWidth, rayDamageWidth);

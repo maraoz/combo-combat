@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-public class DeathrayCaster : Spell {
-
+public class SpellNature : MonoBehaviour {
 
 }

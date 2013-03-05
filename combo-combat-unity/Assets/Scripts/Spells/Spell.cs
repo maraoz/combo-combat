@@ -6,6 +6,8 @@ public abstract class Spell : MonoBehaviour {
     public int id;
     public SpellCast cast;
     public SpellForm form;
+    public SpellNature nature;
+
     public Texture2D icon;
     public Texture2D frame;
     public Tooltip tooltip;
@@ -20,6 +22,8 @@ public abstract class Spell : MonoBehaviour {
 
     internal virtual void Awake() {
         mage = GetComponent<Mage>();
+        cast.SetSpell(this);
+        form.SetSpell(this);
         controls = GetComponent<UserInputController>();
     }
 
@@ -28,7 +32,7 @@ public abstract class Spell : MonoBehaviour {
         controls.FinishedCasting();
     }
 
-    protected void PlanCast() {
+    internal void PlanCast() {
         float now = Time.time;
         if (cast.IsCooldownActive(now)) {
             return;
@@ -72,13 +76,5 @@ public abstract class Spell : MonoBehaviour {
     internal Texture2D GetFrame() {
         return frame;
     }
-
-
-
-    // called when pre casting time elapsed and spell effect should be created
-    public abstract void DoCastSpell();
-
-    // called when full casting time elapsed
-    public abstract void OnFinishCasting();
 
 }
