@@ -38,7 +38,7 @@ public class SpellCast : MonoBehaviour {
             }
             if (castingTime >= fullCastingTime) {
                 ResetCast();
-                spell.OnFinishCasting();
+                spell.form.OnFinishCasting();
             }
         }
     }

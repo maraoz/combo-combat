@@ -187,32 +187,32 @@ public class UserInputController : MonoBehaviour {
     [RPC]
     void OnSpellClickDown(Vector3 planePosition) {
         networkView.Server("OnSpellClickDown", planePosition);
-        currentSpell.OnClickDown(planePosition);
+        currentSpell.form.OnClickDown(planePosition);
     }
 
     [RPC]
     void OnSpellClickDragged(Vector3 planePosition) {
         networkView.Server("OnSpellClickDragged", planePosition);
-        currentSpell.OnClickDragged(planePosition);
+        currentSpell.form.OnClickDragged(planePosition);
     }
 
     [RPC]
     void OnSpellClickUp(Vector3 planePosition) {
         networkView.Server("OnSpellClickUp", planePosition);
-        currentSpell.OnClickUp(planePosition);
+        currentSpell.form.OnClickUp(planePosition);
     }
 
     [RPC]
     void OnInputFocusLostNotify() {
         if (networkView.Server("OnInputFocusLostNotify")) {
-            currentSpell.OnInputFocusLost();
+            currentSpell.form.OnInputFocusLost();
         }
     }
 
     [RPC]
     void OnFinishPerformingRequest() {
         networkView.Server("OnFinishPerformingRequest");
-        currentSpell.OnFinishPerforming();
+        currentSpell.form.OnFinishPerforming();
     }
 
     [RPC]
@@ -221,7 +221,7 @@ public class UserInputController : MonoBehaviour {
         foreach (Spell spell in spells) {
             if (spell.GetId() == spellId) {
                 currentSpell = spell;
-                state = spell.GetInputControlState();
+                state = spell.form.GetInputControlState();
                 break;
             }
         }

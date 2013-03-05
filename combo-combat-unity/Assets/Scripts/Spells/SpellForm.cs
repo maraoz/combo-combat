@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SpellForm : MonoBehaviour {
+public abstract class SpellForm : MonoBehaviour {
 
     public string animationName = "punch";
     public UserInputController.ControlState inputControlState;
@@ -67,7 +67,7 @@ public class SpellForm : MonoBehaviour {
 
     // must be implemented, spell effect logic related
     // called when pre casting time elapsed and spell effect should be created
-    public abstract void DoCastSpell(SpellNature nature);
+    public abstract void DoCastForm(SpellNature nature);
 
     // called when full casting time elapsed
     public abstract void OnFinishCasting();

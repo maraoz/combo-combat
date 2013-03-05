@@ -13,8 +13,8 @@ public class RayForm : SpellForm {
         OnFinishPerforming();
     }
 
-    public override void DoCastSpell(SpellNature nature) {
-        casted.GetComponent<DeathrayController>().ActivateEffects();
+    public override void DoCastForm(SpellNature nature) {
+        casted.GetComponent<DeathrayController>().ActivateEffects(nature);
     }
 
     [RPC]

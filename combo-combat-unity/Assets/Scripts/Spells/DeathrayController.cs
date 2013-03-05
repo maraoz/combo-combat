@@ -7,8 +7,7 @@ public class DeathrayController : MonoBehaviour {
     public float secondsUntilExhaust = 3.0f;
     public float damage = 50;
     public float rayLength = 100;
-    public float rayDamageWidth = 0.5f;
-    public Color rayDamageColor = Color.white;
+    public float rayEffectWidth = 0.5f;
     public float rayWarningWidth = 0.2f;
     public Color rayWarningColor = Color.red;
     public AudioClip[] explosionSounds;
@@ -42,7 +41,7 @@ public class DeathrayController : MonoBehaviour {
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
         lineRenderer.SetColors(rayWarningColor, rayWarningColor);
-        lineRenderer.SetWidth(rayWarningWidth, rayDamageWidth);
+        lineRenderer.SetWidth(rayWarningWidth, rayEffectWidth);
         lineRenderer.SetVertexCount(2);
         origin = transform.position;
         Vector3 forward = transform.TransformDirection(Vector3.forward);
@@ -72,8 +71,9 @@ public class DeathrayController : MonoBehaviour {
 
     internal void ActivateEffects(SpellNature nature) {
         this.enabled = true;
-        lineRenderer.SetColors(rayDamageColor, rayDamageColor);
-        lineRenderer.SetWidth(rayDamageWidth, rayDamageWidth);
+        Color primaryColor = nature.GetPrimaryColor();
+        lineRenderer.SetColors(primaryColor, primaryColor);
+        lineRenderer.SetWidth(rayEffectWidth, rayEffectWidth);
         lineRenderer.SetVertexCount(0);
         
         spawned = Instantiate(effect, transform.position+transform.forward*0.1f, Quaternion.Euler(new Vector3(0,0,90))) as GameObject;
@@ -84,7 +84,7 @@ public class DeathrayController : MonoBehaviour {
 
 
         if (Network.isServer) {
-            RaycastHit[] hits = Physics.SphereCastAll(origin, rayDamageWidth, transform.forward, rayLength);
+            RaycastHit[] hits = Physics.SphereCastAll(origin, rayEffectWidth, transform.forward, rayLength);
             foreach (RaycastHit hit in hits) {
                 Collider other = hit.collider;
                 if (other.tag == GameConstants.TAG_MAGE) {

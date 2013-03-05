@@ -77,4 +77,8 @@ public abstract class Spell : MonoBehaviour {
         return frame;
     }
 
+
+    internal void DoCastSpell() {
+        form.DoCastForm(nature);
+    }
 }

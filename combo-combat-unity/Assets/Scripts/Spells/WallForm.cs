@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class WallCaster : Spell {
+public class WallForm : SpellForm {
 
     public GameObject brick;
     public float wallBrickLength = 1.0f;
@@ -14,8 +14,7 @@ public class WallCaster : Spell {
     private List<Vector3> points;
     private float wallLength;
 
-    internal override void Awake() {
-        base.Awake();
+    void Awake() {
         points = new List<Vector3>();
         wallLength = 0;
         lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -25,7 +24,7 @@ public class WallCaster : Spell {
         lineRenderer.SetWidth(0.1F, 0.1F);
     }
 
-    public override void DoCastSpell() {
+    public override void DoCastForm(SpellNature nature) {
         if (!Network.isServer) {
             return;
         }
@@ -74,10 +73,6 @@ public class WallCaster : Spell {
         piece.transform.position = position;
     }
 
-    public override KeyCode GetHotkey() {
-        return Hotkeys.WALL_HOTKEY;
-    }
-
     public override void OnFinishCasting() {
         points.Clear();
     }
@@ -101,15 +96,11 @@ public class WallCaster : Spell {
     [RPC]
     void PlanCastWall() {
         networkView.ClientsUnbuffered("PlanCastWall");
-        PlanCast();
-    }
-
-    public override void OnClickDown(Vector3 position) {
-        // nothing for now
+        GetSpell().PlanCast();
     }
 
     public override void OnClickDragged(Vector3 position) {
-        if (this.cast.IsCasting()) {
+        if (GetSpell().cast.IsCasting()) {
             return;
         }
         int count = points.Count;

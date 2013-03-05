@@ -46,10 +46,11 @@ public class Mage : MonoBehaviour {
 
     // spells
     private Spell currentSpellBeingCasted;
-    private FireballCaster fireballCaster;
-    private WallCaster wallCaster;
-    private DeathrayCaster deathrayCaster;
-    private GrenadeCaster grenadeCaster;
+
+    public Spell fireballCaster;
+    public Spell wallCaster;
+    public Spell deathrayCaster;
+    public Spell grenadeCaster;
 
     void Awake() {
         if (this.audio == null) {
@@ -61,10 +62,6 @@ public class Mage : MonoBehaviour {
         life = GetComponent<MageLifeController>();
         controller = GetComponent<CharacterController>();
         currentSpellBeingCasted = null;
-        fireballCaster = GetComponent<FireballCaster>();
-        wallCaster = GetComponent<WallCaster>();
-        deathrayCaster = GetComponent<DeathrayCaster>();
-        grenadeCaster = GetComponent<GrenadeCaster>();
     }
 
     internal void SetPlayer(NetworkPlayer networkPlayer) {
