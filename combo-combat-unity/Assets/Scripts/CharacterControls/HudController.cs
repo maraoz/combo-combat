@@ -34,7 +34,7 @@ public class HudController : MonoBehaviour {
 
     public int spellsShown = 4;
 
-    private List<SpellCaster> spells;
+    private List<Spell> spells;
     private MageLifeController life;
     private UserInputController controls;
 
@@ -77,7 +77,7 @@ public class HudController : MonoBehaviour {
         float fSize = spellBarRect.height * 0.3f;
         spellRect = new Rect(spellBarRect.x + spellHpad - spellMargin, spellBarRect.y + spellVPad, fSize, fSize);
         for (int i = 0; i < spells.Count; i++) {
-            SpellCaster spell = spells[i];
+            Spell spell = spells[i];
 
             // button
             float frameSize = fSize * 1.4f;
@@ -152,7 +152,7 @@ public class HudController : MonoBehaviour {
     }
 
     void MakeTooltipWindow(int id) {
-        foreach (SpellCaster spell in spells) {
+        foreach (Spell spell in spells) {
             if (currentTooltip == spell.GetTooltip().id) {
                 InnerMakeTooltipWindow(spell);
                 break;
@@ -160,7 +160,7 @@ public class HudController : MonoBehaviour {
         }
     }
 
-    void InnerMakeTooltipWindow(SpellCaster spell) {
+    void InnerMakeTooltipWindow(Spell spell) {
         Tooltip tooltip = spell.GetTooltip();
         tooltip.SetSpell(spell);
         tooltip.Render();

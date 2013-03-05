@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class GrenadeCaster : SpellCaster {
+public class GrenadeCaster : Spell {
 
     public GameObject grenade;
 

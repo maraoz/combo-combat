@@ -38,10 +38,10 @@ public class CharacterSimpleAnimation : MonoBehaviour {
         animation["Walk"].normalizedSpeed = walkSpeedScale;
 
         if (player.IsCasting()) {
-            SpellCaster spell = player.GetCurrentSpellCaster();
+            Spell spell = player.GetCurrentSpellCaster();
             float fullCastingTime = spell.cast.GetFullCastingTime();
             if (fullCastingTime > 0) {
-                string aniName = spell.GetAnimationName();
+                string aniName = spell.form.GetAnimationName();
                 AnimationState state = animation[aniName];
                 state.speed = state.length / fullCastingTime;
                 animation.CrossFade(aniName);

@@ -1,19 +1,19 @@
 using UnityEngine;
 using System.Collections;
 
-public class Cast : MonoBehaviour {
+public class SpellCast : MonoBehaviour {
 
     public float fullCastingTime = 2;
     public float preCastingTime = 1;
     public float cooldown = 5.0f;
 
-    private SpellCaster spell;
+    private Spell spell;
     private float lastCastTimestamp;
     private float castingTime = 0f;
     private bool isCasting = false;
     private bool hasCastedSpell = false;
 
-    public void SetSpell(SpellCaster spell) {
+    public void SetSpell(Spell spell) {
         this.spell = spell;
     }
 

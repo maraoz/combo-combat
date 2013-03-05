@@ -45,7 +45,7 @@ public class Mage : MonoBehaviour {
 
 
     // spells
-    private SpellCaster currentSpellBeingCasted;
+    private Spell currentSpellBeingCasted;
     private FireballCaster fireballCaster;
     private WallCaster wallCaster;
     private DeathrayCaster deathrayCaster;
@@ -179,7 +179,7 @@ public class Mage : MonoBehaviour {
         controller.Move(totalVelocity * Time.deltaTime);
     }
 
-    public void OnSpellStartedCasting(SpellCaster spell) {
+    public void OnSpellStartedCasting(Spell spell) {
         currentSpellBeingCasted = spell;
     }
 
@@ -214,7 +214,7 @@ public class Mage : MonoBehaviour {
         return currentSpellBeingCasted != null;
     }
 
-    public SpellCaster GetCurrentSpellCaster() {
+    public Spell GetCurrentSpellCaster() {
         return currentSpellBeingCasted;
     }
 
@@ -222,9 +222,9 @@ public class Mage : MonoBehaviour {
         currentSpellBeingCasted = null;
     }
 
-    internal List<SpellCaster> GetSpellCasters() {
+    internal List<Spell> GetSpellCasters() {
         // TODO: take this to static editor list
-        List<SpellCaster> ret = new List<SpellCaster>();
+        List<Spell> ret = new List<Spell>();
         ret.Add(fireballCaster);
         ret.Add(wallCaster);
         ret.Add(grenadeCaster);

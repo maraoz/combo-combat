@@ -1,21 +1,22 @@
 using UnityEngine;
 using System.Collections;
 
-public abstract class SpellCaster : MonoBehaviour {
+public abstract class Spell : MonoBehaviour {
 
     public int id;
-    public Cast cast;
-    public string animationName = "punch";
+    public SpellCast cast;
+    public SpellForm form;
     public Texture2D icon;
     public Texture2D frame;
-
     public Tooltip tooltip;
-    public UserInputController.ControlState inputControlState;
-    public AudioClip[] castShouts;
-    public float shoutProbability = 1.0f;
+    public KeyCode hotkey;
 
     private Mage mage;
     private UserInputController controls;
+
+    public KeyCode GetHotkey() {
+        return hotkey;
+    }
 
     internal virtual void Awake() {
         mage = GetComponent<Mage>();
@@ -39,10 +40,7 @@ public abstract class SpellCaster : MonoBehaviour {
         
         if (!cast.IsCasting()) {
             cast.StartCasting();
-            if (castShouts.Length > 0 && Random.value < shoutProbability) {
-                mage.audio.clip = castShouts[(int) (Random.value * castShouts.Length)];
-                mage.audio.Play();
-            }
+            form.StartCasting();
             mage.OnSpellStartedCasting(this);
         }
     }
@@ -57,10 +55,6 @@ public abstract class SpellCaster : MonoBehaviour {
 
     internal int GetId() {
         return id;
-    }
-
-    public string GetAnimationName() {
-        return animationName;
     }
 
     internal Tooltip GetTooltip() {
@@ -79,9 +73,6 @@ public abstract class SpellCaster : MonoBehaviour {
         return frame;
     }
 
-    internal UserInputController.ControlState GetInputControlState() {
-        return inputControlState;
-    }
 
 
     // called when pre casting time elapsed and spell effect should be created
@@ -89,23 +80,5 @@ public abstract class SpellCaster : MonoBehaviour {
 
     // called when full casting time elapsed
     public abstract void OnFinishCasting();
-
-    // returns the spells hotkey
-    public abstract KeyCode GetHotkey();
-
-    // called when spell performance was finished. If performance is correct must call PlanCast (FIX this? maybe returns if performance was right)
-    public abstract void OnFinishPerforming();
-
-    // called when user clicks mouse down on the world position
-    public abstract void OnClickDown(Vector3 position);
-
-    // called when user drags mouse over world position
-    public abstract void OnClickDragged(Vector3 position);
-
-    // called when user releases the mouse on the world position
-    public abstract void OnClickUp(Vector3 position);
-
-    // called when input focus is lost to GUI/HUD when casting spell
-    public abstract void OnInputFocusLost();
 
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class FireballCaster : SpellCaster {
+public class FireballCaster : Spell {
 
     public GameObject fireball;
 

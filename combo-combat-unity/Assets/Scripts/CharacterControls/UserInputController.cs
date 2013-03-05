@@ -7,8 +7,8 @@ public class UserInputController : MonoBehaviour {
     public GameObject clickFeedback;
 
     private Mage player;
-    private List<SpellCaster> spells;
-    private SpellCaster currentSpell;
+    private List<Spell> spells;
+    private Spell currentSpell;
 
     private ControlState oldState;
     private ControlState state;
@@ -44,7 +44,7 @@ public class UserInputController : MonoBehaviour {
 
         // KEYBOARD
         if (currentSpell == null) {
-            foreach (SpellCaster spell in spells) {
+            foreach (Spell spell in spells) {
                 if (Input.GetKeyDown(spell.GetHotkey())) {
                     if (OnSpellHotkeyPressed(spell)) {
                         break;
@@ -130,7 +130,7 @@ public class UserInputController : MonoBehaviour {
         }
     }
 
-    public bool OnSpellHotkeyPressed(SpellCaster spell) {
+    public bool OnSpellHotkeyPressed(Spell spell) {
         float now = Time.time;
         if (spell.cast.IsCooldownActive(now)) {
             return false;
@@ -218,7 +218,7 @@ public class UserInputController : MonoBehaviour {
     [RPC]
     void OnStartSpellPerform(int spellId) {
         networkView.Server("OnStartSpellPerform", spellId);
-        foreach (SpellCaster spell in spells) {
+        foreach (Spell spell in spells) {
             if (spell.GetId() == spellId) {
                 currentSpell = spell;
                 state = spell.GetInputControlState();

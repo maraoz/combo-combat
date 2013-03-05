@@ -5,7 +5,7 @@ public class Tooltip : MonoBehaviour {
 
     public string id;
     public string spellName;
-    private SpellCaster spell;
+    private Spell spell;
 
     [Multiline]
     public string description;
@@ -62,7 +62,7 @@ public class Tooltip : MonoBehaviour {
 
 
 
-    internal void SetSpell(SpellCaster spell) {
+    internal void SetSpell(Spell spell) {
         this.spell = spell;
     }
 }

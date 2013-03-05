@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class WallCaster : SpellCaster {
+public class WallCaster : Spell {
 
     public GameObject brick;
     public float wallBrickLength = 1.0f;

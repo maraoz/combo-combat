@@ -1,16 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class DeathrayCaster : SpellCaster {
+public class DeathrayCaster : Spell {
 
     public GameObject ray;
 
     private Vector3 target;
     private GameObject casted;
-
-    public override KeyCode GetHotkey() {
-        return Hotkeys.DEATHRAY_HOTKEY;
-    }
 
     public override void DoCastSpell() {
         casted.GetComponent<DeathrayController>().ActivateDamage();
