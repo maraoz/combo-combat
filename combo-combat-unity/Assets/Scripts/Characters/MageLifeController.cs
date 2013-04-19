@@ -163,9 +163,9 @@ public class MageLifeController : MonoBehaviour {
         Vector3 pos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 2.5f);
         int lifePercent = (int) (healthBarLength * GetLifePercentage());
         Rect frameRect = new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, healthBarLength, healthBarHeight);
-        GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, lifePercent, healthBarHeight), foregroundTexture, ScaleMode.StretchToFill, true, 0);
         GUI.DrawTexture(frameRect, backgroundTexture, ScaleMode.StretchToFill, true, 0);
-        //GUI.DrawTexture(frameRect, frameTexture, ScaleMode.StretchToFill, true, 0);
+        GUI.DrawTexture(new Rect(pos.x - healthBarLength / 2, Screen.height - pos.y, lifePercent, healthBarHeight), foregroundTexture, ScaleMode.StretchToFill, true, 0);
+        GUI.DrawTexture(frameRect, frameTexture, ScaleMode.StretchToFill, true, 0);
         GUIStyle centeredStyle = new GUIStyle(GUI.skin.label);
         centeredStyle.alignment = TextAnchor.UpperCenter;
         centeredStyle.normal.textColor = Color.black;

@@ -64,8 +64,8 @@ public class HudController : MonoBehaviour {
 
         int spellBarWidth = spellBar.width /4;
         int spellBarHeight = spellBar.height /4;
-        float lifeBarWidth = lifeBarBack.width*0.237f;
-        float lifeBarHeight = lifeBarBack.height / 4;
+        float lifeBarWidth = lifeBarFrame.width*0.237f;
+        float lifeBarHeight = lifeBarFrame.height / 4;
         spellBarRect = new Rect(Screen.width / 2 - spellBarWidth / 2, padding+(int) Screen.height - spellBarHeight * 1.0f, spellBarWidth, spellBarHeight);
         lifeBarRect = new Rect(Screen.width / 2 - lifeBarWidth / 2, padding + (int) Screen.height - spellBarHeight * 0.95f, lifeBarWidth, lifeBarHeight);
 
@@ -116,9 +116,9 @@ public class HudController : MonoBehaviour {
         // life bar
         Rect lifeBarFrontRect = new Rect(lifeBarRect);
         lifeBarFrontRect.width *= life.GetLifePercentage();
-        GUI.DrawTexture(lifeBarFrontRect, lifeBarFront);
         GUI.DrawTexture(lifeBarRect, lifeBarBack);
-        //GUI.DrawTexture(lifeBarRect, lifeBarFrame);
+        GUI.DrawTexture(lifeBarFrontRect, lifeBarFront);
+        GUI.DrawTexture(lifeBarRect, lifeBarFrame);
 
         // tooltip
         if (Event.current.type == EventType.Repaint) {
