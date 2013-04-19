@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public abstract class Spell : MonoBehaviour {
+public class Spell : MonoBehaviour {
 
     public int id;
     public SpellCast cast;
