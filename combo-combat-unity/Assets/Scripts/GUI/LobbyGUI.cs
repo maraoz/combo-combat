@@ -8,9 +8,6 @@ public class LobbyGUI : MonoBehaviour {
     public string gameName = "You must change this";
     public bool allowsDedicatedServer = false;
     public GUISkin customSkin;
-    public int maxUsernameLength = 20;
-    public string DEFAULT_USERNAME = "Player";
-    public UsernameHolder usernameHolder;
 
     public double serverListRefreshTime = 3.0;
     private double lastHostListRequest = -1000.0;
@@ -26,18 +23,13 @@ public class LobbyGUI : MonoBehaviour {
     private Rect serverListRect;
     private Rect creditsRect;
     private string testMessage = "Undetermined NAT capabilities";
-    private string USERNAME_INPUT_NAME = "Username text field";
-    private string usernameField = "";
+
 
     void Awake() {
         connectionTestResult = Network.TestConnection();
     }
 
     void Start() {
-        usernameField = PlayerPrefs.GetString(GameConstants.PREFS_USERNAME);
-        if (usernameField == "") {
-            usernameField = DEFAULT_USERNAME;
-        }
         if (allowsDedicatedServer && CommandLineParser.IsBatchMode()) {
             DoStartServer();
         }
@@ -119,9 +111,10 @@ public class LobbyGUI : MonoBehaviour {
             }
 
             GUILayout.FlexibleSpace();
-            GUILayout.Label("Username:");
-            GUI.SetNextControlName(USERNAME_INPUT_NAME);
-            usernameField = GUILayout.TextField(usernameField, maxUsernameLength, GUILayout.MinWidth(150));
+            GUILayout.Label("Playing as " + UsernameHolder.GetUsername());
+            if (GUILayout.Button("Logout")) {
+                Application.Quit();
+            }
 
             GUILayout.EndHorizontal();
         } else {
@@ -145,7 +138,7 @@ public class LobbyGUI : MonoBehaviour {
 
             // Do not display NAT enabled games if we cannot do NAT punchthrough
             if (!(filterNATHosts && element.useNat)) {
-                var connections = "("+(element.connectedPlayers - 1) + "/" + (element.playerLimit - 1)+")";
+                var connections = "(" + (element.connectedPlayers - 1) + "/" + (element.playerLimit - 1) + ")";
                 GUILayout.Label(element.gameName);
                 GUILayout.Space(5);
                 GUILayout.Label(connections);
@@ -157,12 +150,6 @@ public class LobbyGUI : MonoBehaviour {
                 if (element.connectedPlayers < element.playerLimit) {
                     if (GUILayout.Button("Join Match", "ShortButton")) {
                         RefreshServers();
-                        PlayerPrefs.SetString(GameConstants.PREFS_USERNAME, usernameField);
-                        // TESTINGWISE>
-                        if (usernameField == "Manu") {
-                            usernameField = "T[" + Time.time + "]";
-                        }
-                        usernameHolder.SetUsername(usernameField);
                         Network.Connect(element);
                         this.enabled = false;
                     }
@@ -260,8 +247,8 @@ public class LobbyGUI : MonoBehaviour {
         GUILayout.Label("Creative Commons Attribution", GUI.skin.GetStyle("ShortLabel"));
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-        GUILayout.Label("Kevin Mac Leod, ZeSoundResearchInc., sandyrb, Goup_1, stijn, "+
-            "Grant Evans, et_, broke for free, jahzzar, ellywu2, Lavoura, "+
+        GUILayout.Label("Kevin Mac Leod, ZeSoundResearchInc., sandyrb, Goup_1, stijn, " +
+            "Grant Evans, et_, broke for free, jahzzar, ellywu2, Lavoura, " +
             "Colin Johnco, eleazzaar, wildweasel, Soughtaftersounds");
         GUILayout.EndVertical();
 
@@ -364,8 +351,9 @@ public class LobbyGUI : MonoBehaviour {
                 testMessage = "Error in test routine, got " + connectionTestResult;
                 break;
         }
-        if (!testMessage.Contains("Undetermined"))
-            Debug.Log(testMessage);
+        if (!testMessage.Contains("Undetermined")) {
+            //Debug.Log(testMessage);
+        }
     }
 
 
@@ -391,8 +379,8 @@ public class LobbyGUI : MonoBehaviour {
     }
 
     void LoadArenaLevel() {
-        Network.SetLevelPrefix(GameConstants.LEVEL_PREFIX_MATCH);
-        Application.LoadLevel(GameConstants.LEVEL_MATCH);
+        Network.SetLevelPrefix(GameConstants.LEVEL_PREFIX_ARENA);
+        Application.LoadLevel(GameConstants.LEVEL_ARENA);
     }
 
 }

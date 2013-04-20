@@ -197,7 +197,7 @@ public class MageLifeController : MonoBehaviour {
     [RPC]
     public void SetUsername(string u) {
         networkView.Clients("SetUsername", u);
-        if (u == UsernameHolder.MyUsername()) {
+        if (u == UsernameHolder.GetUsername()) {
             mage.TakeOwnership();
         }
         if (mage.IsMine()) { // client's own mage

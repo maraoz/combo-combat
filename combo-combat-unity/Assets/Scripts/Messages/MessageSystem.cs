@@ -33,7 +33,7 @@ public class MessageSystem : MonoBehaviour {
     }
 
     void Awake() {
-        chatUsername = UsernameHolder.MyUsername();
+        chatUsername = UsernameHolder.GetUsername();
     }
 
     void Update() {

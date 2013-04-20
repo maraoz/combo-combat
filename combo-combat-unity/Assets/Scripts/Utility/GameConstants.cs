@@ -43,9 +43,11 @@ public class GameConstants {
     public static NetworkPlayer NO_PLAYER = new NetworkPlayer();
 
     // levels
+    public static string LEVEL_SPLASH = "Splash";
     public static string LEVEL_LOBBY = "Lobby";
-    public static string LEVEL_MATCH = "ComboGame";
-    public static int LEVEL_PREFIX_LOBBY = 0;
-    public static int LEVEL_PREFIX_MATCH = 1;
+    public static string LEVEL_ARENA = "ComboGame";
+    public static int LEVEL_PREFIX_SPLASH = 0;
+    public static int LEVEL_PREFIX_LOBBY = 1;
+    public static int LEVEL_PREFIX_ARENA = 2;
 
 }

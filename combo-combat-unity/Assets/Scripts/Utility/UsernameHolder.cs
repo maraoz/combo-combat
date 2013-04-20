@@ -9,15 +9,27 @@ public class UsernameHolder : PersistentSingleton {
         base.Awake();
     }
 
-    public void SetUsername(string username) {
+    private void _SetUsername(string username) {
         this.username = username;
     }
 
-    public string GetUsername() {
+    private string _GetUsername() {
         return username;
     }
 
-    public static string MyUsername() {
-        return GameObject.Find("UsernameHolder").GetComponent<UsernameHolder>().GetUsername();
+    public static void SetUsername(string username) {
+        GameObject uh = GameObject.Find("UsernameHolder");
+        if (uh == null) {
+            return;
+        }
+        uh.GetComponent<UsernameHolder>()._SetUsername(username);
+    }
+
+    public static string GetUsername() {
+        GameObject uh = GameObject.Find("UsernameHolder");
+        if (uh == null) {
+            return "NoUsername";
+        }
+        return uh.GetComponent<UsernameHolder>()._GetUsername();
     }
 }

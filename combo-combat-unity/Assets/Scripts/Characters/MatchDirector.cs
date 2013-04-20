@@ -54,7 +54,7 @@ public class MatchDirector : MonoBehaviour {
             SetMatchMode(Network.maxConnections, CommandLineParser.IsFreeMode());
         }
         if (Network.isClient) {
-            string username = UsernameHolder.MyUsername();
+            string username = UsernameHolder.GetUsername();
             networkView.RPC("SpawnMage", RPCMode.Server, username); // need NetworkMessageInfo
         }
     }
