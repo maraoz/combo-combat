@@ -12,7 +12,7 @@ jinja_environment = jinja2.Environment(
 
 
 def hash_digest(x):
-    hasher = hashlib.new('ripemd160')
+    hasher = hashlib.new('SHA512')
     hasher.update(x)
     return hasher.hexdigest()
 
