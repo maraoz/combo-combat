@@ -47,17 +47,21 @@ public class SplashGUI : MonoBehaviour {
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Login")) {
-            WWW www = new WWW("http://www.combocombat.com/api/login?u=maraoz&p=123456");
-            yield return www;
-            string text = www.text;
-            JSONObject json = JSONObject.Parse(text);
-            bool success = json.GetBoolean("success");
-            if (success == true) {
-                OnSuccessfulLogin();
-            }
+            StartCoroutine(OnLoginPressed());
         }
         GUILayout.EndHorizontal();
         GUILayout.EndArea();
+    }
+
+    private IEnumerator OnLoginPressed() {
+        WWW www = new WWW("http://www.combocombat.com/api/login?u=" + username + "&p=" + password);
+        yield return www;
+        string text = www.text;
+        JSONObject json = JSONObject.Parse(text);
+        bool success = json.GetBoolean("success");
+        if (success == true) {
+            OnSuccessfulLogin();
+        }
     }
 
     private void OnSuccessfulLogin() {
