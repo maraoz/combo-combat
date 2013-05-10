@@ -17,6 +17,11 @@ public class SplashGUI : MonoBehaviour {
         if (username == "") {
             username = DEFAULT_USERNAME;
         }
+
+        if (CommandLineParser.IsBatchMode()) {
+            GoToLobby();
+        }
+
     }
 
     void OnGUI() {
@@ -54,6 +59,11 @@ public class SplashGUI : MonoBehaviour {
         }
         UsernameHolder.SetUsername(username);
 
+        GoToLobby();
+
+    }
+
+    private void GoToLobby() {
         Network.SetLevelPrefix(GameConstants.LEVEL_PREFIX_LOBBY);
         Application.LoadLevel(GameConstants.LEVEL_LOBBY);
     }
