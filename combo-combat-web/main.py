@@ -5,7 +5,7 @@ import webapp2, json, jinja2, os, hashlib
 
 from google.appengine.ext import db
 
-from model import Player
+from model import Player, Server
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
@@ -42,7 +42,7 @@ class RegisterHandler(JsonAPIHandler):
             return {"success": False , "error": "username"}
         
         
-        player = Player(username=username, password=hash_digest(password))
+        player = Player(username=username, password=hash_digest(password), searching = False, match_server = None)
         player.put()
         return {"success": True}
 
@@ -68,7 +68,7 @@ class SearchHandler(JsonAPIHandler):
         if not player:
             return {"success": False, "error": "nonexisting"}
         
-        other = Player.all().filter('searching = ', True).get()
+        other = Player.all().filter('searching = ', True).filter('username !=', username).get()
         if other:
             
             server = Server.get_free()
@@ -78,10 +78,17 @@ class SearchHandler(JsonAPIHandler):
             other.match_server = server
             player.match_server = server
             server.free = False
-            return {}
+            
+            other.put()
+            player.put()
+            server.put()
+            
+            return {"success": True, "match": True}
         
         player.searching = True
-        return {"success": True}
+        player.put()
+        
+        return {"success": True, "match" : False}
 
 class CheckHandler(JsonAPIHandler):
     def handle(self):
@@ -96,7 +103,12 @@ class CheckHandler(JsonAPIHandler):
         if not player.match_server:
             return {"success": True, "host": None}
         
-        return {"success": True, "host": player.match_server.host}
+        server_host = player.match_server.host
+        
+        player.match_server = None
+        player.put()
+        
+        return {"success": True, "host": server_host}
     
 class ResetHandler(JsonAPIHandler):
     def handle(self):
@@ -108,8 +120,23 @@ class ResetHandler(JsonAPIHandler):
         if not server:
             return {"success": False, "error": "nonexisting"}
         server.free = True
+        server.put()
         return {"success": True}
+    
+class AddServerHandler(JsonAPIHandler):
+    def handle(self):
+        host = self.request.get("h")
+        if not host:
+            return {"success": False, "error": "format"}
 
+        server = Server.all().filter('host = ', host).get()
+        if server:
+            return {"success": False, "error": "existing"}
+        
+        server = Server(host=host, free = True)
+        server.put()
+        
+        return {"success": True}
 
 
 app = webapp2.WSGIApplication([
@@ -118,7 +145,8 @@ app = webapp2.WSGIApplication([
     ('/api/login', LoginHandler),
     ('/api/search', SearchHandler),
     ('/api/check', CheckHandler),
-    ('/api/reset', ResetHandler)
+    ('/api/reset', ResetHandler),
+    ('/api/server', AddServerHandler)
     
 ], debug=False)
 

@@ -24,8 +24,8 @@ class Player(db.Model):
 
 class MatchHistory(db.Model):
     """Models a match played"""
-    players = db.ListProperty(db.ReferenceProperty(Player, collection_name='matches'))
-    scores = db.ListProperty(db.IntegerProperty)
+    players = db.ListProperty(str)
+    scores = db.ListProperty(int)
     elo_delta = db.IntegerProperty()
     duration = db.IntegerProperty()
     
