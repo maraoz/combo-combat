@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using Boomlagoon.JSON;
 
 public class SplashGUI : MonoBehaviour {
 
@@ -12,6 +13,7 @@ public class SplashGUI : MonoBehaviour {
     private string password;
 
     void Awake() {
+
         password = "";
         username = PlayerPrefs.GetString(GameConstants.PREFS_USERNAME);
         if (username == "") {
@@ -45,7 +47,14 @@ public class SplashGUI : MonoBehaviour {
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Login")) {
-            OnSuccessfulLogin();
+            WWW www = new WWW("http://www.combocombat.com/api/login?u=maraoz&p=123456");
+            yield return www;
+            string text = www.text;
+            JSONObject json = JSONObject.Parse(text);
+            bool success = json.GetBoolean("success");
+            if (success == true) {
+                OnSuccessfulLogin();
+            }
         }
         GUILayout.EndHorizontal();
         GUILayout.EndArea();
