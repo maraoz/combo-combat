@@ -23,6 +23,7 @@ public class SplashGUI : MonoBehaviour {
         }
 
         if (CommandLineParser.IsBatchMode()) {
+            Debug.Log("salteando ");
             GoToLobby();
         }
 

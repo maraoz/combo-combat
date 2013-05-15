@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using Boomlagoon.JSON;
 
 public class LobbyGUI : MonoBehaviour {
 
@@ -8,9 +9,6 @@ public class LobbyGUI : MonoBehaviour {
     public string gameName = "You must change this";
     public bool allowsDedicatedServer = false;
     public GUISkin customSkin;
-
-    public double serverListRefreshTime = 3.0;
-    private double lastHostListRequest = -1000.0;
 
     private ConnectionTesterStatus connectionTestResult = ConnectionTesterStatus.Undetermined;
     private bool filterNATHosts = false;
@@ -23,6 +21,9 @@ public class LobbyGUI : MonoBehaviour {
     private Rect serverListRect;
     private Rect creditsRect;
     private string testMessage = "Undetermined NAT capabilities";
+    private string message = "";
+    private int attempts;
+    private bool waitingForOpponent = false;
 
 
     void Awake() {
@@ -59,26 +60,14 @@ public class LobbyGUI : MonoBehaviour {
         // If test is undetermined, keep running
         if (!doneTesting)
             TestConnection();
-        if (Time.realtimeSinceStartup > lastHostListRequest + serverListRefreshTime) {
-            RefreshServers();
-        }
     }
 
     void OnGUI() {
         GUI.skin = customSkin;
 
         // main window
-        windowRect = new Rect(Screen.width / 2 - 300, 0, 600, 100);
+        windowRect = new Rect(50, 50, Screen.width - 100, Screen.height - 100);
         windowRect = GUILayout.Window(GameConstants.WIN_ID_SERVER, windowRect, MakeWindow, "");
-
-        // server list 
-        float serverListHeight = 400;
-        float serverListY = Screen.height - serverListHeight - 50;
-        if (serverListY < 150) {
-            serverListY = 150;
-        }
-        serverListRect = new Rect(Screen.width / 2 - Screen.width * 0.45f, serverListY, Screen.width * 0.9f, serverListHeight);
-        serverListRect = GUILayout.Window(GameConstants.WIN_ID_CLIENT, serverListRect, MakeClientWindow, "");
 
         // credits button
         creditsRect = new Rect(Screen.width - 100, Screen.height - 25, 100, 25);
@@ -103,11 +92,9 @@ public class LobbyGUI : MonoBehaviour {
                 if (GUILayout.Button("Start Server")) {
                     DoStartServer();
                 }
-            }
-
-            // Refresh hosts
-            if (GUILayout.Button("Refresh available Servers")) {
-                RefreshServers();
+                if (GUILayout.Button("Connect locally")) {
+                    Network.Connect("localhost", CommandLineParser.GetServerPort());
+                }
             }
 
             GUILayout.FlexibleSpace();
@@ -117,12 +104,72 @@ public class LobbyGUI : MonoBehaviour {
             }
 
             GUILayout.EndHorizontal();
-        } else {
-            if (GUILayout.Button("Disconnect")) {
-                Network.Disconnect();
-                MasterServer.UnregisterHost();
+            GUILayout.Space(50);
+            if (GUILayout.Button("Quick Match")) {
+                StartCoroutine(OnQuickPressed());
             }
-            GUILayout.FlexibleSpace();
+            GUILayout.Box(message, GUILayout.Height(100f));
+            if (waitingForOpponent == true) {
+                if (GUILayout.Button("Cancel search")) {
+                    waitingForOpponent = false;
+                    attempts = 0;
+                }
+            }
+        }
+    }
+
+    private IEnumerator OnQuickPressed() {
+        if (waitingForOpponent) {
+            yield return null;
+        }
+        string username = UsernameHolder.GetUsername();
+        WWW www = new WWW("http://www.combocombat.com/api/search?u=" + username);
+        message = "Contacting matchmaking server...";
+        yield return www;
+        if (www.error != "") {
+            message = www.error;
+            yield return null;
+        }
+        string text = www.text;
+        JSONObject json = JSONObject.Parse(text);
+        bool success = json.GetBoolean("success");
+        if (success == true) {
+            message = "Waiting for opponent...";
+            waitingForOpponent = true;
+            StartCoroutine(OnLookOpponent());
+        } else {
+            message = "Quick match failed: " + json.GetString("error");
+        }
+    }
+
+    private IEnumerator OnLookOpponent() {
+        string username = UsernameHolder.GetUsername();
+        WWW www = new WWW("http://www.combocombat.com/api/check?u=" + username);
+        yield return www;
+        if (www.error != "") {
+            message = www.error;
+            yield return null;
+        }
+        string text = www.text;
+        JSONObject json = JSONObject.Parse(text);
+        bool success = json.GetBoolean("success");
+        if (success == true) {
+            string host = json.GetString("host");
+            if (host == null) {
+                attempts += 1;
+                message = "Waiting for opponent... " + attempts;
+                if (waitingForOpponent) {
+                    yield return new WaitForSeconds(1);
+                    StartCoroutine(OnLookOpponent());
+                } else {
+                    message = "Waiting cancelled.";
+                }
+            } else {
+                message = "Opponent found! Please connect to " + host;
+                attempts = 0;
+            }
+        } else {
+            message = "Wait for opponent failed: " + json.GetString("error");
         }
     }
 
@@ -149,7 +196,6 @@ public class LobbyGUI : MonoBehaviour {
                 GUILayout.Width(100);
                 if (element.connectedPlayers < element.playerLimit) {
                     if (GUILayout.Button("Join Match", "ShortButton")) {
-                        RefreshServers();
                         Network.Connect(element);
                         this.enabled = false;
                     }
@@ -279,11 +325,6 @@ public class LobbyGUI : MonoBehaviour {
 
 
 
-    }
-
-    void RefreshServers() {
-        MasterServer.RequestHostList(gameName);
-        lastHostListRequest = Time.realtimeSinceStartup;
     }
 
     void TestConnection() {
