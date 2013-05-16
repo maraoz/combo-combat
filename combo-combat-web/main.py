@@ -57,6 +57,10 @@ class LoginHandler(JsonAPIHandler):
         player = Player.all().filter('username =', username).filter('password', hash_digest(password)).get()
         if not player:
             return {"success": False , "error": "failed"}
+        if not player.counter:
+            player.counter = 0
+        player.counter += 1
+        player.put()
         return {"success": True}
         
 class SearchHandler(JsonAPIHandler):

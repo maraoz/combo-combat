@@ -16,6 +16,7 @@ class Player(db.Model):
     password = db.StringProperty()
     
     joined = db.DateTimeProperty(auto_now_add=True)
+    counter = db.IntegerProperty()
     
     # TODO: take this out of here?
     searching = db.BooleanProperty()
