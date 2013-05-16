@@ -42,7 +42,7 @@ class RegisterHandler(JsonAPIHandler):
             return {"success": False , "error": "username"}
         
         
-        player = Player(username=username, password=hash_digest(password), searching = False, match_server = None)
+        player = Player(username=username, password=hash_digest(password), searching=False, match_server=None)
         player.put()
         return {"success": True}
 
@@ -71,14 +71,18 @@ class SearchHandler(JsonAPIHandler):
         player = Player.all().filter('username = ', username).get()
         if not player:
             return {"success": False, "error": "nonexisting"}
+        if player.searching:
+            return {"success": False, "error": "already searching"}
+        
+        server = Server.get_free()
+        if not server:
+            return {"success": False, "error": "no free servers"}
         
         other = Player.all().filter('searching = ', True).filter('username !=', username).get()
         if other:
             
-            server = Server.get_free()
             
             other.searching = False
-            player.searching = False
             other.match_server = server
             player.match_server = server
             server.free = False
@@ -87,12 +91,12 @@ class SearchHandler(JsonAPIHandler):
             player.put()
             server.put()
             
-            return {"success": True, "match": True}
+            return {"success": True}
         
         player.searching = True
         player.put()
         
-        return {"success": True, "match" : False}
+        return {"success": True}
 
 class CheckHandler(JsonAPIHandler):
     def handle(self):
@@ -137,7 +141,7 @@ class AddServerHandler(JsonAPIHandler):
         if server:
             return {"success": False, "error": "existing"}
         
-        server = Server(host=host, free = True)
+        server = Server(host=host, free=True)
         server.put()
         
         return {"success": True}
