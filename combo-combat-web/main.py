@@ -5,7 +5,8 @@ import webapp2, json, jinja2, os, hashlib
 
 from google.appengine.ext import db
 
-from model import Player, Server
+from model import Player, Server, MatchHistory
+from ranking import calculate_elos, PLAYER_A, PLAYER_B, DEFAULT_ELO
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
@@ -42,7 +43,13 @@ class RegisterHandler(JsonAPIHandler):
             return {"success": False , "error": "username"}
         
         
-        player = Player(username=username, password=hash_digest(password), searching=False, match_server=None)
+        player = Player(
+            username=username, 
+            password=hash_digest(password),
+            counter = 0,
+            elo = DEFAULT_ELO,
+            searching=False, 
+            match_server=None)
         player.put()
         return {"success": True}
 
@@ -80,7 +87,6 @@ class SearchHandler(JsonAPIHandler):
         
         other = Player.all().filter('searching = ', True).filter('username !=', username).get()
         if other:
-            
             
             other.searching = False
             other.match_server = server
@@ -121,14 +127,53 @@ class CheckHandler(JsonAPIHandler):
 class ResetHandler(JsonAPIHandler):
     def handle(self):
         host = self.request.get("h")
-        if not host:
+        players = self.request.get("p")
+        scores = self.request.get("s")
+        duration = self.request.get("d")
+        
+        # preconditions
+        try:
+            players = players.split(",")
+            playera, playerb = tuple(players)
+            scorea, scoreb = tuple([int(x) for x in scores.split(",")])
+            scores = [scorea, scoreb]
+        except Exception:
+            players, scores = None, None
+        try:
+            duration = long(float(duration))
+        except ValueError:
+            duration = None
+        if not host or not players or not scores or not duration:
             return {"success": False, "error": "format"}
 
         server = Server.all().filter('host = ', host).get()
         if not server:
             return {"success": False, "error": "nonexisting"}
+        
+        
+        # actual processing
         server.free = True
+        
+        playera = Player.all().filter('username = ', playera).get()
+        playerb = Player.all().filter('username = ', playerb).get()
+        
+        
+        (pa_new_elo, pb_new_elo) = calculate_elos(playera.elo, playerb.elo, PLAYER_A if scorea > scoreb else PLAYER_B)
+        
+        mh = MatchHistory(
+            players = players,
+            scores = scores,
+            elo_delta = playera.elo - playerb.elo,
+            duration = duration)    
+        
+        playera.elo = int(pa_new_elo)
+        playerb.elo = int(pb_new_elo)
+        
         server.put()
+        playera.put()
+        playerb.put()
+        mh.put()
+        
         return {"success": True}
     
 class AddServerHandler(JsonAPIHandler):

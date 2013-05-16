@@ -18,6 +18,8 @@ class Player(db.Model):
     joined = db.DateTimeProperty(auto_now_add=True)
     counter = db.IntegerProperty()
     
+    elo = db.IntegerProperty()
+    
     # TODO: take this out of here?
     searching = db.BooleanProperty()
     match_server = db.ReferenceProperty(Server, collection_name='players')
